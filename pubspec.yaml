@@ -1,0 +1,38 @@
+name: socio
+description: Sistema para Socios de Bingo JL
+publish_to: 'none' 
+version: 0.9.0+2
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  equatable: ^2.0.3
+  flutter_bloc: ^7.3.3
+  shared_preferences: ^2.0.7
+  path_provider: ^2.0.0
+  sqlite3_flutter_libs: ^0.5.0
+  drift: ^1.0.1
+  flutter_form_builder: ^7.0.0
+  form_builder_validators: ^7.2.0
+  intl: ^0.17.0
+  http: ^0.13.4
+  flutter_local_notifications: ^9.4.0
+  badges: ^2.0.2
+  get_it: ^7.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^1.0.0
+  drift_dev: ^1.0.2
+  build_runner: ^2.1.5
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/json/

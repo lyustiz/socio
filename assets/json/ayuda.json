@@ -1,0 +1,105 @@
+[   
+    {
+        "pantalla": "inicio",
+        "texto": "Selecciona el tipo de accion para el sistema",
+        "items": [
+            {
+                "icono": "settings",
+                "tipo": "info",
+                "titulo": "Venta",
+                "texto": "Selecciona este item para realizar la configuracion de juegos activos."
+            },
+            {
+                "icono": "query_stats",
+                "tipo": "info",
+                "titulo": "Consulta",
+                "texto": "Selecciona este item para consulta las estadisticas de los juegos."
+            }
+           
+        ]
+    },
+    {
+        "pantalla": "configuracion",
+        "texto": "Describe la configuracion actual del juego seleccionado, la actualizacion se hace en tiempo real, y solo se puede modificar si el juego esta activo",
+        "items": [
+            {
+                "icono": "dynamic_feed",
+                "tipo": "info",
+                "titulo": "Serie",
+                "texto": "Indica la serie a configurar del juego seleccionado"
+            },
+            {
+                "icono": "table_view_rounded",
+                "tipo": "info",
+                "titulo": "Carton",
+                "texto": "Indica el Carton Ganador del Juego seleccionado."
+            },
+            {
+                "icono": "workspaces",
+                "tipo": "info",
+                "titulo": "Balota",
+                "texto": "Indica la Balota Ganadora del Juego seleccionado."
+            },
+            {
+                "icono": "calendar_today",
+                "tipo": "info",
+                "titulo": "Fecha Ultima Modificacion",
+                "texto": "Indica cuando fue la ultima vez que se realizo la actualizacion de la fecha"
+            },
+            {
+                "icono": "check_circle",
+                "tipo": "info",
+                "titulo": "Reconfigurado",
+                "texto": "Indica si fue actualizada la configuracion"
+            }
+        ]
+    },
+    {
+        "pantalla": "configurar",
+        "texto": "Formulario para crear/actualizar la configuracion",
+        "items": [
+            {
+                "icono": "dynamic_feed",
+                "tipo": "info",
+                "titulo": "Serie",
+                "texto": "Indique la serie a configurar del juego seleccionado"
+            },
+            {
+                "icono": "table_view_rounded",
+                "tipo": "info",
+                "titulo": "Carton",
+                "texto": "Indique el Carton Ganador del Juego seleccionado."
+            },
+            {
+                "icono": "workspaces",
+                "tipo": "info",
+                "titulo": "Balota",
+                "texto": "Indique la Balota Ganadora del Juego seleccionado."
+            }
+        ]
+    },
+    {
+        "pantalla": "juegos",
+        "texto": "Lista de los juegos activos/cerrados asignados al vendedor",
+        "items": [
+            {
+                "icono": "power_settings_new_sharp",
+                "tipo": "success",
+                "titulo": "Juegos Activos",
+                "texto": "Permite la venta de cartones y modulos."
+            },
+            {
+                "icono": "power_settings_new_sharp",
+                "tipo": "error",
+                "titulo": "Juegos Terminados",
+                "texto": "Permite la consulta de cartones y modulos."
+            }
+         
+        ]
+    },
+    {
+        "pantalla": "informe",
+        "texto": "Lista las estadisticas del juego actual en tiempo real",
+        "items": []
+    }
+]

@@ -1,0 +1,126 @@
+[{
+    "idJuego": 85,
+    "fechaHoraInicio": "2019-11-17T10:25:23",
+    "fechaHoraFin": "2019-11-17T12:51:49",
+    "idEmpresa": 1,
+    "terminado": "N",
+    "moduloCartones": 6,
+    "valorModulo": 12000.00,
+    "valorCarton": 1000.00,
+    "totalCartones": 0,
+    "figuras": [{
+            "idPlenoAutomatico": 1,
+            "valorPremio": 12000,
+            "estado": "A"
+        },
+        {
+            "idPlenoAutomatico": 3,
+            "valorPremio": 40000,
+            "estado": "A"
+        }
+    ],
+    "promociones": [{
+        "id_promocion": 1,
+        "nombre_promocion": "3x2000",
+        "valorPromocion": 200000,
+        "nro_cartones": 3,
+        "estado": "A"
+    },
+    {
+        "id_promocion": 2,
+        "nombre_promocion": "4x3000",
+        "valorPromocion": 300000,
+        "nro_cartones": 4,
+        "estado": "A"
+    }
+]
+
+},
+{
+    "idJuego": 86,
+    "fechaHoraInicio": "2019-11-17T12:41:16",
+    "fechaHoraFin": "2019-11-17T12:51:49",
+    "idEmpresa": 1,
+    "terminado": "N",
+    "moduloCartones": 6,
+    "valorModulo": 12000.00,
+    "valorCarton": 1000.00,
+    "totalCartones": 0,
+    "figuras": [{
+            "idPlenoAutomatico": 1,
+            "valorPremio": 12000,
+            "estado": "A"
+        },
+        {
+            "idPlenoAutomatico": 3,
+            "valorPremio": 40000,
+            "estado": "A"
+        }
+    ],
+    "promociones": [{
+        "id_promocion": 3,
+        "nombre_promocion": "3x2000",
+        "valorPromocion": 200000,
+        "nro_cartones": 3,
+        "estado": "A"
+    }]
+},
+{
+    "idJuego": 87,
+    "fechaHoraInicio": "2019-11-17T12:46:48",
+    "fechaHoraFin": "2019-11-17T12:51:49",
+    "idEmpresa": 1,
+    "terminado": "N",
+    "moduloCartones": 6,
+    "valorModulo": 12000.00,
+    "valorCarton": 1000.00,
+    "totalCartones": 0,
+    "figuras": [{
+            "idPlenoAutomatico": 1,
+            "valorPremio": 12000,
+            "estado": "A"
+        },
+        {
+            "idPlenoAutomatico": 3,
+            "valorPremio": 40000,
+            "estado": "A"
+        }
+    ],
+    "promociones": [{
+        "id_promocion": 4,
+        "nombre_promocion": "3x2000",
+        "valorPromocion": 200000,
+        "nro_cartones": 3,
+        "estado": "A"
+    }]
+},
+{
+    "idJuego": 88,
+    "fechaHoraInicio": "2019-11-17T12:51:49",
+    "fechaHoraFin": "2019-11-17T12:51:49",
+    "idEmpresa": 1,
+    "terminado": "S",
+    "moduloCartones": 6,
+    "valorModulo": 12000.00,
+    "valorCarton": 1000.00,
+    "totalCartones": 0,
+    "figuras": [{
+            "idPlenoAutomatico": 1,
+            "valorPremio": 12000,
+            "estado": "A"
+        },
+        {
+            "idPlenoAutomatico": 3,
+            "valorPremio": 40000,
+            "estado": "A"
+        }
+    ],
+    "promociones": [{
+        "id_promocion": 5,
+        "nombre_promocion": "3x2000",
+        "valorPromocion": 200000,
+        "nro_cartones": 3,
+        "estado": "A"
+    }]
+}
+]
