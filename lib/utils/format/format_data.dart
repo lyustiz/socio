@@ -33,3 +33,7 @@ String formatNumber(dynamic value) {
   var f = NumberFormat("###,###.00", "es_ES");
   return f.format(value);
 }
+
+String numeroJuego(int numeroJuego) {
+  return numeroJuego.toString().padLeft(3, '0');
+}

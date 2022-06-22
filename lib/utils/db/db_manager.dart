@@ -2,8 +2,6 @@ import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:drift/drift.dart';
-import 'package:socio/daos/premios_dao.dart';
-import 'package:socio/models/premios.dart';
 import 'dart:io';
 // models
 import 'package:socio/models/usuarios.dart';
@@ -11,12 +9,14 @@ import 'package:socio/models/juegos.dart';
 import 'package:socio/models/configuraciones.dart';
 import 'package:socio/models/juegos_promociones.dart';
 import 'package:socio/models/sincronizados.dart';
+import 'package:socio/models/figuras.dart';
 // daos
 import 'package:socio/daos/configuraciones_dao.dart';
 import 'package:socio/daos/juegos_dao.dart';
 import 'package:socio/daos/juegos_promociones_dao.dart';
 import 'package:socio/daos/sincronizados_dao.dart';
 import 'package:socio/daos/usuarios_dao.dart';
+import 'package:socio/daos/figuras_dao.dart';
 
 part 'db_manager.g.dart';
 
@@ -34,14 +34,14 @@ LazyDatabase openConnection() {
   JuegosPromociones,
   Sincronizados,
   Configuraciones,
-  Premios
+  Figuras
 ], daos: [
   ConfiguracionesDao,
   JuegosDao,
   JuegosPromocionesDao,
   SincronizadosDao,
   UsuariosDao,
-  PremiosDao
+  FigurasDao
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(openConnection());
@@ -52,7 +52,6 @@ class AppDatabase extends _$AppDatabase {
   @override
   MigrationStrategy get migration => MigrationStrategy(onCreate: (m) async {
         await m.createAll();
-
         final fechaInit = DateTime.parse("2021-12-01");
         await batch((batch) {
           batch.insertAll(sincronizados, [
@@ -60,6 +59,8 @@ class AppDatabase extends _$AppDatabase {
                 fechaSincronizado: fechaInit, tabla: 'usuario', estado: 'A'),
             SincronizadosCompanion.insert(
                 fechaSincronizado: fechaInit, tabla: 'juegos', estado: 'A'),
+            SincronizadosCompanion.insert(
+                fechaSincronizado: fechaInit, tabla: 'figuras', estado: 'A'),
             SincronizadosCompanion.insert(
                 fechaSincronizado: fechaInit,
                 tabla: 'configuracion',
@@ -70,7 +71,7 @@ class AppDatabase extends _$AppDatabase {
 
   Future<bool> clearDatabase() async {
     try {
-      await delete(premios).go();
+      await delete(figuras).go();
       await delete(juegosPromociones).go();
       await delete(juegos).go();
       await delete(usuarios).go();
@@ -92,21 +93,21 @@ class AppDatabase extends _$AppDatabase {
           ))
         .join(
       [
-        leftOuterJoin(premios,
-            premios.idProgramacionJuego.equalsExp(juegos.idProgramacionJuego)),
+        leftOuterJoin(figuras,
+            figuras.idProgramacionJuego.equalsExp(juegos.idProgramacionJuego)),
       ],
     ).get();
 
     var result = rows.map((_) {
-      final groupedPrem = <Juego, List<Premio>>{};
+      final groupedFig = <Juego, List<Figura>>{};
       for (final row in rows) {
         final juego = row.readTable(juegos);
-        final juegoPrem = row.readTableOrNull(premios);
-        final listPrem = groupedPrem.putIfAbsent(juego, () => []);
-        if (juegoPrem != null) listPrem.add(juegoPrem);
+        final juegoFig = row.readTableOrNull(figuras);
+        final listPrem = groupedFig.putIfAbsent(juego, () => []);
+        if (juegoFig != null) listPrem.add(juegoFig);
       }
       return [
-        for (final entry in groupedPrem.entries)
+        for (final entry in groupedFig.entries)
           JuegosWithPremios(
             juego: entry.key,
             juegoPremio: entry.value,
@@ -153,7 +154,7 @@ class AppDatabase extends _$AppDatabase {
 
 class JuegosWithPremios {
   final Juego juego;
-  final List<Premio> juegoPremio;
+  final List<Figura> juegoPremio;
 
   JuegosWithPremios({
     required this.juego,
@@ -170,17 +171,13 @@ class JuegosWithConfiguracion {
   final Juego juego;
   final Configuracion? configuracion;
 
-  JuegosWithConfiguracion({
-    required this.juego,
-    this.configuracion,
-  });
+  JuegosWithConfiguracion({required this.juego, this.configuracion});
 
   JuegosWithConfiguracion copyWith(
           {Juego? juego, Configuracion? configuracion}) =>
       JuegosWithConfiguracion(
-        juego: juego ?? this.juego,
-        configuracion: configuracion ?? this.configuracion,
-      );
+          juego: juego ?? this.juego,
+          configuracion: configuracion ?? this.configuracion);
 
   @override
   String toString() {
@@ -197,7 +194,7 @@ class JuegosWithDetalles {
   final int modulosAsignados;
   final int modulosVendidos;
   final int numeroVendedores;
-  final List<Premio> premios;
+  final List<Figura> premios;
   final Configuracion? configuracion;
   final List<ProgramacionJuego> programacionJuego;
 
@@ -219,25 +216,6 @@ class JuegosWithDetalles {
     return 'JuegosDetalles $juego $premios';
   }
 }
-
-/*class Premio {
-  final int idJuegoPremio;
-  final int idJuego;
-  final int idPlenoAutomatico;
-  final double valorPremio;
-  final String estado;
-  final DateTime actualizado;
-  final Figura figura;
-
-  Premio(
-      {required this.idJuegoPremio,
-      required this.idJuego,
-      required this.idPlenoAutomatico,
-      required this.valorPremio,
-      required this.estado,
-      required this.actualizado,
-      required this.figura});
-}*/
 
 class ProgramacionJuego {
   final int idProgramacionJuego;

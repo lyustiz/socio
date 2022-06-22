@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:socio/blocs/informe_juego/informe_juego_bloc.dart';
-import 'package:socio/models/vemdedor_cobro.dart';
 import 'package:socio/providers/dto/figura_dto.dart';
-import 'package:socio/providers/dto/flujos_caja_dto.dart';
 import 'package:socio/providers/dto/informe_juego_dto.dart';
 import 'package:socio/providers/dto/recaudos_totales_dto.dart';
 import 'package:socio/providers/dto/vendedor_cobro_dto.dart';
-import 'package:socio/providers/dto/vendedor_resumen_dto.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
 import 'package:socio/widgets/layout/app_container.dart';
@@ -48,9 +45,6 @@ class InformeJuegoScreen extends StatelessWidget {
                 Tab(
                     icon: Icon(Icons.groups,
                         color: Theme.of(context).colorScheme.secondary)),
-                /*  Tab(
-                    icon: Icon(Icons.person_outline_sharp,
-                        color: Theme.of(context).colorScheme.secondary)), */
                 Tab(
                     icon: Icon(Icons.emoji_events,
                         color: Theme.of(context).colorScheme.secondary)),
@@ -94,7 +88,7 @@ class InformeJuegoScreen extends StatelessWidget {
 
   Widget resumenJuego(BuildContext context, InformeJuegoDto informeJuego) {
     double asistenciaSocial = informeJuego.asistenciaSocial;
-    int totalPremios = informeJuego.figuras
+    double totalPremios = informeJuego.figuras
         .fold(0, (total, figura) => total + figura.valorPremio);
 
     double cuentasXCobrar = informeJuego.cuentasXCobrar;
@@ -239,7 +233,7 @@ class InformeJuegoScreen extends StatelessWidget {
 
   Widget resumenPremios(BuildContext context, InformeJuegoDto informeJuego) {
     List<FiguraDto> premio = informeJuego.figuras;
-    int totalValoPremios = 0;
+    double totalValoPremios = 0;
 
     return AppContainer(
         variant: 'secondary',

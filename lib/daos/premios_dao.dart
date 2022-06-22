@@ -1,4 +1,4 @@
-import 'package:socio/utils/db/db_manager.dart';
+/*import 'package:socio/utils/db/db_manager.dart';
 import 'package:drift/drift.dart';
 import 'package:socio/models/premios.dart'
     hide $PremiosTable, Premio, AppDatabase, PremiosCompanion;
@@ -25,3 +25,4 @@ class PremiosDao extends DatabaseAccessor<AppDatabase> with _$PremiosDaoMixin {
         t.idProgramacionJuego.equals(idProgramacionJuego));
   }
 }
+*/

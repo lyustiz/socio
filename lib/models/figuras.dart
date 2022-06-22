@@ -1,5 +1,10 @@
-/*class Premiosd extends Table {
-  IntColumn get idPremio => integer().autoIncrement()();
+import 'package:drift/drift.dart';
+
+part 'figuras.g.dart';
+
+@DataClassName("Figura")
+class Figuras extends Table {
+  IntColumn get idFigura => integer().autoIncrement()();
   IntColumn get idProgramacionJuego => integer()();
   IntColumn get idPlenoAutomatico => integer()();
   TextColumn get nombre => text()();
@@ -11,4 +16,6 @@
   DateTimeColumn get fechaAjuste => dateTime().nullable()();
   IntColumn get idUsuario => integer().nullable()();
 }
-*/
+
+@DriftDatabase(tables: [Figuras])
+class AppDatabase {}

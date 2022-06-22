@@ -30,7 +30,7 @@ class JuegoDetalleDto {
   final int modulosAsignados;
   final int modulosVendidos;
   final int numeroVendedores;
-  final List<Premio> premios;
+  final List<Figura> figuras;
   final ConfiguracionDto? configuracion;
   final List<ProgramacionJuegoDto> programacionesJuego;
 
@@ -59,7 +59,7 @@ class JuegoDetalleDto {
     required this.modulosAsignados,
     required this.modulosVendidos,
     required this.numeroVendedores,
-    required this.premios,
+    required this.figuras,
     this.configuracion,
     required this.programacionesJuego,
   });
@@ -71,14 +71,14 @@ class JuegoDetalleDto {
     var programaciones = json['programacionjuegos'];
     var config = json['configuracion'];
 
-    List<Premio> listPremios = [];
+    List<Figura> listFiguras = [];
     List<ProgramacionJuegoDto> listProgramacionJuego = [];
     ConfiguracionDto? configDTO = null;
 
     if (premios != null) {
       premios.forEach((premio) {
-        listPremios.add(Premio(
-          idPremio: premio['idFigura'],
+        listFiguras.add(Figura(
+          idFigura: premio['idFigura'],
           idProgramacionJuego:
               serializer.fromJson<int>(json['idProgramacionJuego']),
           idPlenoAutomatico: premio['idPlenoAutomatico'],
@@ -154,7 +154,7 @@ class JuegoDetalleDto {
       modulosAsignados: serializer.fromJson<int>(json['modulosAsignados']),
       modulosVendidos: serializer.fromJson<int>(json['modulosVendidos']),
       numeroVendedores: serializer.fromJson<int>(json['numeroVendedores']),
-      premios: listPremios,
+      figuras: listFiguras,
       configuracion: configDTO,
       programacionesJuego: listProgramacionJuego,
     );
@@ -186,11 +186,11 @@ class JuegoDetalleDto {
       estado: juegoDTO.estado,
     );
 
-    List<Premio> listPremios = [];
+    List<Figura> listFiguras = [];
 
-    juegoDTO.premios.forEach((premio) {
-      Premio addPremio = Premio(
-        idPremio: premio.idPremio,
+    juegoDTO.figuras.forEach((premio) {
+      Figura addPremio = Figura(
+        idFigura: premio.idFigura,
         idProgramacionJuego: premio.idProgramacionJuego,
         idPlenoAutomatico: premio.idPlenoAutomatico,
         nombre: premio.nombre,
@@ -199,7 +199,7 @@ class JuegoDetalleDto {
         estado: premio.estado,
         actualizado: premio.actualizado,
       );
-      listPremios.add(addPremio);
+      listFiguras.add(addPremio);
     });
 
     List<ProgramacionJuego> listProgramacionJuego = [];
@@ -248,7 +248,7 @@ class JuegoDetalleDto {
         modulosAsignados: juegoDTO.modulosAsignados,
         modulosVendidos: juegoDTO.modulosVendidos,
         numeroVendedores: juegoDTO.numeroVendedores,
-        premios: listPremios,
+        premios: listFiguras,
         configuracion: config,
         programacionJuego: listProgramacionJuego);
   }

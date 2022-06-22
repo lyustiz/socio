@@ -2607,8 +2607,8 @@ class $ConfiguracionesTable extends Configuraciones
   }
 }
 
-class Premio extends DataClass implements Insertable<Premio> {
-  final int idPremio;
+class Figura extends DataClass implements Insertable<Figura> {
+  final int idFigura;
   final int idProgramacionJuego;
   final int idPlenoAutomatico;
   final String nombre;
@@ -2619,8 +2619,8 @@ class Premio extends DataClass implements Insertable<Premio> {
   final String? acumula;
   final DateTime? fechaAjuste;
   final int? idUsuario;
-  Premio(
-      {required this.idPremio,
+  Figura(
+      {required this.idFigura,
       required this.idProgramacionJuego,
       required this.idPlenoAutomatico,
       required this.nombre,
@@ -2631,11 +2631,11 @@ class Premio extends DataClass implements Insertable<Premio> {
       this.acumula,
       this.fechaAjuste,
       this.idUsuario});
-  factory Premio.fromData(Map<String, dynamic> data, {String? prefix}) {
+  factory Figura.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
-    return Premio(
-      idPremio: const IntType()
-          .mapFromDatabaseResponse(data['${effectivePrefix}id_premio'])!,
+    return Figura(
+      idFigura: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_figura'])!,
       idProgramacionJuego: const IntType().mapFromDatabaseResponse(
           data['${effectivePrefix}id_programacion_juego'])!,
       idPlenoAutomatico: const IntType().mapFromDatabaseResponse(
@@ -2661,7 +2661,7 @@ class Premio extends DataClass implements Insertable<Premio> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    map['id_premio'] = Variable<int>(idPremio);
+    map['id_figura'] = Variable<int>(idFigura);
     map['id_programacion_juego'] = Variable<int>(idProgramacionJuego);
     map['id_pleno_automatico'] = Variable<int>(idPlenoAutomatico);
     map['nombre'] = Variable<String>(nombre);
@@ -2683,9 +2683,9 @@ class Premio extends DataClass implements Insertable<Premio> {
     return map;
   }
 
-  PremiosCompanion toCompanion(bool nullToAbsent) {
-    return PremiosCompanion(
-      idPremio: Value(idPremio),
+  FigurasCompanion toCompanion(bool nullToAbsent) {
+    return FigurasCompanion(
+      idFigura: Value(idFigura),
       idProgramacionJuego: Value(idProgramacionJuego),
       idPlenoAutomatico: Value(idPlenoAutomatico),
       nombre: Value(nombre),
@@ -2707,11 +2707,11 @@ class Premio extends DataClass implements Insertable<Premio> {
     );
   }
 
-  factory Premio.fromJson(Map<String, dynamic> json,
+  factory Figura.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return Premio(
-      idPremio: serializer.fromJson<int>(json['idPremio']),
+    return Figura(
+      idFigura: serializer.fromJson<int>(json['idFigura']),
       idProgramacionJuego:
           serializer.fromJson<int>(json['idProgramacionJuego']),
       idPlenoAutomatico: serializer.fromJson<int>(json['idPlenoAutomatico']),
@@ -2729,7 +2729,7 @@ class Premio extends DataClass implements Insertable<Premio> {
   Map<String, dynamic> toJson({ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
-      'idPremio': serializer.toJson<int>(idPremio),
+      'idFigura': serializer.toJson<int>(idFigura),
       'idProgramacionJuego': serializer.toJson<int>(idProgramacionJuego),
       'idPlenoAutomatico': serializer.toJson<int>(idPlenoAutomatico),
       'nombre': serializer.toJson<String>(nombre),
@@ -2743,8 +2743,8 @@ class Premio extends DataClass implements Insertable<Premio> {
     };
   }
 
-  Premio copyWith(
-          {int? idPremio,
+  Figura copyWith(
+          {int? idFigura,
           int? idProgramacionJuego,
           int? idPlenoAutomatico,
           String? nombre,
@@ -2755,8 +2755,8 @@ class Premio extends DataClass implements Insertable<Premio> {
           String? acumula,
           DateTime? fechaAjuste,
           int? idUsuario}) =>
-      Premio(
-        idPremio: idPremio ?? this.idPremio,
+      Figura(
+        idFigura: idFigura ?? this.idFigura,
         idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
         idPlenoAutomatico: idPlenoAutomatico ?? this.idPlenoAutomatico,
         nombre: nombre ?? this.nombre,
@@ -2770,8 +2770,8 @@ class Premio extends DataClass implements Insertable<Premio> {
       );
   @override
   String toString() {
-    return (StringBuffer('Premio(')
-          ..write('idPremio: $idPremio, ')
+    return (StringBuffer('Figura(')
+          ..write('idFigura: $idFigura, ')
           ..write('idProgramacionJuego: $idProgramacionJuego, ')
           ..write('idPlenoAutomatico: $idPlenoAutomatico, ')
           ..write('nombre: $nombre, ')
@@ -2788,7 +2788,7 @@ class Premio extends DataClass implements Insertable<Premio> {
 
   @override
   int get hashCode => Object.hash(
-      idPremio,
+      idFigura,
       idProgramacionJuego,
       idPlenoAutomatico,
       nombre,
@@ -2802,8 +2802,8 @@ class Premio extends DataClass implements Insertable<Premio> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is Premio &&
-          other.idPremio == this.idPremio &&
+      (other is Figura &&
+          other.idFigura == this.idFigura &&
           other.idProgramacionJuego == this.idProgramacionJuego &&
           other.idPlenoAutomatico == this.idPlenoAutomatico &&
           other.nombre == this.nombre &&
@@ -2816,8 +2816,8 @@ class Premio extends DataClass implements Insertable<Premio> {
           other.idUsuario == this.idUsuario);
 }
 
-class PremiosCompanion extends UpdateCompanion<Premio> {
-  final Value<int> idPremio;
+class FigurasCompanion extends UpdateCompanion<Figura> {
+  final Value<int> idFigura;
   final Value<int> idProgramacionJuego;
   final Value<int> idPlenoAutomatico;
   final Value<String> nombre;
@@ -2828,8 +2828,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
   final Value<String?> acumula;
   final Value<DateTime?> fechaAjuste;
   final Value<int?> idUsuario;
-  const PremiosCompanion({
-    this.idPremio = const Value.absent(),
+  const FigurasCompanion({
+    this.idFigura = const Value.absent(),
     this.idProgramacionJuego = const Value.absent(),
     this.idPlenoAutomatico = const Value.absent(),
     this.nombre = const Value.absent(),
@@ -2841,8 +2841,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
     this.fechaAjuste = const Value.absent(),
     this.idUsuario = const Value.absent(),
   });
-  PremiosCompanion.insert({
-    this.idPremio = const Value.absent(),
+  FigurasCompanion.insert({
+    this.idFigura = const Value.absent(),
     required int idProgramacionJuego,
     required int idPlenoAutomatico,
     required String nombre,
@@ -2858,8 +2858,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
         nombre = Value(nombre),
         posiciones = Value(posiciones),
         valorPremio = Value(valorPremio);
-  static Insertable<Premio> custom({
-    Expression<int>? idPremio,
+  static Insertable<Figura> custom({
+    Expression<int>? idFigura,
     Expression<int>? idProgramacionJuego,
     Expression<int>? idPlenoAutomatico,
     Expression<String>? nombre,
@@ -2872,7 +2872,7 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
     Expression<int?>? idUsuario,
   }) {
     return RawValuesInsertable({
-      if (idPremio != null) 'id_premio': idPremio,
+      if (idFigura != null) 'id_figura': idFigura,
       if (idProgramacionJuego != null)
         'id_programacion_juego': idProgramacionJuego,
       if (idPlenoAutomatico != null) 'id_pleno_automatico': idPlenoAutomatico,
@@ -2887,8 +2887,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
     });
   }
 
-  PremiosCompanion copyWith(
-      {Value<int>? idPremio,
+  FigurasCompanion copyWith(
+      {Value<int>? idFigura,
       Value<int>? idProgramacionJuego,
       Value<int>? idPlenoAutomatico,
       Value<String>? nombre,
@@ -2899,8 +2899,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
       Value<String?>? acumula,
       Value<DateTime?>? fechaAjuste,
       Value<int?>? idUsuario}) {
-    return PremiosCompanion(
-      idPremio: idPremio ?? this.idPremio,
+    return FigurasCompanion(
+      idFigura: idFigura ?? this.idFigura,
       idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
       idPlenoAutomatico: idPlenoAutomatico ?? this.idPlenoAutomatico,
       nombre: nombre ?? this.nombre,
@@ -2917,8 +2917,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
-    if (idPremio.present) {
-      map['id_premio'] = Variable<int>(idPremio.value);
+    if (idFigura.present) {
+      map['id_figura'] = Variable<int>(idFigura.value);
     }
     if (idProgramacionJuego.present) {
       map['id_programacion_juego'] = Variable<int>(idProgramacionJuego.value);
@@ -2955,8 +2955,8 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
 
   @override
   String toString() {
-    return (StringBuffer('PremiosCompanion(')
-          ..write('idPremio: $idPremio, ')
+    return (StringBuffer('FigurasCompanion(')
+          ..write('idFigura: $idFigura, ')
           ..write('idProgramacionJuego: $idProgramacionJuego, ')
           ..write('idPlenoAutomatico: $idPlenoAutomatico, ')
           ..write('nombre: $nombre, ')
@@ -2972,13 +2972,13 @@ class PremiosCompanion extends UpdateCompanion<Premio> {
   }
 }
 
-class $PremiosTable extends Premios with TableInfo<$PremiosTable, Premio> {
+class $FigurasTable extends Figuras with TableInfo<$FigurasTable, Figura> {
   final GeneratedDatabase _db;
   final String? _alias;
-  $PremiosTable(this._db, [this._alias]);
-  final VerificationMeta _idPremioMeta = const VerificationMeta('idPremio');
-  late final GeneratedColumn<int?> idPremio = GeneratedColumn<int?>(
-      'id_premio', aliasedName, false,
+  $FigurasTable(this._db, [this._alias]);
+  final VerificationMeta _idFiguraMeta = const VerificationMeta('idFigura');
+  late final GeneratedColumn<int?> idFigura = GeneratedColumn<int?>(
+      'id_figura', aliasedName, false,
       typeName: 'INTEGER',
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
@@ -3034,7 +3034,7 @@ class $PremiosTable extends Premios with TableInfo<$PremiosTable, Premio> {
       typeName: 'INTEGER', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
-        idPremio,
+        idFigura,
         idProgramacionJuego,
         idPlenoAutomatico,
         nombre,
@@ -3047,17 +3047,17 @@ class $PremiosTable extends Premios with TableInfo<$PremiosTable, Premio> {
         idUsuario
       ];
   @override
-  String get aliasedName => _alias ?? 'premios';
+  String get aliasedName => _alias ?? 'figuras';
   @override
-  String get actualTableName => 'premios';
+  String get actualTableName => 'figuras';
   @override
-  VerificationContext validateIntegrity(Insertable<Premio> instance,
+  VerificationContext validateIntegrity(Insertable<Figura> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
-    if (data.containsKey('id_premio')) {
-      context.handle(_idPremioMeta,
-          idPremio.isAcceptableOrUnknown(data['id_premio']!, _idPremioMeta));
+    if (data.containsKey('id_figura')) {
+      context.handle(_idFiguraMeta,
+          idFigura.isAcceptableOrUnknown(data['id_figura']!, _idFiguraMeta));
     }
     if (data.containsKey('id_programacion_juego')) {
       context.handle(
@@ -3125,16 +3125,16 @@ class $PremiosTable extends Premios with TableInfo<$PremiosTable, Premio> {
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {idPremio};
+  Set<GeneratedColumn> get $primaryKey => {idFigura};
   @override
-  Premio map(Map<String, dynamic> data, {String? tablePrefix}) {
-    return Premio.fromData(data,
+  Figura map(Map<String, dynamic> data, {String? tablePrefix}) {
+    return Figura.fromData(data,
         prefix: tablePrefix != null ? '$tablePrefix.' : null);
   }
 
   @override
-  $PremiosTable createAlias(String alias) {
-    return $PremiosTable(_db, alias);
+  $FigurasTable createAlias(String alias) {
+    return $FigurasTable(_db, alias);
   }
 }
 
@@ -3147,7 +3147,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $SincronizadosTable sincronizados = $SincronizadosTable(this);
   late final $ConfiguracionesTable configuraciones =
       $ConfiguracionesTable(this);
-  late final $PremiosTable premios = $PremiosTable(this);
+  late final $FigurasTable figuras = $FigurasTable(this);
   late final ConfiguracionesDao configuracionesDao =
       ConfiguracionesDao(this as AppDatabase);
   late final JuegosDao juegosDao = JuegosDao(this as AppDatabase);
@@ -3156,7 +3156,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final SincronizadosDao sincronizadosDao =
       SincronizadosDao(this as AppDatabase);
   late final UsuariosDao usuariosDao = UsuariosDao(this as AppDatabase);
-  late final PremiosDao premiosDao = PremiosDao(this as AppDatabase);
+  late final FigurasDao figurasDao = FigurasDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
@@ -3166,6 +3166,6 @@ abstract class _$AppDatabase extends GeneratedDatabase {
         juegosPromociones,
         sincronizados,
         configuraciones,
-        premios
+        figuras
       ];
 }

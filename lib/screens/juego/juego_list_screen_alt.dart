@@ -127,13 +127,13 @@ class JuegoListScreenAlt extends StatelessWidget {
                 },
                 color: Theme.of(context).colorScheme.secondary,
                 itemBuilder: (context) => [
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'estadistica',
-                        child: const Text('Estadisticas'),
+                        child: Text('Estadisticas'),
                       ),
-                      PopupMenuItem(
+                      const PopupMenuItem(
                         value: 'informe',
-                        child: const Text('Informe General'),
+                        child: Text('Informe General'),
                       )
                     ],
                 icon: const Icon(Icons.settings),

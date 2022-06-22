@@ -1,7 +1,7 @@
 name: socio
 description: Sistema para Socios de Bingo JL
 publish_to: 'none' 
-version: 0.9.0+2
+version: 0.9.1+3
 
 environment:
   sdk: ">=2.12.0 <3.0.0"

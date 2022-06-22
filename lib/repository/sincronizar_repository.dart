@@ -28,7 +28,7 @@ class SincronizarRepository {
         }
 
         if ((juego['premios'] as List).isNotEmpty) {
-          sincronizarPremios(
+          sincronizarFiguras(
               juego['premios'], juego['idProgramacionJuego'], actualizado);
         }
       }
@@ -48,30 +48,30 @@ class SincronizarRepository {
     return data['isSuccess'];
   }
 
-  Future<bool> sincronizarPremios(List juegosPremiosJson,
+  Future<bool> sincronizarFiguras(List juegosFiguraJson,
       int idProgramacionJuego, DateTime actualizado) async {
-    List<Premio> juegosPremiosList = [];
-    List<int> idPremiosActivos = [];
+    List<Figura> juegosFigurasList = [];
+    List<int> idFigurasActivas = [];
 
-    for (var juegoPremio in juegosPremiosJson) {
-      juegoPremio['idPremio'] = juegoPremio['idFigura'];
-      juegoPremio['idProgramacionJuego'] = idProgramacionJuego;
-      juegoPremio['actualizado'] = actualizado.toString();
-      juegosPremiosList
-          .add(Premio.fromJson(juegoPremio, serializer: JsonSerializer()));
+    for (var juegoFigura in juegosFiguraJson) {
+      juegoFigura['idFigura'] = juegoFigura['idFigura'];
+      juegoFigura['idProgramacionJuego'] = idProgramacionJuego;
+      juegoFigura['actualizado'] = actualizado.toString();
+      juegosFigurasList
+          .add(Figura.fromJson(juegoFigura, serializer: JsonSerializer()));
     }
 
-    for (var premio in juegosPremiosList) {
-      idPremiosActivos.add(premio.idPremio);
-      db<AppDatabase>().premiosDao.upsertPremio(premio);
+    for (var figura in juegosFigurasList) {
+      idFigurasActivas.add(figura.idFigura);
+      db<AppDatabase>().figurasDao.upsertFigura(figura);
     }
 
-    if (juegosPremiosList.isNotEmpty) {
-      await updateSincronizados('premios', actualizado: actualizado);
+    if (juegosFigurasList.isNotEmpty) {
+      await updateSincronizados('figuras', actualizado: actualizado);
 
       await db<AppDatabase>()
-          .premiosDao
-          .deletePremiosInactivos(idPremiosActivos, idProgramacionJuego);
+          .figurasDao
+          .deleteFigurasInactivas(idFigurasActivas, idProgramacionJuego);
     }
 
     return true;

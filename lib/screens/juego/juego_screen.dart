@@ -256,14 +256,14 @@ class JuegoScreen extends StatelessWidget {
     return LinearProgressIndicator();
   }
 
-  Widget premiosList(context, List<Premio> juegosPremios) {
+  Widget premiosList(context, List<Figura> juegosFiguras) {
     return SizedBox(
         width: double.infinity,
         height: 200,
         child: ListView.builder(
-          itemCount: juegosPremios.length,
+          itemCount: juegosFiguras.length,
           itemBuilder: (context, index) {
-            Premio premio = juegosPremios[index];
+            Figura premio = juegosFiguras[index];
             return itemsPremio(context, premio);
           },
         ));
