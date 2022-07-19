@@ -22,13 +22,13 @@ class Api {
   };
 
   Api(
-      {this.baseUrl = 'juegosjl-001-site5.ftempurl.com',
+      {this.baseUrl = 'apidesarrollo.sistemasyayudas.online',
       this.prefix = '/api/v1/'});
 
   Future<Map<String, dynamic>> getData(
       String endPoint, Map<String, dynamic>? params) async {
     baseUrl = await getBaseUrl();
-    url = Uri.http(baseUrl, this.prefix + endPoint, params);
+    url = Uri.https(baseUrl, prefix + endPoint, params);
 
     headers['Authorization'] = '${await getToken()}';
 
@@ -45,8 +45,8 @@ class Api {
   Future<Map<String, dynamic>> postData(String endPoint,
       {Map<String, dynamic>? params, bool isAuth = false}) async {
     baseUrl = await getBaseUrl();
-    url = Uri.http(baseUrl, this.prefix + endPoint);
-
+    url = Uri.https(baseUrl, prefix + endPoint);
+    print(url);
     if (!isAuth) {
       headers['Authorization'] = '${await getToken()}';
     }
@@ -68,7 +68,7 @@ class Api {
   Future<Map<String, dynamic>> putData(
       String endPoint, Map<String, dynamic> params) async {
     baseUrl = await getBaseUrl();
-    url = Uri.http(baseUrl, this.prefix + endPoint);
+    url = Uri.https(baseUrl, prefix + endPoint);
 
     headers['Authorization'] = '${await getToken()}';
 
@@ -87,7 +87,7 @@ class Api {
   Future<Map<String, dynamic>> deleteData(
       String endPoint, Map<String, dynamic> params) async {
     baseUrl = await getBaseUrl();
-    url = Uri.http(baseUrl, endPoint);
+    url = Uri.https(baseUrl, endPoint);
 
     headers['Authorization'] = '${await getToken()}';
 
@@ -131,6 +131,7 @@ class Api {
   }
 
   void errorHandler(var e) {
+    print(e);
     if (e is StateError) throw Exception(StateError);
     if (e is SocketException) {
       throw Exception(

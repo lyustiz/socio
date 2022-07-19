@@ -11,6 +11,7 @@ class EndPoint {
 }
 
 Map<String, String> endpoints = {
-  'Empresa 1': 'juegosjl-001-site5.ftempurl.com',
-  'Empresa 2': 'juegosjl-001-site6.ftempurl.com',
+  'Huarquillas': 'apihuaquillas.sistemasyayudas.online',
+  'Guatemala': 'apiguatemala.sistemasyayudas.online',
+  'Desarrollo': 'apidesarrollo.sistemasyayudas.online',
 };

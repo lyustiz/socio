@@ -7,9 +7,9 @@ class ConfiguracionDto {
   final int carton;
   final String serie;
   final int balotas;
-  final String fechaRegistro;
+  final String? fechaRegistro;
   final int idUsuario;
-  final String estado;
+  final String? estado;
   final String? fechaModificacion;
   final int reconfigurado;
 
@@ -48,7 +48,9 @@ class ConfiguracionDto {
       carton: configuracionDTO.carton,
       serie: configuracionDTO.serie,
       balotas: configuracionDTO.balotas,
-      fechaRegistro: DateTime.parse(configuracionDTO.fechaRegistro),
+      fechaRegistro: configuracionDTO.fechaRegistro != null
+          ? DateTime.parse(configuracionDTO.fechaRegistro!)
+          : null,
       idUsuario: configuracionDTO.idUsuario,
       estado: configuracionDTO.estado,
       fechaModificacion: configuracionDTO.fechaModificacion == null
@@ -78,9 +80,9 @@ class ConfiguracionDto {
       'carton': serializer.toJson<int>(carton),
       'serie': serializer.toJson<String>(serie),
       'balotas': serializer.toJson<int>(balotas),
-      'fechaRegistro': serializer.toJson<String>(fechaRegistro),
+      'fechaRegistro': serializer.toJson<String?>(fechaRegistro),
       'idUsuario': serializer.toJson<int>(idUsuario),
-      'estado': serializer.toJson<String>(estado),
+      'estado': serializer.toJson<String?>(estado),
       'fechaModificacion': serializer.toJson<String?>(fechaModificacion),
       'reconfigurado': serializer.toJson<int>(reconfigurado),
     };

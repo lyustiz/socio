@@ -61,12 +61,12 @@ class FiguraDto {
     return <String, dynamic>{
       'idFigura': serializer.toJson<int>(idFigura),
       'idPlenoAutomatico': serializer.toJson<int>(idPlenoAutomatico),
-      'nombre': serializer.toJson<String>(nombre),
-      'posiciones': serializer.toJson<String>(posiciones),
+      'nombre': serializer.toJson<String>(''),
+      'posiciones': serializer.toJson<String>(''),
       'estado': serializer.toJson<String>(estado),
-      'valorPremio': serializer.toJson<double>(valorPremio),
+      'valorPremio': serializer.toJson<double>(0),
       'acumula': serializer.toJson<String>(acumula),
-      'fechaAjuste': serializer.toJson<String?>(fechaAjuste.toString()),
+      'fechaAjuste': serializer.toJson<String?>(null),
       'idUsuario': serializer.toJson<int>(idUsuario ?? 0),
     };
   }

@@ -67,7 +67,7 @@ class JuegoDetalleDto {
   factory JuegoDetalleDto.fromJson(Map<String, dynamic> json) {
     var serializer = const JsonSerializer();
 
-    var premios = json['premios'];
+    var figuras = json['premios'];
     var programaciones = json['programacionjuegos'];
     var config = json['configuracion'];
 
@@ -75,8 +75,8 @@ class JuegoDetalleDto {
     List<ProgramacionJuegoDto> listProgramacionJuego = [];
     ConfiguracionDto? configDTO = null;
 
-    if (premios != null) {
-      premios.forEach((premio) {
+    if (figuras != null) {
+      figuras.forEach((premio) {
         listFiguras.add(Figura(
           idFigura: premio['idFigura'],
           idProgramacionJuego:
@@ -118,7 +118,7 @@ class JuegoDetalleDto {
             idConfiguracion: config['idConfiguracion'],
             numeroJuego: config['numeroJuego'],
             carton: config['carton'],
-            serie: config['serie'],
+            serie: config['idSerie'].toString(),
             balotas: config['balotas'],
             fechaRegistro: config['fechaRegistro'],
             idUsuario: config['idUsuario'],
@@ -233,7 +233,9 @@ class JuegoDetalleDto {
           carton: jc.carton,
           serie: jc.serie,
           balotas: jc.balotas,
-          fechaRegistro: DateTime.parse(jc.fechaRegistro),
+          fechaRegistro: jc.fechaRegistro != null
+              ? DateTime.parse(jc.fechaRegistro!)
+              : null,
           idUsuario: jc.idUsuario,
           estado: jc.estado,
           reconfigurado: jc.reconfigurado == 1);
