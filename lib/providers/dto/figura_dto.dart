@@ -2,13 +2,14 @@ import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/utils/db/json_serializer.dart';
 
 class FiguraDto {
-  final int idFigura; //: 6,
-  final int idPlenoAutomatico; //: 56,
+  final int idFigura;
+  final int idPlenoAutomatico;
   final String nombre;
-  final String posiciones; //: 2 Esquinas 1,
-  final String estado; //: A,
+  final String posiciones;
+  final String estado;
   final double valorPremio;
-  final String acumula; //: 100
+  final String acumula;
+  final int carton;
   final DateTime? fechaAjuste;
   final int? idUsuario;
 
@@ -20,6 +21,7 @@ class FiguraDto {
       required this.estado,
       required this.valorPremio,
       required this.acumula,
+      required this.carton,
       this.fechaAjuste,
       this.idUsuario});
 
@@ -38,6 +40,7 @@ class FiguraDto {
       estado: serializer.fromJson<String>(json['estado']),
       valorPremio: serializer.fromJson<double>(json['valorPremio']),
       acumula: serializer.fromJson<String>(json['acumula']),
+      carton: serializer.fromJson<int>(json['carton']),
       fechaAjuste: fechaAjuste,
       idUsuario: serializer.fromJson<int?>(json['idUsuario']),
     );
@@ -52,6 +55,7 @@ class FiguraDto {
         estado: figura.estado,
         valorPremio: figura.valorPremio,
         acumula: figura.acumula ?? 'N',
+        carton: figura.carton,
         fechaAjuste: DateTime.now(),
         idUsuario: figura.idUsuario ?? 0);
   }
@@ -66,6 +70,7 @@ class FiguraDto {
       'estado': serializer.toJson<String>(estado),
       'valorPremio': serializer.toJson<double>(0),
       'acumula': serializer.toJson<String>(acumula),
+      'carton': serializer.toJson<int>(carton),
       'fechaAjuste': serializer.toJson<String?>(null),
       'idUsuario': serializer.toJson<int>(idUsuario ?? 0),
     };
@@ -81,6 +86,7 @@ class FiguraDto {
       estado: estado,
       valorPremio: valorPremio,
       acumula: acumula,
+      carton: carton,
       fechaAjuste: fechaAjuste,
       idUsuario: idUsuario,
     );

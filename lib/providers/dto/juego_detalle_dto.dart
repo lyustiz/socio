@@ -86,6 +86,7 @@ class JuegoDetalleDto {
           posiciones: premio['posiciones'],
           valorPremio: double.parse(premio['valorPremio'].toString()),
           estado: premio['estado'],
+          carton: premio['carton'] ?? 0,
           actualizado: premio['actualizado'] ?? DateTime.now(),
         ));
       });
@@ -188,7 +189,7 @@ class JuegoDetalleDto {
 
     List<Figura> listFiguras = [];
 
-    juegoDTO.figuras.forEach((premio) {
+    for (var premio in juegoDTO.figuras) {
       Figura addPremio = Figura(
         idFigura: premio.idFigura,
         idProgramacionJuego: premio.idProgramacionJuego,
@@ -197,10 +198,11 @@ class JuegoDetalleDto {
         posiciones: premio.posiciones,
         valorPremio: premio.valorPremio,
         estado: premio.estado,
+        carton: premio.carton,
         actualizado: premio.actualizado,
       );
       listFiguras.add(addPremio);
-    });
+    }
 
     List<ProgramacionJuego> listProgramacionJuego = [];
 

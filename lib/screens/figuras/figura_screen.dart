@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:socio/blocs/figura/figura_bloc.dart';
 import 'package:socio/screens/figuras/widgets/figura_icon.dart';
 import 'package:socio/utils/route_helper.dart';
@@ -14,7 +16,7 @@ import 'package:socio/widgets/layout/app_dialog.dart' as Dlg;
 import 'package:socio/widgets/layout/app_message.dart' as Msg;
 
 class FiguraScreen extends StatelessWidget {
-  const FiguraScreen({Key? key}) : super(key: key);
+  FiguraScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -99,11 +101,24 @@ class FiguraScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.secondary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold)),
-              subtitle: Text(
-                Fd.formatNumber(figura.valorPremio),
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontSize: 16),
+              subtitle: Container(
+                child: Column(
+                  children: [
+                    Text(
+                      Fd.formatNumber(figura.valorPremio),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: 16),
+                    ),
+                    Text(
+                      'Carton: ' + figura.carton.toString(),
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondaryVariant,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
               trailing: Switch(
                 value: figura.acumula == 'S',
@@ -154,33 +169,78 @@ class FiguraScreen extends StatelessWidget {
 
   void confirm(BuildContext context, Juego juego, Figura figura, bool active,
       FiguraBloc figuraBlock) async {
-    String mensaje = active ? 'se Acumule?' : 'NO se Acumule?';
-
+    String mensaje = active ? ', se Acumule? ' : ', "NO" se Acumule? ';
+    final _formKey = GlobalKey<FormBuilderState>();
     List<Widget> content = [
-      const Text(
-        'Desea que la figura:',
-        textAlign: TextAlign.justify,
+      const SizedBox(height: 20),
+      RichText(
+        text: TextSpan(
+          text: 'Desea que la figura: ',
+          children: <TextSpan>[
+            TextSpan(
+                text: figura.nombre.toUpperCase(),
+                style: const TextStyle(color: Colors.amber)),
+            TextSpan(
+                text: mensaje,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
-      Text(
-        figura.nombre.toUpperCase(),
-        textAlign: TextAlign.justify,
-      ),
-      Text(
-        mensaje,
-        textAlign: TextAlign.justify,
-      ),
-      ListTile(
-        title: const Text('Juego'),
-        trailing: Text(Fd.numeroJuego(juego.idProgramacionJuego)),
-      ),
+      const SizedBox(height: 20),
+      (!active)
+          ? const SizedBox(height: 20)
+          : FormBuilder(
+              key: _formKey,
+              child: FormBuilderTextField(
+                  name: 'carton',
+                  autofocus: true,
+                  initialValue:
+                      figura.carton > 0 ? figura.carton.toString() : '',
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
+                  autovalidateMode: AutovalidateMode.always,
+                  decoration: InputDecoration(
+                      labelText: 'Carton Asignado',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      filled: true,
+                      isDense: true,
+                      suffixIcon: const Icon(Icons.table_view)),
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context,
+                        errorText: 'El carton es requerido'),
+                    FormBuilderValidators.integer(context,
+                        errorText: 'indicar Solo numeros'),
+                    FormBuilderValidators.min(context, 1,
+                        errorText: 'Debe ser mayor que 0'),
+                    FormBuilderValidators.max(context, juego.cartonFinal,
+                        errorText: 'No debe ser mayor de ${juego.cartonFinal}'),
+                  ])),
+            ),
       const SizedBox(height: 20),
     ];
 
     bool? isConfirm = await Dlg.appDialog(context, 'Acumular Figura?', content,
         action: 'Confirmar');
 
-    if (isConfirm ?? false) {
-      setAcumula(context, juego, figura, active, figuraBlock);
+    if (active) {
+      final FormBuilderState? formStatus = _formKey.currentState;
+      if (isConfirm ?? false) {
+        if (formStatus != null) {
+          formStatus.save();
+          if (formStatus.validate()) {
+            int carton = int.parse(formStatus.value['carton']);
+            setAcumula(context, juego, figura, active, carton, figuraBlock);
+          }
+        } else {
+          Msg.appMessage(context, 'info', 'Debe asignar un carton');
+        }
+      }
+    } else {
+      if (isConfirm ?? false) {
+        setAcumula(context, juego, figura, active, 0, figuraBlock);
+      }
     }
   }
 
@@ -189,6 +249,7 @@ class FiguraScreen extends StatelessWidget {
     Juego juego,
     Figura figura,
     bool active,
+    int carton,
     FiguraBloc figuraBlock,
   ) {
     Figura updFigura = Figura(
@@ -199,7 +260,8 @@ class FiguraScreen extends StatelessWidget {
         posiciones: figura.posiciones,
         estado: figura.estado,
         valorPremio: figura.valorPremio,
-        acumula: active ? 'S' : 'N');
+        acumula: active ? 'S' : 'N',
+        carton: active ? carton : 0);
 
     figuraBlock.add(UpdateFigura(updFigura));
   }

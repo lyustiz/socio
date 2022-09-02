@@ -13,6 +13,7 @@ class Figuras extends Table {
   RealColumn get valorPremio => real()();
   DateTimeColumn get actualizado => dateTime().nullable()();
   TextColumn get acumula => text().nullable()();
+  IntColumn get carton => integer()();
   DateTimeColumn get fechaAjuste => dateTime().nullable()();
   IntColumn get idUsuario => integer().nullable()();
 }

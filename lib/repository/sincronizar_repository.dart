@@ -15,6 +15,7 @@ class SincronizarRepository {
       List dataJuegos = data['data'];
       List<Juego> juegosList = [];
       List<int> juegosIds = [];
+      List<int> configuracionIds = [];
 
       for (var juego in dataJuegos) {
         juegosIds.add(juego['idProgramacionJuego']);
@@ -23,8 +24,11 @@ class SincronizarRepository {
             .add(Juego.fromJson(juego, serializer: const JsonSerializer()));
 
         if (juego['configuracion'] != null) {
-          sincronizarConfiguracion(juego['configuracion'],
+          bool confUpd = await sincronizarConfiguracion(juego['configuracion'],
               juego['idProgramacionJuego'], actualizado);
+          if (confUpd) {
+            configuracionIds.add(juego['configuracion']['id_configuracion']);
+          }
         }
 
         if ((juego['premios'] as List).isNotEmpty) {
@@ -39,6 +43,9 @@ class SincronizarRepository {
 
       // terminar los juegos que no esten en los datos -- pendiente eliminar
       db<AppDatabase>().juegosDao.cancelarJuegos(juegosIds);
+      db<AppDatabase>()
+          .configuracionesDao
+          .cancelarConfiguraciones(configuracionIds);
 
       if (juegosList.isNotEmpty) {
         await updateSincronizados('juegos', actualizado: actualizado);

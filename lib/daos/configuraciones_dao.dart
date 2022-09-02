@@ -36,4 +36,9 @@ class ConfiguracionesDao extends DatabaseAccessor<AppDatabase>
   Future<int> deleteConfiguracion(Configuracion configuracion) async {
     return delete(configuraciones).delete(configuracion);
   }
+
+  Future cancelarConfiguraciones(List<int> configuracionesIds) async {
+    return delete(configuraciones)
+        .where((t) => t.idConfiguracion.isNotIn(configuracionesIds));
+  }
 }

@@ -2617,6 +2617,7 @@ class Figura extends DataClass implements Insertable<Figura> {
   final double valorPremio;
   final DateTime? actualizado;
   final String? acumula;
+  final int carton;
   final DateTime? fechaAjuste;
   final int? idUsuario;
   Figura(
@@ -2629,6 +2630,7 @@ class Figura extends DataClass implements Insertable<Figura> {
       required this.valorPremio,
       this.actualizado,
       this.acumula,
+      required this.carton,
       this.fechaAjuste,
       this.idUsuario});
   factory Figura.fromData(Map<String, dynamic> data, {String? prefix}) {
@@ -2652,6 +2654,8 @@ class Figura extends DataClass implements Insertable<Figura> {
           .mapFromDatabaseResponse(data['${effectivePrefix}actualizado']),
       acumula: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}acumula']),
+      carton: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}carton'])!,
       fechaAjuste: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}fecha_ajuste']),
       idUsuario: const IntType()
@@ -2674,6 +2678,7 @@ class Figura extends DataClass implements Insertable<Figura> {
     if (!nullToAbsent || acumula != null) {
       map['acumula'] = Variable<String?>(acumula);
     }
+    map['carton'] = Variable<int>(carton);
     if (!nullToAbsent || fechaAjuste != null) {
       map['fecha_ajuste'] = Variable<DateTime?>(fechaAjuste);
     }
@@ -2698,6 +2703,7 @@ class Figura extends DataClass implements Insertable<Figura> {
       acumula: acumula == null && nullToAbsent
           ? const Value.absent()
           : Value(acumula),
+      carton: Value(carton),
       fechaAjuste: fechaAjuste == null && nullToAbsent
           ? const Value.absent()
           : Value(fechaAjuste),
@@ -2721,6 +2727,7 @@ class Figura extends DataClass implements Insertable<Figura> {
       valorPremio: serializer.fromJson<double>(json['valorPremio']),
       actualizado: serializer.fromJson<DateTime?>(json['actualizado']),
       acumula: serializer.fromJson<String?>(json['acumula']),
+      carton: serializer.fromJson<int>(json['carton']),
       fechaAjuste: serializer.fromJson<DateTime?>(json['fechaAjuste']),
       idUsuario: serializer.fromJson<int?>(json['idUsuario']),
     );
@@ -2738,6 +2745,7 @@ class Figura extends DataClass implements Insertable<Figura> {
       'valorPremio': serializer.toJson<double>(valorPremio),
       'actualizado': serializer.toJson<DateTime?>(actualizado),
       'acumula': serializer.toJson<String?>(acumula),
+      'carton': serializer.toJson<int>(carton),
       'fechaAjuste': serializer.toJson<DateTime?>(fechaAjuste),
       'idUsuario': serializer.toJson<int?>(idUsuario),
     };
@@ -2753,6 +2761,7 @@ class Figura extends DataClass implements Insertable<Figura> {
           double? valorPremio,
           DateTime? actualizado,
           String? acumula,
+          int? carton,
           DateTime? fechaAjuste,
           int? idUsuario}) =>
       Figura(
@@ -2765,6 +2774,7 @@ class Figura extends DataClass implements Insertable<Figura> {
         valorPremio: valorPremio ?? this.valorPremio,
         actualizado: actualizado ?? this.actualizado,
         acumula: acumula ?? this.acumula,
+        carton: carton ?? this.carton,
         fechaAjuste: fechaAjuste ?? this.fechaAjuste,
         idUsuario: idUsuario ?? this.idUsuario,
       );
@@ -2780,6 +2790,7 @@ class Figura extends DataClass implements Insertable<Figura> {
           ..write('valorPremio: $valorPremio, ')
           ..write('actualizado: $actualizado, ')
           ..write('acumula: $acumula, ')
+          ..write('carton: $carton, ')
           ..write('fechaAjuste: $fechaAjuste, ')
           ..write('idUsuario: $idUsuario')
           ..write(')'))
@@ -2797,6 +2808,7 @@ class Figura extends DataClass implements Insertable<Figura> {
       valorPremio,
       actualizado,
       acumula,
+      carton,
       fechaAjuste,
       idUsuario);
   @override
@@ -2812,6 +2824,7 @@ class Figura extends DataClass implements Insertable<Figura> {
           other.valorPremio == this.valorPremio &&
           other.actualizado == this.actualizado &&
           other.acumula == this.acumula &&
+          other.carton == this.carton &&
           other.fechaAjuste == this.fechaAjuste &&
           other.idUsuario == this.idUsuario);
 }
@@ -2826,6 +2839,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
   final Value<double> valorPremio;
   final Value<DateTime?> actualizado;
   final Value<String?> acumula;
+  final Value<int> carton;
   final Value<DateTime?> fechaAjuste;
   final Value<int?> idUsuario;
   const FigurasCompanion({
@@ -2838,6 +2852,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
     this.valorPremio = const Value.absent(),
     this.actualizado = const Value.absent(),
     this.acumula = const Value.absent(),
+    this.carton = const Value.absent(),
     this.fechaAjuste = const Value.absent(),
     this.idUsuario = const Value.absent(),
   });
@@ -2851,13 +2866,15 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
     required double valorPremio,
     this.actualizado = const Value.absent(),
     this.acumula = const Value.absent(),
+    required int carton,
     this.fechaAjuste = const Value.absent(),
     this.idUsuario = const Value.absent(),
   })  : idProgramacionJuego = Value(idProgramacionJuego),
         idPlenoAutomatico = Value(idPlenoAutomatico),
         nombre = Value(nombre),
         posiciones = Value(posiciones),
-        valorPremio = Value(valorPremio);
+        valorPremio = Value(valorPremio),
+        carton = Value(carton);
   static Insertable<Figura> custom({
     Expression<int>? idFigura,
     Expression<int>? idProgramacionJuego,
@@ -2868,6 +2885,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
     Expression<double>? valorPremio,
     Expression<DateTime?>? actualizado,
     Expression<String?>? acumula,
+    Expression<int>? carton,
     Expression<DateTime?>? fechaAjuste,
     Expression<int?>? idUsuario,
   }) {
@@ -2882,6 +2900,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
       if (valorPremio != null) 'valor_premio': valorPremio,
       if (actualizado != null) 'actualizado': actualizado,
       if (acumula != null) 'acumula': acumula,
+      if (carton != null) 'carton': carton,
       if (fechaAjuste != null) 'fecha_ajuste': fechaAjuste,
       if (idUsuario != null) 'id_usuario': idUsuario,
     });
@@ -2897,6 +2916,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
       Value<double>? valorPremio,
       Value<DateTime?>? actualizado,
       Value<String?>? acumula,
+      Value<int>? carton,
       Value<DateTime?>? fechaAjuste,
       Value<int?>? idUsuario}) {
     return FigurasCompanion(
@@ -2909,6 +2929,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
       valorPremio: valorPremio ?? this.valorPremio,
       actualizado: actualizado ?? this.actualizado,
       acumula: acumula ?? this.acumula,
+      carton: carton ?? this.carton,
       fechaAjuste: fechaAjuste ?? this.fechaAjuste,
       idUsuario: idUsuario ?? this.idUsuario,
     );
@@ -2944,6 +2965,9 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
     if (acumula.present) {
       map['acumula'] = Variable<String?>(acumula.value);
     }
+    if (carton.present) {
+      map['carton'] = Variable<int>(carton.value);
+    }
     if (fechaAjuste.present) {
       map['fecha_ajuste'] = Variable<DateTime?>(fechaAjuste.value);
     }
@@ -2965,6 +2989,7 @@ class FigurasCompanion extends UpdateCompanion<Figura> {
           ..write('valorPremio: $valorPremio, ')
           ..write('actualizado: $actualizado, ')
           ..write('acumula: $acumula, ')
+          ..write('carton: $carton, ')
           ..write('fechaAjuste: $fechaAjuste, ')
           ..write('idUsuario: $idUsuario')
           ..write(')'))
@@ -3023,6 +3048,10 @@ class $FigurasTable extends Figuras with TableInfo<$FigurasTable, Figura> {
   late final GeneratedColumn<String?> acumula = GeneratedColumn<String?>(
       'acumula', aliasedName, true,
       typeName: 'TEXT', requiredDuringInsert: false);
+  final VerificationMeta _cartonMeta = const VerificationMeta('carton');
+  late final GeneratedColumn<int?> carton = GeneratedColumn<int?>(
+      'carton', aliasedName, false,
+      typeName: 'INTEGER', requiredDuringInsert: true);
   final VerificationMeta _fechaAjusteMeta =
       const VerificationMeta('fechaAjuste');
   late final GeneratedColumn<DateTime?> fechaAjuste =
@@ -3043,6 +3072,7 @@ class $FigurasTable extends Figuras with TableInfo<$FigurasTable, Figura> {
         valorPremio,
         actualizado,
         acumula,
+        carton,
         fechaAjuste,
         idUsuario
       ];
@@ -3110,6 +3140,12 @@ class $FigurasTable extends Figuras with TableInfo<$FigurasTable, Figura> {
     if (data.containsKey('acumula')) {
       context.handle(_acumulaMeta,
           acumula.isAcceptableOrUnknown(data['acumula']!, _acumulaMeta));
+    }
+    if (data.containsKey('carton')) {
+      context.handle(_cartonMeta,
+          carton.isAcceptableOrUnknown(data['carton']!, _cartonMeta));
+    } else if (isInserting) {
+      context.missing(_cartonMeta);
     }
     if (data.containsKey('fecha_ajuste')) {
       context.handle(

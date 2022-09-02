@@ -11,7 +11,11 @@ class EndPoint {
 }
 
 Map<String, String> endpoints = {
-  'Huarquillas': 'apihuaquillas.sistemasyayudas.online',
-  'Guatemala': 'apiguatemala.sistemasyayudas.online',
   'Desarrollo': 'apidesarrollo.sistemasyayudas.online',
+  'Florencia': 'apiflorencia.sistemasyayudas.online',
+  'Guatemala': 'apiguatemala.sistemasyayudas.online',
+  'Huaquillas': 'apihuaquillas.sistemasyayudas.online',
+  'Ipiales': 'apiipiales.sistemasyayudas.online',
+  'Pradera': 'apipradera.sistemasyayudas.online',
 };
+

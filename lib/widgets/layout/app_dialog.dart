@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Future<bool?> appDialog(context, String title, List<Widget> content,
-    {String action = 'Ok'}) async {
+    {String action = 'Ok', bool active = true}) async {
   return await showDialog<bool>(
       context: context,
       builder: (BuildContext context) => AlertDialog(
@@ -22,7 +22,7 @@ Future<bool?> appDialog(context, String title, List<Widget> content,
               ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(Colors.green)),
-                  onPressed: () => Navigator.pop(context, true),
+                  onPressed: () => active ? Navigator.pop(context, true) : null,
                   child: Text(action)),
             ],
           ));
