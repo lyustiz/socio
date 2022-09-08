@@ -118,7 +118,7 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<JuegosWithConfiguracion>> allJuegosWithConfiguracion(
       String estado) async {
-    estado = (['S', 'N'].contains(estado)) ? estado : '%';
+    estado = (['A', 'C'].contains(estado)) ? estado : '%';
     List rows = await (select(juegos)
           ..where((t) => t.estado.like('%$estado%'))
           ..orderBy(

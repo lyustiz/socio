@@ -21,7 +21,7 @@ class JuegoListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     juegoBlock = context.read<JuegoBloc>();
-    juegoBlock.add(GetAllJuego(''));
+    juegoBlock.add(GetAllJuego('A'));
 
     return BlocBuilder<JuegoBloc, JuegoState>(
       builder: (context, state) {

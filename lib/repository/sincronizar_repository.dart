@@ -18,26 +18,22 @@ class SincronizarRepository {
       List<int> configuracionIds = [];
 
       for (var juego in dataJuegos) {
-        if (juego['estado'] == 'A') {
-          juegosIds.add(juego['idProgramacionJuego']);
-          juego['actualizado'] = actualizado.toString();
-          juegosList
-              .add(Juego.fromJson(juego, serializer: const JsonSerializer()));
+        juegosIds.add(juego['idProgramacionJuego']);
+        juego['actualizado'] = actualizado.toString();
+        juegosList
+            .add(Juego.fromJson(juego, serializer: const JsonSerializer()));
 
-          if (juego['configuracion'] != null) {
-            bool confUpd = await sincronizarConfiguracion(
-                juego['configuracion'],
-                juego['idProgramacionJuego'],
-                actualizado);
-            if (confUpd) {
-              configuracionIds.add(juego['configuracion']['idConfiguracion']);
-            }
+        if (juego['configuracion'] != null) {
+          bool confUpd = await sincronizarConfiguracion(juego['configuracion'],
+              juego['idProgramacionJuego'], actualizado);
+          if (confUpd) {
+            configuracionIds.add(juego['configuracion']['idConfiguracion']);
           }
+        }
 
-          if ((juego['premios'] as List).isNotEmpty) {
-            sincronizarFiguras(
-                juego['premios'], juego['idProgramacionJuego'], actualizado);
-          }
+        if ((juego['premios'] as List).isNotEmpty) {
+          sincronizarFiguras(
+              juego['premios'], juego['idProgramacionJuego'], actualizado);
         }
       }
 
