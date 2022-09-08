@@ -97,7 +97,7 @@ class SyncScreen extends StatelessWidget {
                 title: Text('${item.tabla}'.toUpperCase(),
                     style: TextStyle(
                         color: Theme.of(context).colorScheme.primary,
-                        fontSize: 17)),
+                        fontSize: 16)),
                 subtitle: Text(
                   '${FT.formatDateTime(item.fechaSincronizado)}',
                   style:
@@ -122,11 +122,11 @@ class SyncScreen extends StatelessWidget {
       );
     }
 
-    bool isOutDate = item.fechaSincronizado.isAfter(FT.today());
+    bool isInDate = item.isSync;
 
     return Icon(
-      (isOutDate) ? Icons.warning_amber : Icons.check,
-      color: (isOutDate) ? Colors.amber : Colors.green,
+      (isInDate) ? Icons.check : Icons.warning_amber,
+      color: (isInDate) ? Colors.green : Colors.amber,
     );
   }
 

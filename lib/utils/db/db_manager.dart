@@ -56,8 +56,6 @@ class AppDatabase extends _$AppDatabase {
         await batch((batch) {
           batch.insertAll(sincronizados, [
             SincronizadosCompanion.insert(
-                fechaSincronizado: fechaInit, tabla: 'usuario', estado: 'A'),
-            SincronizadosCompanion.insert(
                 fechaSincronizado: fechaInit, tabla: 'juegos', estado: 'A'),
             SincronizadosCompanion.insert(
                 fechaSincronizado: fechaInit, tabla: 'figuras', estado: 'A'),

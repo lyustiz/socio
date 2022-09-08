@@ -38,5 +38,4 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'helper_screen': (_) => const HelperScreen(),
   'helper': (_) => const HelperGlobal(),
   'cuenta': (_) => const CuentaScreen(),
-  'test': (_) => const DbInit(),
 };

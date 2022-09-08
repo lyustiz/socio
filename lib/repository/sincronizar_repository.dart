@@ -18,22 +18,26 @@ class SincronizarRepository {
       List<int> configuracionIds = [];
 
       for (var juego in dataJuegos) {
-        juegosIds.add(juego['idProgramacionJuego']);
-        juego['actualizado'] = actualizado.toString();
-        juegosList
-            .add(Juego.fromJson(juego, serializer: const JsonSerializer()));
+        if (juego['estado'] == 'A') {
+          juegosIds.add(juego['idProgramacionJuego']);
+          juego['actualizado'] = actualizado.toString();
+          juegosList
+              .add(Juego.fromJson(juego, serializer: const JsonSerializer()));
 
-        if (juego['configuracion'] != null) {
-          bool confUpd = await sincronizarConfiguracion(juego['configuracion'],
-              juego['idProgramacionJuego'], actualizado);
-          if (confUpd) {
-            configuracionIds.add(juego['configuracion']['id_configuracion']);
+          if (juego['configuracion'] != null) {
+            bool confUpd = await sincronizarConfiguracion(
+                juego['configuracion'],
+                juego['idProgramacionJuego'],
+                actualizado);
+            if (confUpd) {
+              configuracionIds.add(juego['configuracion']['idConfiguracion']);
+            }
           }
-        }
 
-        if ((juego['premios'] as List).isNotEmpty) {
-          sincronizarFiguras(
-              juego['premios'], juego['idProgramacionJuego'], actualizado);
+          if ((juego['premios'] as List).isNotEmpty) {
+            sincronizarFiguras(
+                juego['premios'], juego['idProgramacionJuego'], actualizado);
+          }
         }
       }
 
@@ -42,7 +46,7 @@ class SincronizarRepository {
       }
 
       // terminar los juegos que no esten en los datos -- pendiente eliminar
-      db<AppDatabase>().juegosDao.cancelarJuegos(juegosIds);
+      db<AppDatabase>().juegosDao.eliminarJuegos(juegosIds);
       db<AppDatabase>()
           .configuracionesDao
           .cancelarConfiguraciones(configuracionIds);
@@ -135,5 +139,9 @@ class SincronizarRepository {
     return db<AppDatabase>()
         .sincronizadosDao
         .setSincronizado(tabla, actualizado);
+  }
+
+  Future<int> inicializarSincronizacion() async {
+    return db<AppDatabase>().sincronizadosDao.inicializarSincronizacion();
   }
 }

@@ -46,7 +46,6 @@ class Api {
       {Map<String, dynamic>? params, bool isAuth = false}) async {
     baseUrl = await getBaseUrl();
     url = Uri.https(baseUrl, prefix + endPoint);
-    print(url);
     if (!isAuth) {
       headers['Authorization'] = '${await getToken()}';
     }
@@ -131,7 +130,6 @@ class Api {
   }
 
   void errorHandler(var e) {
-    print(e);
     if (e is StateError) throw Exception(StateError);
     if (e is SocketException) {
       throw Exception(

@@ -74,6 +74,15 @@ class AppMenu extends StatelessWidget {
                 onTap: () => pushScreen(context, item.screen),
               );
             }).toList(),
+            ListTile(
+              leading: const Icon(
+                Icons.change_circle_outlined,
+                color: Colors.amber,
+              ),
+              title: Text('Sincronizar',
+                  style: TextStyle(color: Colors.amber[600])),
+              onTap: () => navigateTo(context, 'sincronizar'),
+            ),
             Divider(
               color: Theme.of(context).colorScheme.secondaryVariant,
             ),

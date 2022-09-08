@@ -93,10 +93,6 @@ class AuthRepository {
       await prefs.setInt('idUsuario', usuario.idUsuario);
       await prefs.setString(
           'nombre', '${usuario.nombres} ${usuario.apellidos}');
-
-      await syncRep.updateSincronizados('usuario',
-          actualizado: DateTime.parse(userdata['actualizado']));
-
       return Result(isLogged: true, isSync: false, usuario: usuario);
     }
 

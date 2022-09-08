@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:form_builder_validators/localization/intl/messages_de.dart';
 import 'package:socio/repository/sincronizar_repository.dart';
 import 'package:socio/utils/db/db_manager.dart';
 
@@ -18,6 +17,7 @@ class SyncBloc extends Bloc<SyncEvent, SyncState> {
 
   void _onSincronizar(event, emit) async {
     try {
+      await rep.inicializarSincronizacion();
       emit(const SyncLoading('inicio sincronizacion...', {}));
       emit(const SyncLoading('Sincronizando Juegos...', {}));
       await rep.sincronizarJuego();

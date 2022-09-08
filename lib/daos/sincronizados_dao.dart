@@ -27,7 +27,7 @@ class SincronizadosDao extends DatabaseAccessor<AppDatabase>
   }
 
   Future<int> inicializarSincronizacion() async {
-    DateTime actualizado = DateTime.parse('2022-01-01');
+    DateTime actualizado = DateTime.now();
     return (update(sincronizados)
           ..where((t) => t.estado.equals('A'))
           ..where((t) => t.tabla.isNotIn(['usuario'])))

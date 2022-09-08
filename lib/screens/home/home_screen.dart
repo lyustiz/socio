@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socio/blocs/auth/auth_bloc.dart';
 import 'package:socio/blocs/items/items_bloc.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
@@ -15,9 +16,16 @@ class HomeScreen extends StatelessWidget {
     return BlocBuilder<ItemsBloc, ItemsState>(
       builder: (context, state) {
         ItemsBloc itemsBloc = context.read<ItemsBloc>();
+        AuthState authState = context.read<AuthBloc>().state;
+        String userName = 'Socio';
+
+        if (authState is AuthLogged) {
+          userName = authState.usuario.nombres;
+        }
+
         return AppScaffold(
           titleBar: AppTitleBar(
-            title: 'Socio',
+            title: userName,
             helpScreen: 'inicio',
           ),
           drawer: const HomeMenu(),
