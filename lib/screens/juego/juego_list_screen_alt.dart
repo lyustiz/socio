@@ -109,20 +109,16 @@ class JuegoListScreenAlt extends StatelessWidget {
             trailing: PopupMenuButton(
                 elevation: 7,
                 onSelected: (tipo) {
-                  if (juegosWithConfiguracion.juego.estado == 'C') {
-                    ScaffoldMessenger.of(context).showSnackBar(mensaje);
-                  } else {
-                    itemsBloc.add(SelectItem(
-                        tipoItem: 'juego', item: juegosWithConfiguracion));
-                    pushScreen(context, 'juego');
-                    switch (tipo) {
-                      case 'estadistica':
-                        break;
-                      case 'informe':
-                        pushScreen(context, 'informe_juego');
-                        break;
-                      default:
-                    }
+                  itemsBloc.add(SelectItem(
+                      tipoItem: 'juego', item: juegosWithConfiguracion));
+                  pushScreen(context, 'juego');
+                  switch (tipo) {
+                    case 'estadistica':
+                      break;
+                    case 'informe':
+                      pushScreen(context, 'informe_juego');
+                      break;
+                    default:
                   }
                 },
                 color: Theme.of(context).colorScheme.secondary,

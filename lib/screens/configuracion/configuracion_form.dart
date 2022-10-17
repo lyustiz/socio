@@ -128,6 +128,8 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
                                     AutovalidateMode.onUserInteraction,
                                 decoration: InputDecoration(
                                     labelText: 'Carton',
+                                    hintText:
+                                        'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
                                     border: OutlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
                                     ),
@@ -137,10 +139,14 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
                                 validator: FormBuilderValidators.compose([
                                   FormBuilderValidators.required(context,
                                       errorText: 'El carton es requerido'),
-                                  FormBuilderValidators.min(context, 1,
-                                      errorText: 'Debe ser mayor que 0'),
-                                  FormBuilderValidators.max(context, 1000,
-                                      errorText: 'No debe ser mayor que 1000'),
+                                  FormBuilderValidators.min(
+                                      context, juego.cartonInicial,
+                                      errorText:
+                                          'Debe ser mayor que ${juego.cartonInicial}'),
+                                  FormBuilderValidators.max(
+                                      context, juego.cartonFinal,
+                                      errorText:
+                                          'No debe ser mayor que ${juego.cartonFinal}'),
                                 ]),
                               ),
                               const SizedBox(
@@ -166,8 +172,8 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
                                       errorText: 'la balota es requerida'),
                                   FormBuilderValidators.min(context, 1,
                                       errorText: 'Debe ser mayor que 0'),
-                                  FormBuilderValidators.max(context, 100,
-                                      errorText: 'No debe ser mayor que 100'),
+                                  FormBuilderValidators.max(context, 75,
+                                      errorText: 'No debe ser mayor que 75'),
                                 ]),
                               ),
                               const SizedBox(

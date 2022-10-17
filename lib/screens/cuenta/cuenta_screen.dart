@@ -4,6 +4,7 @@ import 'package:socio/blocs/auth/auth_bloc.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
+import 'package:socio/utils/format/format_data.dart' as Fd;
 
 class CuentaScreen extends StatelessWidget {
   const CuentaScreen({Key? key}) : super(key: key);
@@ -62,8 +63,18 @@ class CuentaScreen extends StatelessWidget {
                                     leading: const Icon(Icons.calendar_today,
                                         size: 30, color: Colors.white),
                                     title: const Text('Fecha Creacion'),
+                                    subtitle: Text(Fd.formatDateTime(
+                                        authState.usuario.fechaCreacion))),
+                                ListTile(
+                                    leading: const Icon(
+                                        Icons.admin_panel_settings,
+                                        size: 30,
+                                        color: Colors.white),
+                                    title: const Text('Es Administrador'),
                                     subtitle: Text(
-                                        '${authState.usuario.fechaCreacion}')),
+                                        authState.usuario.isAdmin == 'S'
+                                            ? 'Si'
+                                            : 'No')),
                               ],
                             )
                           : const CircularProgressIndicator()),

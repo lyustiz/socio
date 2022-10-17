@@ -44,7 +44,7 @@ class HomeButton extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    height: MediaQuery.of(context).size.height * 0.20,
+                    height: MediaQuery.of(context).size.height * 0.15,
                     width: double.infinity,
                     padding:
                         EdgeInsets.only(top: 8, bottom: 8, left: 8, right: 12),

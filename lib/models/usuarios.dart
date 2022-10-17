@@ -11,6 +11,7 @@ class Usuarios extends Table {
   TextColumn get documento => text()();
   TextColumn get celular => text()();
   TextColumn get password => text().nullable()();
+  TextColumn get isAdmin => text()();
   TextColumn get estado => text()();
   DateTimeColumn get fechaCreacion => dateTime()();
   DateTimeColumn get fechaIngreso => dateTime().withDefault(currentDate)();

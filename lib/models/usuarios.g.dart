@@ -15,6 +15,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
   final String documento;
   final String celular;
   final String? password;
+  final String isAdmin;
   final String estado;
   final DateTime fechaCreacion;
   final DateTime fechaIngreso;
@@ -27,6 +28,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       required this.documento,
       required this.celular,
       this.password,
+      required this.isAdmin,
       required this.estado,
       required this.fechaCreacion,
       required this.fechaIngreso,
@@ -48,6 +50,8 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           .mapFromDatabaseResponse(data['${effectivePrefix}celular'])!,
       password: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}password']),
+      isAdmin: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}is_admin'])!,
       estado: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
       fechaCreacion: const DateTimeType()
@@ -70,6 +74,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
     if (!nullToAbsent || password != null) {
       map['password'] = Variable<String?>(password);
     }
+    map['is_admin'] = Variable<String>(isAdmin);
     map['estado'] = Variable<String>(estado);
     map['fecha_creacion'] = Variable<DateTime>(fechaCreacion);
     map['fecha_ingreso'] = Variable<DateTime>(fechaIngreso);
@@ -90,6 +95,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       password: password == null && nullToAbsent
           ? const Value.absent()
           : Value(password),
+      isAdmin: Value(isAdmin),
       estado: Value(estado),
       fechaCreacion: Value(fechaCreacion),
       fechaIngreso: Value(fechaIngreso),
@@ -110,6 +116,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       documento: serializer.fromJson<String>(json['documento']),
       celular: serializer.fromJson<String>(json['celular']),
       password: serializer.fromJson<String?>(json['password']),
+      isAdmin: serializer.fromJson<String>(json['isAdmin']),
       estado: serializer.fromJson<String>(json['estado']),
       fechaCreacion: serializer.fromJson<DateTime>(json['fechaCreacion']),
       fechaIngreso: serializer.fromJson<DateTime>(json['fechaIngreso']),
@@ -127,6 +134,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       'documento': serializer.toJson<String>(documento),
       'celular': serializer.toJson<String>(celular),
       'password': serializer.toJson<String?>(password),
+      'isAdmin': serializer.toJson<String>(isAdmin),
       'estado': serializer.toJson<String>(estado),
       'fechaCreacion': serializer.toJson<DateTime>(fechaCreacion),
       'fechaIngreso': serializer.toJson<DateTime>(fechaIngreso),
@@ -142,6 +150,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           String? documento,
           String? celular,
           String? password,
+          String? isAdmin,
           String? estado,
           DateTime? fechaCreacion,
           DateTime? fechaIngreso,
@@ -154,6 +163,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
         documento: documento ?? this.documento,
         celular: celular ?? this.celular,
         password: password ?? this.password,
+        isAdmin: isAdmin ?? this.isAdmin,
         estado: estado ?? this.estado,
         fechaCreacion: fechaCreacion ?? this.fechaCreacion,
         fechaIngreso: fechaIngreso ?? this.fechaIngreso,
@@ -169,6 +179,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           ..write('documento: $documento, ')
           ..write('celular: $celular, ')
           ..write('password: $password, ')
+          ..write('isAdmin: $isAdmin, ')
           ..write('estado: $estado, ')
           ..write('fechaCreacion: $fechaCreacion, ')
           ..write('fechaIngreso: $fechaIngreso, ')
@@ -186,6 +197,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       documento,
       celular,
       password,
+      isAdmin,
       estado,
       fechaCreacion,
       fechaIngreso,
@@ -201,6 +213,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           other.documento == this.documento &&
           other.celular == this.celular &&
           other.password == this.password &&
+          other.isAdmin == this.isAdmin &&
           other.estado == this.estado &&
           other.fechaCreacion == this.fechaCreacion &&
           other.fechaIngreso == this.fechaIngreso &&
@@ -215,6 +228,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
   final Value<String> documento;
   final Value<String> celular;
   final Value<String?> password;
+  final Value<String> isAdmin;
   final Value<String> estado;
   final Value<DateTime> fechaCreacion;
   final Value<DateTime> fechaIngreso;
@@ -227,6 +241,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     this.documento = const Value.absent(),
     this.celular = const Value.absent(),
     this.password = const Value.absent(),
+    this.isAdmin = const Value.absent(),
     this.estado = const Value.absent(),
     this.fechaCreacion = const Value.absent(),
     this.fechaIngreso = const Value.absent(),
@@ -240,6 +255,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     required String documento,
     required String celular,
     this.password = const Value.absent(),
+    required String isAdmin,
     required String estado,
     required DateTime fechaCreacion,
     this.fechaIngreso = const Value.absent(),
@@ -249,6 +265,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
         apellidos = Value(apellidos),
         documento = Value(documento),
         celular = Value(celular),
+        isAdmin = Value(isAdmin),
         estado = Value(estado),
         fechaCreacion = Value(fechaCreacion);
   static Insertable<Usuario> custom({
@@ -259,6 +276,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     Expression<String>? documento,
     Expression<String>? celular,
     Expression<String?>? password,
+    Expression<String>? isAdmin,
     Expression<String>? estado,
     Expression<DateTime>? fechaCreacion,
     Expression<DateTime>? fechaIngreso,
@@ -272,6 +290,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
       if (documento != null) 'documento': documento,
       if (celular != null) 'celular': celular,
       if (password != null) 'password': password,
+      if (isAdmin != null) 'is_admin': isAdmin,
       if (estado != null) 'estado': estado,
       if (fechaCreacion != null) 'fecha_creacion': fechaCreacion,
       if (fechaIngreso != null) 'fecha_ingreso': fechaIngreso,
@@ -287,6 +306,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
       Value<String>? documento,
       Value<String>? celular,
       Value<String?>? password,
+      Value<String>? isAdmin,
       Value<String>? estado,
       Value<DateTime>? fechaCreacion,
       Value<DateTime>? fechaIngreso,
@@ -299,6 +319,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
       documento: documento ?? this.documento,
       celular: celular ?? this.celular,
       password: password ?? this.password,
+      isAdmin: isAdmin ?? this.isAdmin,
       estado: estado ?? this.estado,
       fechaCreacion: fechaCreacion ?? this.fechaCreacion,
       fechaIngreso: fechaIngreso ?? this.fechaIngreso,
@@ -330,6 +351,9 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     if (password.present) {
       map['password'] = Variable<String?>(password.value);
     }
+    if (isAdmin.present) {
+      map['is_admin'] = Variable<String>(isAdmin.value);
+    }
     if (estado.present) {
       map['estado'] = Variable<String>(estado.value);
     }
@@ -355,6 +379,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
           ..write('documento: $documento, ')
           ..write('celular: $celular, ')
           ..write('password: $password, ')
+          ..write('isAdmin: $isAdmin, ')
           ..write('estado: $estado, ')
           ..write('fechaCreacion: $fechaCreacion, ')
           ..write('fechaIngreso: $fechaIngreso, ')
@@ -398,6 +423,10 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
   late final GeneratedColumn<String?> password = GeneratedColumn<String?>(
       'password', aliasedName, true,
       typeName: 'TEXT', requiredDuringInsert: false);
+  final VerificationMeta _isAdminMeta = const VerificationMeta('isAdmin');
+  late final GeneratedColumn<String?> isAdmin = GeneratedColumn<String?>(
+      'is_admin', aliasedName, false,
+      typeName: 'TEXT', requiredDuringInsert: true);
   final VerificationMeta _estadoMeta = const VerificationMeta('estado');
   late final GeneratedColumn<String?> estado = GeneratedColumn<String?>(
       'estado', aliasedName, false,
@@ -428,6 +457,7 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
         documento,
         celular,
         password,
+        isAdmin,
         estado,
         fechaCreacion,
         fechaIngreso,
@@ -479,6 +509,12 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
     if (data.containsKey('password')) {
       context.handle(_passwordMeta,
           password.isAcceptableOrUnknown(data['password']!, _passwordMeta));
+    }
+    if (data.containsKey('is_admin')) {
+      context.handle(_isAdminMeta,
+          isAdmin.isAcceptableOrUnknown(data['is_admin']!, _isAdminMeta));
+    } else if (isInserting) {
+      context.missing(_isAdminMeta);
     }
     if (data.containsKey('estado')) {
       context.handle(_estadoMeta,

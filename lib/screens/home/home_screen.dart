@@ -18,9 +18,11 @@ class HomeScreen extends StatelessWidget {
         ItemsBloc itemsBloc = context.read<ItemsBloc>();
         AuthState authState = context.read<AuthBloc>().state;
         String userName = 'Socio';
+        bool isAdmin = false;
 
         if (authState is AuthLogged) {
           userName = authState.usuario.nombres;
+          isAdmin = authState.usuario.isAdmin == 'S';
         }
 
         return AppScaffold(
@@ -43,14 +45,36 @@ class HomeScreen extends StatelessWidget {
                         color: Colors.white),
                   ),
                 ),
+                (!isAdmin)
+                    ? Container()
+                    : HomeButton(
+                        icon: Icons.settings,
+                        title: 'Configurar Juego',
+                        color: Theme.of(context).colorScheme.secondaryVariant,
+                        onTap: () {
+                          itemsBloc.add(const SelectItem(
+                              tipoItem: 'terminado', item: 'N'));
+                          navigateTo(context, 'juego_list');
+                        },
+                        body: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '',
+                              style: TextStyle(
+                                  color: Colors.primaries.first, fontSize: 26),
+                            ),
+                          ],
+                        ),
+                      ),
                 HomeButton(
-                  icon: Icons.settings,
-                  title: 'Configurar Juego',
-                  color: Theme.of(context).colorScheme.primary,
+                  icon: Icons.query_stats,
+                  title: 'Informe de Juegos',
+                  color: Theme.of(context).colorScheme.secondary,
                   onTap: () {
                     itemsBloc.add(
                         const SelectItem(tipoItem: 'terminado', item: 'N'));
-                    navigateTo(context, 'juego_list');
+                    navigateTo(context, 'juego_list_alt');
                   },
                   body: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -64,13 +88,11 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 HomeButton(
-                  icon: Icons.query_stats,
-                  title: 'Informe de Juegos',
-                  color: Theme.of(context).colorScheme.secondary,
+                  icon: Icons.sync_outlined,
+                  title: 'Sincronizar',
+                  color: Theme.of(context).colorScheme.primary,
                   onTap: () {
-                    itemsBloc.add(
-                        const SelectItem(tipoItem: 'terminado', item: 'N'));
-                    navigateTo(context, 'juego_list_alt');
+                    navigateTo(context, 'sincronizar');
                   },
                   body: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

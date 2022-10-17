@@ -4,7 +4,9 @@ Future<bool?> appDialog(context, String title, List<Widget> content,
     {String action = 'Ok', bool active = true}) async {
   return await showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) => AlertDialog(
+            contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 0),
             backgroundColor: Theme.of(context).colorScheme.secondary,
             title: Text(title),
             content: SingleChildScrollView(

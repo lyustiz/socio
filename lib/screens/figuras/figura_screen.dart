@@ -83,6 +83,10 @@ class FiguraScreen extends StatelessWidget {
       List<Figura> figuras, FiguraBloc figuraBlock) {
     List<Widget> itemsFiguras = [];
 
+    figuras = figuras
+        .where((figura) => !figura.nombre.toLowerCase().startsWith('lleno'))
+        .toList();
+
     for (var figura in figuras) {
       var item = Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
@@ -170,6 +174,7 @@ class FiguraScreen extends StatelessWidget {
   void confirm(BuildContext context, Juego juego, Figura figura, bool active,
       FiguraBloc figuraBlock) async {
     String mensaje = active ? ', se Acumule? ' : ', "NO" se Acumule? ';
+
     final _formKey = GlobalKey<FormBuilderState>();
     List<Widget> content = [
       const SizedBox(height: 20),
@@ -186,7 +191,13 @@ class FiguraScreen extends StatelessWidget {
           ],
         ),
       ),
-      const SizedBox(height: 20),
+      Container(
+        margin: EdgeInsets.only(top: 15, bottom: 15),
+        child: Text(
+          'Cartones desde ${juego.cartonInicial} hasta ${juego.cartonFinal}',
+          style: const TextStyle(color: Colors.amber, fontSize: 14),
+        ),
+      ),
       (!active)
           ? const SizedBox(height: 20)
           : FormBuilder(
@@ -212,13 +223,26 @@ class FiguraScreen extends StatelessWidget {
                         errorText: 'El carton es requerido'),
                     FormBuilderValidators.integer(context,
                         errorText: 'indicar Solo numeros'),
-                    FormBuilderValidators.min(context, 1,
-                        errorText: 'Debe ser mayor que 0'),
-                    FormBuilderValidators.max(context, 999,
-                        errorText: 'No debe ser mayor de 100'),
+                    FormBuilderValidators.min(context, 0,
+                        errorText:
+                            'Debe ser ${juego.cartonInicial} o superior'),
+                    FormBuilderValidators.max(context, juego.cartonFinal,
+                        errorText: 'No debe ser mayor de ${juego.cartonFinal}'),
+                    (val) {
+                      final number = int.parse(val ?? '0');
+                      if (number == 0) return null;
+                      if (number < juego.cartonInicial) {
+                        return 'Debe ser 0, ${juego.cartonInicial} o superior';
+                      }
+                      return null;
+                    }
                   ])),
             ),
-      const SizedBox(height: 20),
+      const SizedBox(height: 4),
+      (!active)
+          ? const SizedBox(height: 5)
+          : const Text('Cero (0) selecciona un carton aleatorio no vendido',
+              style: TextStyle(color: Colors.amber)),
     ];
 
     bool? isConfirm = await Dlg.appDialog(context, 'Acumular Figura?', content,
