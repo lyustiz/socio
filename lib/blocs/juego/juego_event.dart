@@ -27,7 +27,7 @@ class GetAllJuego extends JuegoEvent {
   List<Juego> get props => [];
 
   @override
-  String toString() => 'GetAllUsuario';
+  String toString() => 'GetAllJuegos';
 }
 
 class UpdateJuego extends JuegoEvent {

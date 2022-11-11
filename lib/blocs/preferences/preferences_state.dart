@@ -12,11 +12,13 @@ class PreferencesInitial extends PreferencesState {}
 class PreferenceLoaded extends PreferencesState {
   final Theme theme;
   final String endpoint;
-  const PreferenceLoaded({required this.theme, required this.endpoint});
+  final String locale;
+  const PreferenceLoaded(
+      {required this.theme, required this.endpoint, this.locale = "es-CO"});
 
   @override
-  List<Object> get props => [theme, endpoint];
+  List<Object> get props => [theme, endpoint, locale];
 
   @override
-  String toString() => '$runtimeType { $theme }';
+  String toString() => '$runtimeType { $theme,  $endpoint, $locale }';
 }

@@ -9,8 +9,11 @@ import 'package:socio/blocs/items/items_bloc.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
 
+import 'package:socio/utils/format/format_data.dart' as Fd;
+
 class JuegoScreen extends StatelessWidget {
   JuegoScreen({Key? key}) : super(key: key);
+  late Fd.FormatLocale fL;
   final mensaje = SnackBar(
       duration: const Duration(milliseconds: 700),
       content: Row(children: [
@@ -35,12 +38,12 @@ class JuegoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Juego juego = context.read<ItemsBloc>().state.juegoSelected.juego;
-
+    fL = Fd.FormatLocale(locale: juego.moneda);
     return AppScaffold(
       color: 'white',
       titleBar: AppTitleBarVariant(
         title:
-            'Informe Juego ${juego.idProgramacionJuego.toString().padLeft(2, '0')}',
+            'Estadisticas ${juego.idProgramacionJuego.toString().padLeft(2, '0')}',
         leading: IconButton(
             onPressed: () => navigateTo(context, 'juego_list_alt'),
             icon: const Icon(Icons.chevron_left)),
@@ -123,10 +126,10 @@ class JuegoScreen extends StatelessWidget {
               size: 35,
             ),
             title: Text(
-              'Valor Carton $valorCarton',
+              'Valor Carton ${fL.currency(valorCarton)}',
               style: TextStyle(fontSize: 16),
             ),
-            subtitle: Text('Valor Modulo $valorModulo',
+            subtitle: Text('Valor Modulo ${fL.currency(valorModulo)}',
                 style: TextStyle(fontSize: 16)),
           ),
           ListTile(
@@ -208,7 +211,7 @@ class JuegoScreen extends StatelessWidget {
               style: TextStyle(fontSize: 35),
             ),
             subtitle: Text(
-                'Monto Venta Cartones $montoVendidoCarton/$montoTotalCarton'),
+                'Monto Venta Cartones ${fL.currency(montoVendidoCarton)}/${fL.currency(montoTotalCarton)}'),
             title: LinearProgressIndicator(
               color: Colors.greenAccent,
               value: (porcVentaCarton < 1 && porcVentaCarton > 0)
@@ -223,7 +226,7 @@ class JuegoScreen extends StatelessWidget {
               style: TextStyle(fontSize: 35),
             ),
             subtitle: Text(
-                'Monto Venta Modulos $montoVendidoModulo/$montoTotalModulo'),
+                'Monto Venta Modulos ${fL.currency(montoVendidoModulo)}/${fL.currency(montoTotalModulo)}'),
             title: LinearProgressIndicator(
               color: Colors.greenAccent,
               value: (porcVentaModulo < 1 && porcVentaModulo > 0)
@@ -237,8 +240,8 @@ class JuegoScreen extends StatelessWidget {
               ' \$',
               style: TextStyle(fontSize: 35),
             ),
-            subtitle:
-                Text('Monto Total Venta $montoTotalVendido/$montoTotalGeneral'),
+            subtitle: Text(
+                'Monto Total Venta ${fL.currency(montoTotalVendido)}/${fL.currency(montoTotalGeneral)}'),
             title: LinearProgressIndicator(
               color: Colors.greenAccent,
               value: (porcVenta < 1 && porcVenta > 0) ? 0.01 : porcVenta,

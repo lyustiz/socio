@@ -36,3 +36,17 @@ class UpdateEndPoint extends PreferencesEvent {
   @override
   String toString() => 'UpdateEndPonit { $empresa }';
 }
+
+class UpdateLocale extends PreferencesEvent {
+  final String locale;
+
+  const UpdateLocale(this.locale);
+
+  @override
+  List<Object> get props => [
+        {locale}
+      ];
+
+  @override
+  String toString() => 'UpdateEndPonit { $locale }';
+}

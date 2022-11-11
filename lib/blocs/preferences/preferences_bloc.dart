@@ -29,5 +29,12 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
       emit(PreferenceLoaded(
           theme: Theme.dark, endpoint: endpoints[event.empresa]!));
     });
+
+    on<UpdateLocale>((event, emit) async {
+      preferencesRepository.setLocale(event.locale);
+      final String endpoint = await preferencesRepository.getEndPoint();
+      emit(PreferenceLoaded(
+          theme: Theme.dark, endpoint: endpoint, locale: event.locale));
+    });
   }
 }

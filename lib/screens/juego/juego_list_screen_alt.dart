@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
-import 'package:socio/screens/informe_juego/informe_juego_screen.dart';
 import 'package:socio/screens/juego/juego_screen.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
@@ -103,7 +102,7 @@ class JuegoListScreenAlt extends StatelessWidget {
                     fontSize: 24,
                     fontWeight: FontWeight.bold)),
             subtitle: Text(
-              '${Fd.formatDateTime(juegosWithConfiguracion.juego.fechaProgramada)}',
+              Fd.formatDateTime(juegosWithConfiguracion.juego.fechaProgramada),
               style: const TextStyle(color: Colors.white, fontSize: 14),
             ),
             trailing: PopupMenuButton(

@@ -7,7 +7,8 @@ class JuegoRepository {
   }
 
   Future<List<Juego>> allJuegos(String terminado) async {
-    return db<AppDatabase>().juegosDao.allJuegos(terminado);
+    var juegos = await db<AppDatabase>().juegosDao.allJuegos(terminado);
+    return juegos;
   }
 
   Future<bool> upateJuego(Juego juego) async {
@@ -21,4 +22,6 @@ class JuegoRepository {
   Future<int> deleteJuego(Juego juego) async {
     return db<AppDatabase>().juegosDao.deleteJuego(juego);
   }
+
+  static PreferenceRepositoryImpl() {}
 }

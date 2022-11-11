@@ -6,4 +6,8 @@ abstract class PreferencesRepository {
 
   Future<void> setEndPoint(String endPoint);
   Future<String> getEndPoint();
+
+  Future<void> setLocale(String locale);
+  Future<String> getLocale();
+  Future<void> setupLocale({String locale});
 }

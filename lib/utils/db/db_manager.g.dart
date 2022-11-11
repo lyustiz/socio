@@ -561,6 +561,7 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
 
 class Juego extends DataClass implements Insertable<Juego> {
   final int idProgramacionJuego;
+  final int? idJuego;
   final String tipoJuego;
   final DateTime fechaProgramada;
   final int moduloCartones;
@@ -582,6 +583,7 @@ class Juego extends DataClass implements Insertable<Juego> {
   final DateTime? actualizado;
   Juego(
       {required this.idProgramacionJuego,
+      this.idJuego,
       required this.tipoJuego,
       required this.fechaProgramada,
       required this.moduloCartones,
@@ -606,6 +608,8 @@ class Juego extends DataClass implements Insertable<Juego> {
     return Juego(
       idProgramacionJuego: const IntType().mapFromDatabaseResponse(
           data['${effectivePrefix}id_programacion_juego'])!,
+      idJuego: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}id_juego']),
       tipoJuego: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}tipo_juego'])!,
       fechaProgramada: const DateTimeType()
@@ -650,6 +654,9 @@ class Juego extends DataClass implements Insertable<Juego> {
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id_programacion_juego'] = Variable<int>(idProgramacionJuego);
+    if (!nullToAbsent || idJuego != null) {
+      map['id_juego'] = Variable<int?>(idJuego);
+    }
     map['tipo_juego'] = Variable<String>(tipoJuego);
     map['fecha_programada'] = Variable<DateTime>(fechaProgramada);
     map['modulo_cartones'] = Variable<int>(moduloCartones);
@@ -677,6 +684,9 @@ class Juego extends DataClass implements Insertable<Juego> {
   JuegosCompanion toCompanion(bool nullToAbsent) {
     return JuegosCompanion(
       idProgramacionJuego: Value(idProgramacionJuego),
+      idJuego: idJuego == null && nullToAbsent
+          ? const Value.absent()
+          : Value(idJuego),
       tipoJuego: Value(tipoJuego),
       fechaProgramada: Value(fechaProgramada),
       moduloCartones: Value(moduloCartones),
@@ -707,6 +717,7 @@ class Juego extends DataClass implements Insertable<Juego> {
     return Juego(
       idProgramacionJuego:
           serializer.fromJson<int>(json['idProgramacionJuego']),
+      idJuego: serializer.fromJson<int?>(json['idJuego']),
       tipoJuego: serializer.fromJson<String>(json['tipoJuego']),
       fechaProgramada: serializer.fromJson<DateTime>(json['fechaProgramada']),
       moduloCartones: serializer.fromJson<int>(json['moduloCartones']),
@@ -734,6 +745,7 @@ class Juego extends DataClass implements Insertable<Juego> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'idProgramacionJuego': serializer.toJson<int>(idProgramacionJuego),
+      'idJuego': serializer.toJson<int?>(idJuego),
       'tipoJuego': serializer.toJson<String>(tipoJuego),
       'fechaProgramada': serializer.toJson<DateTime>(fechaProgramada),
       'moduloCartones': serializer.toJson<int>(moduloCartones),
@@ -758,6 +770,7 @@ class Juego extends DataClass implements Insertable<Juego> {
 
   Juego copyWith(
           {int? idProgramacionJuego,
+          int? idJuego,
           String? tipoJuego,
           DateTime? fechaProgramada,
           int? moduloCartones,
@@ -779,6 +792,7 @@ class Juego extends DataClass implements Insertable<Juego> {
           DateTime? actualizado}) =>
       Juego(
         idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
+        idJuego: idJuego ?? this.idJuego,
         tipoJuego: tipoJuego ?? this.tipoJuego,
         fechaProgramada: fechaProgramada ?? this.fechaProgramada,
         moduloCartones: moduloCartones ?? this.moduloCartones,
@@ -803,6 +817,7 @@ class Juego extends DataClass implements Insertable<Juego> {
   String toString() {
     return (StringBuffer('Juego(')
           ..write('idProgramacionJuego: $idProgramacionJuego, ')
+          ..write('idJuego: $idJuego, ')
           ..write('tipoJuego: $tipoJuego, ')
           ..write('fechaProgramada: $fechaProgramada, ')
           ..write('moduloCartones: $moduloCartones, ')
@@ -827,32 +842,35 @@ class Juego extends DataClass implements Insertable<Juego> {
   }
 
   @override
-  int get hashCode => Object.hash(
-      idProgramacionJuego,
-      tipoJuego,
-      fechaProgramada,
-      moduloCartones,
-      moneda,
-      valorCarton,
-      totalCartones,
-      valorModulo,
-      totalModulos,
-      totalPremios,
-      serie,
-      cartonInicial,
-      cartonFinal,
-      hojaInicial,
-      hojaFinal,
-      horaCierre,
-      previoCierre,
-      permitirDevolucion,
-      estado,
-      actualizado);
+  int get hashCode => Object.hashAll([
+        idProgramacionJuego,
+        idJuego,
+        tipoJuego,
+        fechaProgramada,
+        moduloCartones,
+        moneda,
+        valorCarton,
+        totalCartones,
+        valorModulo,
+        totalModulos,
+        totalPremios,
+        serie,
+        cartonInicial,
+        cartonFinal,
+        hojaInicial,
+        hojaFinal,
+        horaCierre,
+        previoCierre,
+        permitirDevolucion,
+        estado,
+        actualizado
+      ]);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Juego &&
           other.idProgramacionJuego == this.idProgramacionJuego &&
+          other.idJuego == this.idJuego &&
           other.tipoJuego == this.tipoJuego &&
           other.fechaProgramada == this.fechaProgramada &&
           other.moduloCartones == this.moduloCartones &&
@@ -876,6 +894,7 @@ class Juego extends DataClass implements Insertable<Juego> {
 
 class JuegosCompanion extends UpdateCompanion<Juego> {
   final Value<int> idProgramacionJuego;
+  final Value<int?> idJuego;
   final Value<String> tipoJuego;
   final Value<DateTime> fechaProgramada;
   final Value<int> moduloCartones;
@@ -897,6 +916,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
   final Value<DateTime?> actualizado;
   const JuegosCompanion({
     this.idProgramacionJuego = const Value.absent(),
+    this.idJuego = const Value.absent(),
     this.tipoJuego = const Value.absent(),
     this.fechaProgramada = const Value.absent(),
     this.moduloCartones = const Value.absent(),
@@ -919,6 +939,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
   });
   JuegosCompanion.insert({
     this.idProgramacionJuego = const Value.absent(),
+    this.idJuego = const Value.absent(),
     required String tipoJuego,
     required DateTime fechaProgramada,
     required int moduloCartones,
@@ -958,6 +979,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
         estado = Value(estado);
   static Insertable<Juego> custom({
     Expression<int>? idProgramacionJuego,
+    Expression<int?>? idJuego,
     Expression<String>? tipoJuego,
     Expression<DateTime>? fechaProgramada,
     Expression<int>? moduloCartones,
@@ -981,6 +1003,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
     return RawValuesInsertable({
       if (idProgramacionJuego != null)
         'id_programacion_juego': idProgramacionJuego,
+      if (idJuego != null) 'id_juego': idJuego,
       if (tipoJuego != null) 'tipo_juego': tipoJuego,
       if (fechaProgramada != null) 'fecha_programada': fechaProgramada,
       if (moduloCartones != null) 'modulo_cartones': moduloCartones,
@@ -1005,6 +1028,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
 
   JuegosCompanion copyWith(
       {Value<int>? idProgramacionJuego,
+      Value<int?>? idJuego,
       Value<String>? tipoJuego,
       Value<DateTime>? fechaProgramada,
       Value<int>? moduloCartones,
@@ -1026,6 +1050,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
       Value<DateTime?>? actualizado}) {
     return JuegosCompanion(
       idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
+      idJuego: idJuego ?? this.idJuego,
       tipoJuego: tipoJuego ?? this.tipoJuego,
       fechaProgramada: fechaProgramada ?? this.fechaProgramada,
       moduloCartones: moduloCartones ?? this.moduloCartones,
@@ -1053,6 +1078,9 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
     final map = <String, Expression>{};
     if (idProgramacionJuego.present) {
       map['id_programacion_juego'] = Variable<int>(idProgramacionJuego.value);
+    }
+    if (idJuego.present) {
+      map['id_juego'] = Variable<int?>(idJuego.value);
     }
     if (tipoJuego.present) {
       map['tipo_juego'] = Variable<String>(tipoJuego.value);
@@ -1118,6 +1146,7 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
   String toString() {
     return (StringBuffer('JuegosCompanion(')
           ..write('idProgramacionJuego: $idProgramacionJuego, ')
+          ..write('idJuego: $idJuego, ')
           ..write('tipoJuego: $tipoJuego, ')
           ..write('fechaProgramada: $fechaProgramada, ')
           ..write('moduloCartones: $moduloCartones, ')
@@ -1153,6 +1182,10 @@ class $JuegosTable extends Juegos with TableInfo<$JuegosTable, Juego> {
       typeName: 'INTEGER',
       requiredDuringInsert: false,
       defaultConstraints: 'PRIMARY KEY AUTOINCREMENT');
+  final VerificationMeta _idJuegoMeta = const VerificationMeta('idJuego');
+  late final GeneratedColumn<int?> idJuego = GeneratedColumn<int?>(
+      'id_juego', aliasedName, true,
+      typeName: 'INTEGER', requiredDuringInsert: false);
   final VerificationMeta _tipoJuegoMeta = const VerificationMeta('tipoJuego');
   late final GeneratedColumn<String?> tipoJuego = GeneratedColumn<String?>(
       'tipo_juego', aliasedName, false,
@@ -1245,6 +1278,7 @@ class $JuegosTable extends Juegos with TableInfo<$JuegosTable, Juego> {
   @override
   List<GeneratedColumn> get $columns => [
         idProgramacionJuego,
+        idJuego,
         tipoJuego,
         fechaProgramada,
         moduloCartones,
@@ -1279,6 +1313,10 @@ class $JuegosTable extends Juegos with TableInfo<$JuegosTable, Juego> {
           _idProgramacionJuegoMeta,
           idProgramacionJuego.isAcceptableOrUnknown(
               data['id_programacion_juego']!, _idProgramacionJuegoMeta));
+    }
+    if (data.containsKey('id_juego')) {
+      context.handle(_idJuegoMeta,
+          idJuego.isAcceptableOrUnknown(data['id_juego']!, _idJuegoMeta));
     }
     if (data.containsKey('tipo_juego')) {
       context.handle(_tipoJuegoMeta,

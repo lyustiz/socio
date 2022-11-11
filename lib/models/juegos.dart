@@ -5,6 +5,7 @@ part 'juegos.g.dart';
 @DataClassName("Juego")
 class Juegos extends Table {
   IntColumn get idProgramacionJuego => integer().autoIncrement()();
+  IntColumn get idJuego => integer().nullable()();
   TextColumn get tipoJuego => text()();
   DateTimeColumn get fechaProgramada => dateTime()();
   IntColumn get moduloCartones => integer()();

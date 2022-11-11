@@ -9,13 +9,17 @@ import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
 
+import 'package:socio/utils/format/format_data.dart' as Fd;
+
 class EstadisticaScreen extends StatelessWidget {
   EstadisticaScreen({Key? key}) : super(key: key);
+
+  late Fd.FormatLocale fL;
 
   @override
   Widget build(BuildContext context) {
     Juego juego = context.read<ItemsBloc>().state.juegoSelected.juego;
-
+    fL = Fd.FormatLocale(locale: juego.moneda);
     return BlocProvider(
       create: (context) => EstadisticaBloc(),
       child: AppScaffold(
@@ -121,24 +125,24 @@ class EstadisticaScreen extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
               ),
               subtitle: Text(
-                'Valor Carton ${est.valorCarton}',
+                'Valor Carton ${fL.currency(est.valorCarton)}',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.secondary),
               ),
-              trailing: Text('${est.totalVentaCartones}',
+              trailing: Text(fL.currency(est.totalVentaCartones),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             ),
             ListTile(
               title: Text('Total Venta Modulos',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
               subtitle: Text(
-                'Valor Modulo ${est.valorModulo}',
+                'Valor Modulo ${fL.currency(est.valorModulo)}',
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.secondary),
               ),
-              trailing: Text('${est.totalVentaModulos}',
+              trailing: Text('${fL.currency(est.totalVentaModulos)}',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
             )
           ],

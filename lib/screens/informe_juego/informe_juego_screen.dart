@@ -14,14 +14,18 @@ import 'package:socio/blocs/items/items_bloc.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
 
+import 'package:socio/utils/format/format_data.dart' as Fd;
+
 class InformeJuegoScreen extends StatelessWidget {
   InformeJuegoScreen({Key? key}) : super(key: key);
 
   late Juego juego;
+  late Fd.FormatLocale fL;
 
   @override
   Widget build(BuildContext context) {
     juego = context.read<ItemsBloc>().state.juegoSelected.juego;
+    fL = Fd.FormatLocale(locale: juego.moneda);
 
     return DefaultTabController(
         length: 3,
@@ -76,30 +80,30 @@ class InformeJuegoScreen extends StatelessWidget {
     return const LinearProgressIndicator();
   }
 
-  Widget informeContent(BuildContext context, InformeJuegoDto informeJuego) {
+  Widget informeContent(BuildContext context, InformeJuegoDto informe) {
     return TabBarView(
       children: [
-        resumenJuego(context, informeJuego),
-        resumenVendedores(context, informeJuego),
-        resumenPremios(context, informeJuego),
+        resumenJuego(context, informe),
+        resumenVendedores(context, informe),
+        resumenPremios(context, informe),
       ],
     );
   }
 
-  Widget resumenJuego(BuildContext context, InformeJuegoDto informeJuego) {
-    double asistenciaSocial = informeJuego.asistenciaSocial;
-    double totalPremios = informeJuego.figuras
-        .fold(0, (total, figura) => total + figura.valorPremio);
+  Widget resumenJuego(BuildContext context, InformeJuegoDto informe) {
+    double asistenciaSocial = informe.asistenciaSocial;
+    double totalPremios =
+        informe.figuras.fold(0, (total, figura) => total + figura.valorPremio);
 
-    double cuentasXCobrar = informeJuego.cuentasXCobrar;
-    double totalVentas = informeJuego.totalVentas;
-    double totalRecaudos = informeJuego.totalRecaudos;
-    double faltante = informeJuego.faltante;
-    double efectivo = informeJuego.efectivo;
-    double banco = informeJuego.banco;
-    double sobrante = informeJuego.sobrante;
-    double totalGastos = informeJuego.totalGastos;
-    double resultadoFinal = informeJuego.resultadoFinal;
+    double cuentasXCobrar = informe.cuentasXCobrar;
+    double totalVentas = informe.totalVentas;
+    double totalRecaudos = informe.totalRecaudos;
+    double faltante = informe.faltante;
+    double efectivo = informe.efectivo;
+    double banco = informe.banco;
+    double sobrante = informe.sobrante;
+    double totalGastos = informe.totalGastos;
+    double resultadoFinal = informe.resultadoFinal;
 
     return AppContainer(
       variant: 'secondary',
@@ -118,26 +122,32 @@ class InformeJuegoScreen extends StatelessWidget {
               infoList(
                   title: 'Cartones',
                   text:
-                      'Desde: ${informeJuego.cartonInicial} al ${informeJuego.cartonFinal}'),
+                      'Desde: ${informe.cartonInicial} al ${informe.cartonFinal}'),
               infoList(
-                  title: 'Valor Carton', text: '${informeJuego.valorCarton}'),
+                  title: 'Valor Carton',
+                  text: fL.currency(informe.valorCarton)),
               infoList(
-                  title: 'Valor Modulo', text: '${informeJuego.valorModulo}'),
-              infoList(title: 'Total Premios', text: '$totalPremios'),
+                  title: 'Valor Modulo',
+                  text: fL.currency(informe.valorModulo)),
+              infoList(title: 'Total Premios', text: fL.currency(totalPremios)),
               infoList(
-                  title: 'Total Cartones',
-                  text: '${informeJuego.totalCartones}'),
-              infoList(title: 'Asistenacia Social', text: '$asistenciaSocial'),
-              infoList(title: 'Cuentas X Cobrar', text: '$cuentasXCobrar'),
-              infoList(title: 'Total Ventas', text: '$totalVentas'),
-              infoList(title: 'Total Recaudos', text: '$totalRecaudos'),
-              infoList(title: 'Faltante', text: '$faltante'),
-              infoList(title: 'Efectivo', text: '$efectivo'),
-              infoList(title: 'Banco', text: '$banco'),
-              infoList(title: 'Sobrante', text: '$sobrante'),
-              infoList(title: 'Total Gastos', text: '$totalGastos'),
+                  title: 'Total Cartones', text: '${informe.totalCartones}'),
+              infoList(
+                  title: 'Asistencia Social',
+                  text: fL.currency(asistenciaSocial)),
+              infoList(
+                  title: 'Cuentas X Cobrar', text: fL.currency(cuentasXCobrar)),
+              infoList(title: 'Total Ventas', text: fL.currency(totalVentas)),
+              infoList(
+                  title: 'Total Recaudos', text: fL.currency(totalRecaudos)),
+              infoList(title: 'Faltante', text: fL.currency(faltante)),
+              infoList(title: 'Efectivo', text: fL.currency(efectivo)),
+              infoList(title: 'Banco', text: fL.currency(banco)),
+              infoList(title: 'Sobrante', text: fL.currency(sobrante)),
+              infoList(title: 'Total Gastos', text: fL.currency(totalGastos)),
               const Divider(color: Colors.white, indent: 12, endIndent: 12),
-              infoList(title: 'Resultado Final', text: '$resultadoFinal'),
+              infoList(
+                  title: 'Resultado Final', text: fL.currency(resultadoFinal)),
             ]),
           ))
         ],
@@ -145,8 +155,8 @@ class InformeJuegoScreen extends StatelessWidget {
     );
   }
 
-  Widget resumenVendedores(BuildContext context, InformeJuegoDto informeJuego) {
-    List<VendedorCobroDto> vendedoresCobro = informeJuego.vendedoresCobroDto;
+  Widget resumenVendedores(BuildContext context, InformeJuegoDto informe) {
+    List<VendedorCobroDto> vendedoresCobro = informe.vendedoresCobroDto;
     return AppContainer(
         variant: 'secondary',
         child: Column(children: [
@@ -175,15 +185,15 @@ class InformeJuegoScreen extends StatelessWidget {
                 ...vendedoresCobro.map((vc) {
                   return DataRow(cells: [
                     DataCell(Text(vc.nombreVendedor)),
-                    DataCell(Text('${vc.totalCartones}')),
-                    DataCell(Text('${vc.totalModulos}')),
-                    DataCell(Text('${vc.cartonesCortesia}')),
-                    DataCell(Text('${vc.totalPagado}')),
-                    DataCell(Text('${vc.cartonesDevueltos}')),
-                    DataCell(Text('${vc.porcentajeComision}')),
-                    DataCell(Text('${vc.cartonesCortesia}')),
-                    DataCell(Text('${vc.porcentajeComision}')),
-                    DataCell(Text('${vc.totalVentas}'))
+                    DataCell(Text(fL.currency(vc.totalCartones))),
+                    DataCell(Text(fL.currency(vc.totalModulos))),
+                    DataCell(Text(fL.currency(vc.cartonesCortesia))),
+                    DataCell(Text(fL.currency(vc.totalPagado))),
+                    DataCell(Text(fL.currency(vc.cartonesDevueltos))),
+                    DataCell(Text(fL.currency(vc.porcentajeComision))),
+                    DataCell(Text(fL.currency(vc.cartonesCortesia))),
+                    DataCell(Text(fL.currency(vc.porcentajeComision))),
+                    DataCell(Text(fL.currency(vc.totalVentas)))
                   ]);
                 })
               ]),
@@ -192,8 +202,8 @@ class InformeJuegoScreen extends StatelessWidget {
         ]));
   }
 
-  Widget resumenUsuarios(BuildContext context, InformeJuegoDto informeJuego) {
-    List<RecaudosTotalesDto> recaudosTotales = informeJuego.recaudosTotalesDTO;
+  Widget resumenUsuarios(BuildContext context, InformeJuegoDto informe) {
+    List<RecaudosTotalesDto> recaudosTotales = informe.recaudosTotalesDTO;
     return AppContainer(
         variant: 'secondary',
         child: Column(children: [
@@ -218,11 +228,11 @@ class InformeJuegoScreen extends StatelessWidget {
                 ...recaudosTotales.map((row) {
                   return DataRow(cells: [
                     DataCell(Text(row.nombreUsuario)),
-                    DataCell(Text('${row.ingresos}')),
-                    DataCell(Text('${row.gastos}')),
-                    DataCell(Text('${row.recuadoTotal}')),
-                    DataCell(Text('${row.valorRecaudoCalculado}')),
-                    DataCell(Text('${row.diferencia}')),
+                    DataCell(Text(fL.currency(row.ingresos))),
+                    DataCell(Text(fL.currency(row.gastos))),
+                    DataCell(Text(fL.currency(row.recuadoTotal))),
+                    DataCell(Text(fL.currency(row.valorRecaudoCalculado))),
+                    DataCell(Text(fL.currency(row.diferencia))),
                   ]);
                 })
               ]),
@@ -231,8 +241,8 @@ class InformeJuegoScreen extends StatelessWidget {
         ]));
   }
 
-  Widget resumenPremios(BuildContext context, InformeJuegoDto informeJuego) {
-    List<FiguraDto> premio = informeJuego.figuras;
+  Widget resumenPremios(BuildContext context, InformeJuegoDto informe) {
+    List<FiguraDto> premio = informe.figuras;
     double totalValoPremios = 0;
 
     return AppContainer(
@@ -253,13 +263,13 @@ class InformeJuegoScreen extends StatelessWidget {
                 totalValoPremios += vr.valorPremio;
                 return DataRow(cells: [
                   DataCell(Text(vr.nombre)),
-                  DataCell(Text('${vr.valorPremio}')),
+                  DataCell(Text(fL.currency(vr.valorPremio))),
                 ]);
               }),
               DataRow(selected: true, cells: [
                 const DataCell(Text('Total',
                     style: TextStyle(fontWeight: FontWeight.bold))),
-                DataCell(Text('$totalValoPremios',
+                DataCell(Text(fL.currency(totalValoPremios),
                     style: const TextStyle(fontWeight: FontWeight.bold))),
               ])
             ]),
@@ -269,7 +279,7 @@ class InformeJuegoScreen extends StatelessWidget {
 
   Widget infoList({required String title, required String text}) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 8),
+      margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 6),
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -291,3 +301,5 @@ class InformeJuegoScreen extends StatelessWidget {
     );
   }
 }
+
+class PreferenceRepository {}

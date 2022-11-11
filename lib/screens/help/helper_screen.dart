@@ -88,7 +88,8 @@ class HelperScreen extends StatelessWidget {
       'info': Theme.of(context).colorScheme.secondary,
       'warning': Colors.amber,
       'success': Colors.green,
-      'error': Colors.redAccent
+      'error': Colors.redAccent,
+      'orange': Colors.orange
     };
 
     return Stack(

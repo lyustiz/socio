@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:socio/blocs/juegodetalle/juegodetalle_bloc.dart';
+import 'package:socio/blocs/preferences/preferences_bloc.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/juego/juego_screen.dart';
+import 'package:socio/screens/juego/witgets/juego_icon.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
 import 'juego_menu.dart';
@@ -13,6 +14,9 @@ import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/utils/format/format_data.dart' as Fd;
 import 'package:socio/widgets/layout/app_message.dart' as Msg;
 
+// repository
+import 'package:socio/repository/preferences_repository.dart';
+
 class JuegoListScreen extends StatelessWidget {
   JuegoListScreen({Key? key}) : super(key: key);
 
@@ -21,7 +25,7 @@ class JuegoListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     juegoBlock = context.read<JuegoBloc>();
-    juegoBlock.add(GetAllJuego('A'));
+    juegoBlock.add(GetAllJuego(''));
 
     return BlocBuilder<JuegoBloc, JuegoState>(
       builder: (context, state) {
@@ -54,13 +58,14 @@ class JuegoListScreen extends StatelessWidget {
   }
 
   Widget itemsJuegos(context, itemsBloc, JuegosWithConfiguracion juegoC) {
-    bool isClose = juegoC.juego.estado == 'C';
+    bool isClose = (juegoC.juego.idJuego != null);
+
     var action = PopupMenuButton(
         elevation: 7,
         onSelected: (tipo) {
           if (isClose) {
             ScaffoldMessenger.of(context).showSnackBar(
-                Msg.appMessage(context, 'warning', 'Juego Cerrado'));
+                Msg.appMessage(context, 'error', 'El Juego ya ha sido Jugado'));
           } else {
             itemsBloc.add(SelectItem(tipoItem: 'juego', item: juegoC));
             switch (tipo) {
@@ -142,17 +147,7 @@ class JuegoListScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2),
-                    borderRadius: BorderRadius.circular(30),
-                    color: (isClose) ? Colors.redAccent : Colors.lightGreen),
-                child: const Icon(
-                  Icons.power_settings_new_sharp,
-                  color: Colors.white,
-                  size: 45,
-                ),
-              ),
+              child: JuegoIcon(juego: juego),
             ),
           ),
         ],

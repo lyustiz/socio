@@ -72,8 +72,8 @@ class App extends StatelessWidget {
                     onGenerateRoute: (settings) =>
                         _getRoute(settings, authState),
                     supportedLocales: const [
-                      Locale('en'),
                       Locale('es'),
+                      Locale('en'),
                     ],
                     localizationsDelegates: const [
                       GlobalMaterialLocalizations.delegate,

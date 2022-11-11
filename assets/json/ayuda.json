@@ -86,13 +86,19 @@
                 "icono": "power_settings_new_sharp",
                 "tipo": "success",
                 "titulo": "Juegos Activos",
-                "texto": "Permite la venta de cartones y modulos."
+                "texto": "Permite la consulta y configuracion."
             },
             {
                 "icono": "power_settings_new_sharp",
+                "tipo": "orange",
+                "titulo": "Juegos Cerrados",
+                "texto": "Permite la consulta y configuracion."
+            },
+            {
+                "icono": "lock",
                 "tipo": "error",
                 "titulo": "Juegos Terminados",
-                "texto": "Permite la consulta de cartones y modulos."
+                "texto": "El juego ya se ejecuto en el sistema Bingo, solo permite la consulta de los informes"
             }
          
         ]

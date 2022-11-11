@@ -21,5 +21,6 @@ Map<String, IconData> iconData = {
   'calendar_today': Icons.calendar_today,
   'check_circle': Icons.check_circle,
   'settings': Icons.settings,
-  'query_stats': Icons.query_stats
+  'query_stats': Icons.query_stats,
+  'lock': Icons.lock
 };
