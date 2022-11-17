@@ -7,7 +7,7 @@ import 'gastos_programacion_juego_dto.dart';
 import 'ingresos_generales_dto.dart';
 import 'ingresos_programacion_juego_dto.dart';
 
-class InformeMansualDto {
+class InformeMensualDto {
   final int anio;
   final int mes;
   final double sumTotalPremios;
@@ -41,7 +41,7 @@ class InformeMansualDto {
   final List<IngresosprogramacionjuegosDto> listaIngresosJuegos;
   final List<SocioPorcentajeDto> listaSocioPorcentaje;
 
-  InformeMansualDto({
+  InformeMensualDto({
     required this.anio,
     required this.mes,
     required this.sumTotalPremios,
@@ -76,7 +76,7 @@ class InformeMansualDto {
     required this.listaSocioPorcentaje,
   });
 
-  factory InformeMansualDto.fromJson(Map<String, dynamic> json) {
+  factory InformeMensualDto.fromJson(Map<String, dynamic> json) {
     var serializer = const JsonSerializer();
 
     int year = DateTime.now().year;
@@ -96,44 +96,46 @@ class InformeMansualDto {
     for (var dataJson in (json['listaGastosGenerales'] as List)) {
       listaGastosGenerales.add(GastosGeneralesDto.fromJson(dataJson));
     }
-    for (var dataJson in (json['listaGastosJuego'] as List)) {
+    for (var dataJson in (json['listaIngresosGenerales'] as List)) {
       listaIngresosGenerales.add(IngresosGeneralesDto.fromJson(dataJson));
     }
-    for (var dataJson in (json['listaIngresosJuegos'] as List)) {
+    for (var dataJson in (json['listaGastosJuego'] as List)) {
       listaGastosJuego.add(GastosprogramacionjuegosDto.fromJson(dataJson));
     }
-    for (var dataJson in (json['listaSocioPorcentaje'] as List)) {
+    for (var dataJson in (json['listaIngresosJuegos'] as List)) {
       listaIngresosJuegos.add(IngresosprogramacionjuegosDto.fromJson(dataJson));
     }
     for (var dataJson in (json['listaSocioPorcentaje'] as List)) {
       listaSocioPorcentaje.add(SocioPorcentajeDto.fromJson(dataJson));
     }
 
-    return InformeMansualDto(
-      anio: serializer.fromJson<int>(json['serializer']),
-      mes: serializer.fromJson<int>(json['serializer']),
-      sumTotalPremios: serializer.fromJson<double>(json['serializer']),
-      sumAsistenciaSocial: serializer.fromJson<double>(json['serializer']),
-      sumIngresos: serializer.fromJson<double>(json['serializer']),
-      sumGastos: serializer.fromJson<double>(json['serializer']),
-      sumUtilidadFinal: serializer.fromJson<double>(json['serializer']),
-      sumIngresosJuego: serializer.fromJson<double>(json['serializer']),
-      sumGastosJuego: serializer.fromJson<double>(json['serializer']),
-      utilidadNeta: serializer.fromJson<double>(json['serializer']),
-      totalIngresos: serializer.fromJson<double>(json['serializer']),
-      totalGastos: serializer.fromJson<double>(json['serializer']),
-      totalAporteSocial: serializer.fromJson<double>(json['serializer']),
-      totalUtilidadFinal: serializer.fromJson<double>(json['serializer']),
-      totalSocios: serializer.fromJson<double>(json['serializer']),
-      totalEfectivo: serializer.fromJson<double>(json['serializer']),
-      totalBancos: serializer.fromJson<double>(json['serializer']),
-      totalDiferencia: serializer.fromJson<double>(json['serializer']),
-      cartonesVendidos: serializer.fromJson<double>(json['serializer']),
-      ventasTotales: serializer.fromJson<double>(json['serializer']),
-      beneficioNeto: serializer.fromJson<double>(json['serializer']),
-      sumVentasTotales: serializer.fromJson<double>(json['serializer']),
-      sumBeneficioNeto: serializer.fromJson<double>(json['serializer']),
-      sumComision: serializer.fromJson<double>(json['serializer']),
+    return InformeMensualDto(
+      anio: serializer.fromJson<int>(json['anio']),
+      mes: serializer.fromJson<int>(json['mes']),
+      sumTotalPremios: serializer.fromJson<double>(json['sumTotalPremios']),
+      sumAsistenciaSocial:
+          serializer.fromJson<double>(json['sumAsistenciaSocial']),
+      sumIngresos: serializer.fromJson<double>(json['sumIngresos']),
+      sumGastos: serializer.fromJson<double>(json['sumGastos']),
+      sumUtilidadFinal: serializer.fromJson<double>(json['sumUtilidadFinal']),
+      sumIngresosJuego: serializer.fromJson<double>(json['sumIngresosJuego']),
+      sumGastosJuego: serializer.fromJson<double>(json['sumGastosJuego']),
+      utilidadNeta: serializer.fromJson<double>(json['utilidadNeta']),
+      totalIngresos: serializer.fromJson<double>(json['totalIngresos']),
+      totalGastos: serializer.fromJson<double>(json['totalGastos']),
+      totalAporteSocial: serializer.fromJson<double>(json['totalAporteSocial']),
+      totalUtilidadFinal:
+          serializer.fromJson<double>(json['totalUtilidadFinal']),
+      totalSocios: serializer.fromJson<double>(json['totalSocios']),
+      totalEfectivo: serializer.fromJson<double>(json['totalEfectivo']),
+      totalBancos: serializer.fromJson<double>(json['totalBancos']),
+      totalDiferencia: serializer.fromJson<double>(json['totalDiferencia']),
+      cartonesVendidos: serializer.fromJson<double>(json['cartonesVendidos']),
+      ventasTotales: serializer.fromJson<double>(json['ventasTotales']),
+      beneficioNeto: serializer.fromJson<double>(json['beneficioNeto']),
+      sumVentasTotales: serializer.fromJson<double>(json['sumVentasTotales']),
+      sumBeneficioNeto: serializer.fromJson<double>(json['sumBeneficioNeto']),
+      sumComision: serializer.fromJson<double>(json['sumComision']),
       listAnios: listAnios,
       listMeses: listMeses,
       listaResumenJuegos: listaResumenJuegos,

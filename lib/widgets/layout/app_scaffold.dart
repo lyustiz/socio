@@ -8,16 +8,16 @@ class AppScaffold extends StatelessWidget {
   final FloatingActionButton? floatingActionButton;
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
-  const AppScaffold(
-      {Key? key,
-      required this.child,
-      this.drawer,
-      this.titleBar,
-      this.bottomSheet,
-      this.floatingActionButton,
-      this.bottomNavigationBar,
-      this.color = 'orange'})
-      : super(key: key);
+  const AppScaffold({
+    Key? key,
+    required this.child,
+    this.drawer,
+    this.titleBar,
+    this.bottomSheet,
+    this.floatingActionButton,
+    this.bottomNavigationBar,
+    this.color = 'orange',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

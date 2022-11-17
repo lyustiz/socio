@@ -9,13 +9,13 @@ class AppTitleBarVariant extends StatelessWidget with PreferredSizeWidget {
   final String? helpScreen;
   final Widget? leading;
   final String? color;
-  AppTitleBarVariant(
-      {Key? key,
-      required this.title,
-      this.helpScreen,
-      this.leading,
-      this.color = 'purple'})
-      : preferredSize = Size.fromHeight(60.0),
+  AppTitleBarVariant({
+    Key? key,
+    required this.title,
+    this.helpScreen,
+    this.leading,
+    this.color = 'purple',
+  })  : preferredSize = Size.fromHeight(60.0),
         super(key: key);
 
   @override

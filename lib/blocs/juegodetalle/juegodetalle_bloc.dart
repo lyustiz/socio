@@ -19,7 +19,7 @@ class JuegodetalleBloc extends Bloc<JuegoDetalleEvent, JuegoDetalleState> {
     if (juego is JuegosWithDetalles) {
       emit(JuegoDetalleLoaded(juego));
     } else {
-      emit(JuegoDetalleError);
+      emit(JuegoDetalleError());
     }
   }
 }

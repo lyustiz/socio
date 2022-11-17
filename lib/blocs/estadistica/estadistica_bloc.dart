@@ -12,6 +12,5 @@ class EstadisticaBloc extends Bloc<EstadisticaEvent, EstadisticaState> {
 
   void _onGetEstadistica(event, emit) async {
     emit(EstadisticaLoading());
-    // emit(EstadisticaLoaded(estadistica));
   }
 }

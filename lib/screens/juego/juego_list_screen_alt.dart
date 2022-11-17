@@ -117,6 +117,15 @@ class JuegoListScreenAlt extends StatelessWidget {
                     case 'informe':
                       pushScreen(context, 'informe_juego');
                       break;
+                    case 'informe_mensual':
+                      pushScreen(context, 'informe_mensual');
+                      break;
+                    case 'informe_usuario':
+                      pushScreen(context, 'informe_usuario');
+                      break;
+                    case 'informe_venta':
+                      pushScreen(context, 'informe_venta');
+                      break;
                     default:
                   }
                 },
@@ -129,6 +138,18 @@ class JuegoListScreenAlt extends StatelessWidget {
                       const PopupMenuItem(
                         value: 'informe',
                         child: Text('Informe General'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'informe_mensual',
+                        child: Text('Informe Mensual'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'informe_usuario',
+                        child: Text('Informe por Usuario'),
+                      ),
+                      const PopupMenuItem(
+                        value: 'informe_venta',
+                        child: Text('Informe Promedio Ventas'),
                       )
                     ],
                 icon: const Icon(Icons.settings),
@@ -184,6 +205,15 @@ class JuegoListScreenAlt extends StatelessWidget {
           break;
         case 'informe':
           navigateTo(context, 'informe_juego');
+          break;
+        case 'informe_mensual':
+          navigateTo(context, 'informe_mensual');
+          break;
+        case 'informe_usuario':
+          navigateTo(context, 'informe_usuario');
+          break;
+        case 'informe_venta':
+          navigateTo(context, 'informe_venta');
           break;
         default:
       }

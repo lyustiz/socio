@@ -8,6 +8,7 @@ import 'package:socio/providers/dto/vendedor_cobro_dto.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
 import 'package:socio/widgets/layout/app_container.dart';
+import 'package:socio/widgets/layout/app_info_list.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socio/blocs/items/items_bloc.dart';
@@ -32,11 +33,12 @@ class InformeJuegoScreen extends StatelessWidget {
         child: AppScaffold(
             color: 'white',
             titleBar: AppTitleBarVariant(
-              title: 'Informe Juego ${juego.idProgramacionJuego}',
+              title:
+                  'Informe General Juego ${juego.idProgramacionJuego.toString().padLeft(3, '0')}',
               leading: IconButton(
                   onPressed: () => navigateTo(context, 'juego_list_alt'),
                   icon: const Icon(Icons.chevron_left)),
-              helpScreen: 'informe',
+              helpScreen: null,
             ),
             drawer: const JuegoMenu(),
             child: buildJuegoDetalles(context, juego.idProgramacionJuego),
@@ -75,7 +77,13 @@ class InformeJuegoScreen extends StatelessWidget {
       return informeContent(context, state.informeJuego);
     }
     if (state is InformeJuegoError) {
-      return const Text('Error en Informe');
+      return Container(
+        alignment: Alignment.center,
+        child: Text(
+          state.errorMsj,
+          style: const TextStyle(color: Colors.red),
+        ),
+      );
     }
     return const LinearProgressIndicator();
   }
@@ -118,35 +126,38 @@ class InformeJuegoScreen extends StatelessWidget {
             interactive: true,
             isAlwaysShown: true,
             child: ListView(padding: const EdgeInsets.all(0), children: [
-              infoList(title: 'Serie', text: 'Serie ${juego.serie}'),
-              infoList(
+              AppInfoList(title: 'Serie', text: 'Serie ${juego.serie}'),
+              AppInfoList(
                   title: 'Cartones',
                   text:
                       'Desde: ${informe.cartonInicial} al ${informe.cartonFinal}'),
-              infoList(
+              AppInfoList(
                   title: 'Valor Carton',
                   text: fL.currency(informe.valorCarton)),
-              infoList(
+              AppInfoList(
                   title: 'Valor Modulo',
                   text: fL.currency(informe.valorModulo)),
-              infoList(title: 'Total Premios', text: fL.currency(totalPremios)),
-              infoList(
+              AppInfoList(
+                  title: 'Total Premios', text: fL.currency(totalPremios)),
+              AppInfoList(
                   title: 'Total Cartones', text: '${informe.totalCartones}'),
-              infoList(
+              AppInfoList(
                   title: 'Asistencia Social',
                   text: fL.currency(asistenciaSocial)),
-              infoList(
+              AppInfoList(
                   title: 'Cuentas X Cobrar', text: fL.currency(cuentasXCobrar)),
-              infoList(title: 'Total Ventas', text: fL.currency(totalVentas)),
-              infoList(
+              AppInfoList(
+                  title: 'Total Ventas', text: fL.currency(totalVentas)),
+              AppInfoList(
                   title: 'Total Recaudos', text: fL.currency(totalRecaudos)),
-              infoList(title: 'Faltante', text: fL.currency(faltante)),
-              infoList(title: 'Efectivo', text: fL.currency(efectivo)),
-              infoList(title: 'Banco', text: fL.currency(banco)),
-              infoList(title: 'Sobrante', text: fL.currency(sobrante)),
-              infoList(title: 'Total Gastos', text: fL.currency(totalGastos)),
+              AppInfoList(title: 'Faltante', text: fL.currency(faltante)),
+              AppInfoList(title: 'Efectivo', text: fL.currency(efectivo)),
+              AppInfoList(title: 'Banco', text: fL.currency(banco)),
+              AppInfoList(title: 'Sobrante', text: fL.currency(sobrante)),
+              AppInfoList(
+                  title: 'Total Gastos', text: fL.currency(totalGastos)),
               const Divider(color: Colors.white, indent: 12, endIndent: 12),
-              infoList(
+              AppInfoList(
                   title: 'Resultado Final', text: fL.currency(resultadoFinal)),
             ]),
           ))
@@ -301,5 +312,3 @@ class InformeJuegoScreen extends StatelessWidget {
     );
   }
 }
-
-class PreferenceRepository {}

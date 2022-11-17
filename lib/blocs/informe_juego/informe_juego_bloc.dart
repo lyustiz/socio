@@ -19,7 +19,7 @@ class InformeJuegoBloc extends Bloc<InformeJuegoEvent, InformeJuegoState> {
     if (juego is InformeJuegoDto) {
       emit(InformeJuegoLoaded(juego));
     } else {
-      emit(InformeJuegoError);
+      emit(const InformeJuegoError('No ha sido posible cargar el Informe'));
     }
   }
 }

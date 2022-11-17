@@ -22,6 +22,7 @@ dependencies:
   flutter_local_notifications: ^9.4.0
   badges: ^2.0.2
   get_it: ^7.2.0
+  fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:

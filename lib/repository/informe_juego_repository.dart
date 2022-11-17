@@ -7,7 +7,7 @@ class InformeJuegoRepository {
   Map<String, dynamic> result = {'isSuccess': false, 'data': null};
 
   Future<InformeJuegoDto?> getInformeJuego({required int idJuego}) async {
-    var params = {'idJuego ': '$idJuego'};
+    var params = {'idJuego': '$idJuego'};
 
     try {
       result = await api.getData('informejuego/$idJuego', params);

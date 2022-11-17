@@ -30,6 +30,13 @@ String formatDateTime(DateTime? dateTime) {
   return DateFormat('MM/dd/yyyy hh:mm a').format(dateTime);
 }
 
+String formatDate(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+  return DateFormat('MM/dd/yyyy').format(dateTime);
+}
+
 DateTime today() {
   return DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day);
@@ -141,5 +148,27 @@ class FormatLocale {
 
     return NumberFormat.simpleCurrency(locale: locale, decimalDigits: 2)
         .format(value);
+  }
+
+  String formatDate(DateTime? dateTime) {
+    if (dateTime == null) {
+      return '';
+    }
+    return DateFormat('MM/dd/yyyy').format(dateTime);
+  }
+
+  String formatNumber(dynamic value) {
+    var f = NumberFormat("###,###.00", locale);
+    return f.format(value);
+  }
+
+  String formatCantidad(dynamic value) {
+    var f = NumberFormat("###,###", locale);
+    return f.format(value);
+  }
+
+  String percent(dynamic value) {
+    var f = NumberFormat("###,###", locale);
+    return '${f.format(value)}%';
   }
 }

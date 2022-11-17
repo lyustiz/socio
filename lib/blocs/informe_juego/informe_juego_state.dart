@@ -38,6 +38,10 @@ class InformeJuegoSelected extends InformeJuegoState {
 }
 
 class InformeJuegoError extends InformeJuegoState {
+  final String errorMsj;
+  const InformeJuegoError(this.errorMsj);
+  @override
+  List<Object> get props => [errorMsj];
   @override
   String toString() => 'InformeJuegoError';
 }
