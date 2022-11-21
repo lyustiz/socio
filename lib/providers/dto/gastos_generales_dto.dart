@@ -4,9 +4,10 @@ class GastosGeneralesDto {
   final int idGastoGeneral;
   final int idUsuario;
   final int idConceptoGasto;
+  final String nombre;
   final String descripcion;
   final double valor;
-  final String socio;
+  final String? socio;
   final DateTime fechaRegistro;
   final int mes;
   final int anio;
@@ -17,6 +18,7 @@ class GastosGeneralesDto {
     required this.idGastoGeneral,
     required this.idUsuario,
     required this.idConceptoGasto,
+    required this.nombre,
     required this.descripcion,
     required this.valor,
     required this.socio,
@@ -33,9 +35,10 @@ class GastosGeneralesDto {
       idGastoGeneral: serializer.fromJson<int>(json['idGastoGeneral']),
       idUsuario: serializer.fromJson<int>(json['idUsuario']),
       idConceptoGasto: serializer.fromJson<int>(json['idConceptoGasto']),
+      nombre: serializer.fromJson<String>(json['nombre']),
       descripcion: serializer.fromJson<String>(json['descripcion']),
       valor: serializer.fromJson<double>(json['valor']),
-      socio: serializer.fromJson<String>(json['socio']),
+      socio: serializer.fromJson<String?>(json['socio']),
       fechaRegistro: serializer.fromJson<DateTime>(json['fechaRegistro']),
       mes: serializer.fromJson<int>(json['mes']),
       anio: serializer.fromJson<int>(json['anio']),

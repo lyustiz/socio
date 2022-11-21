@@ -4,10 +4,12 @@ import 'package:socio/blocs/informe_usuario/informe_usuario_bloc.dart';
 import 'package:socio/providers/dto/gastos_programacion_juego_dto.dart';
 import 'package:socio/providers/dto/informe_caja_usuario_dto.dart';
 import 'package:socio/providers/dto/ingresos_programacion_juego_dto.dart';
+import 'package:socio/providers/dto/usuario_dto.dart';
 import 'package:socio/providers/dto/vendedor_cobro_carton_dto.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
 import 'package:socio/widgets/layout/app_container.dart';
+import 'package:socio/widgets/layout/app_filters.dart';
 import 'package:socio/widgets/layout/app_info_list.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,39 +30,6 @@ class InformeUsuarioScreen extends StatelessWidget {
     juego = context.read<ItemsBloc>().state.juegoSelected.juego;
     fL = Fd.FormatLocale(locale: juego.moneda);
 
-    return DefaultTabController(
-        length: 4,
-        child: AppScaffold(
-            color: 'white',
-            titleBar: AppTitleBarVariant(
-              title: 'Informe Caja por Usuario',
-              leading: IconButton(
-                  onPressed: () => navigateTo(context, 'juego_list_alt'),
-                  icon: const Icon(Icons.chevron_left)),
-              helpScreen: null,
-            ),
-            drawer: const JuegoMenu(),
-            child: buildJuegoDetalles(context, juego.idProgramacionJuego),
-            bottomNavigationBar: TabBar(
-              indicatorColor: Theme.of(context).colorScheme.secondaryVariant,
-              tabs: [
-                Tab(
-                    icon: Icon(Icons.list_alt,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.groups,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.file_download,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.file_upload,
-                        color: Theme.of(context).colorScheme.secondary)),
-              ],
-            )));
-  }
-
-  Widget buildJuegoDetalles(BuildContext context, int idJuego) {
     return BlocProvider(
       create: (context) => InformeUsuarioBloc(),
       child: BlocBuilder<InformeUsuarioBloc, InformeUsuarioState>(
@@ -68,9 +37,50 @@ class InformeUsuarioScreen extends StatelessWidget {
           if (state is InformeUsuarioInitial) {
             context
                 .read<InformeUsuarioBloc>()
-                .add(GetInformeUsuario(idJuego, 3));
+                .add(GetInformeUsuario(juego.idProgramacionJuego, 3));
           }
-          return juegoInforme(context, state);
+          return DefaultTabController(
+              length: 4,
+              child: AppScaffold(
+                  color: 'white',
+                  titleBar: AppTitleBarVariant(
+                    title: 'Informe Caja por Usuario',
+                    leading: IconButton(
+                        onPressed: () => navigateTo(context, 'juego_list_alt'),
+                        icon: const Icon(Icons.chevron_left)),
+                    helpScreen: null,
+                  ),
+                  drawer: const JuegoMenu(),
+                  floatingActionButton: FloatingActionButton(
+                    tooltip: 'Seleccione Usuario',
+                    onPressed: () => filter(
+                        context, context.read<InformeUsuarioBloc>(), state),
+                    child: const Icon(
+                      Icons.person,
+                      size: 28,
+                    ),
+                    backgroundColor: Colors.amber,
+                    mini: true,
+                  ),
+                  child: juegoInforme(context, state),
+                  bottomNavigationBar: TabBar(
+                    indicatorColor:
+                        Theme.of(context).colorScheme.secondaryVariant,
+                    tabs: [
+                      Tab(
+                          icon: Icon(Icons.list_alt,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.groups,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.file_download,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.file_upload,
+                              color: Theme.of(context).colorScheme.secondary)),
+                    ],
+                  )));
         },
       ),
     );
@@ -108,7 +118,7 @@ class InformeUsuarioScreen extends StatelessWidget {
         variant: 'secondary',
         child: Column(children: [
           const Text(
-            'Resumen por Usuario',
+            'RESUMEN POR USUARIO',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
           const SizedBox(height: 15),
@@ -117,6 +127,7 @@ class InformeUsuarioScreen extends StatelessWidget {
             interactive: true,
             isAlwaysShown: true,
             child: ListView(padding: const EdgeInsets.all(0), children: [
+              AppInfoList(title: 'Usuario', text: informe.nombreUsuario),
               AppInfoList(
                   title: 'Total Fantante',
                   text: fL.currency(informe.totalFaltante)),
@@ -157,7 +168,7 @@ class InformeUsuarioScreen extends StatelessWidget {
         variant: 'secondary',
         child: Column(children: [
           const Text(
-            'Relacion de Vendedores',
+            'RELACION DE VENDEDORES',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
@@ -187,7 +198,7 @@ class InformeUsuarioScreen extends StatelessWidget {
                     DataCell(Text(fL.formatCantidad(row.totalCartones))),
                     DataCell(Text(fL.formatCantidad(row.cartonesCortesia))),
                     DataCell(Text(fL.formatCantidad(row.totalModulos))),
-                    DataCell(Text(fL.formatCantidad(0))),
+                    DataCell(Text(fL.formatCantidad(row.ventaTotalCartones))),
                     DataCell(Text(fL.formatCantidad(row.cartonesDevueltos))),
                     DataCell(Text(fL.percent(row.porcentajeComision))),
                     DataCell(Text(fL.currency(row.valorComision))),
@@ -235,7 +246,7 @@ class InformeUsuarioScreen extends StatelessWidget {
         variant: 'secondary',
         child: Column(children: [
           const Text(
-            'Resumen de Ingresos Generales',
+            'INGRESOS DEL JUEGO',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
@@ -273,7 +284,7 @@ class InformeUsuarioScreen extends StatelessWidget {
         variant: 'secondary',
         child: Column(children: [
           const Text(
-            'Resumen de Gastos Generales',
+            'GASTOS DEL JUEGO',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
@@ -303,5 +314,45 @@ class InformeUsuarioScreen extends StatelessWidget {
             ),
           ))
         ]));
+  }
+
+  void filter(BuildContext context, InformeUsuarioBloc iuBloc,
+      InformeUsuarioState state) async {
+    List<DropdownMenuItem<int>>? usersItems;
+    int idUsuario = 0;
+    int idProgramacionJuego = juego.idProgramacionJuego;
+
+    if (state is InformeUsuarioLoaded) {
+      usersItems = state.informe.listaUsuarios
+          .map<DropdownMenuItem<int>>((UsuarioDto u) {
+        return DropdownMenuItem<int>(
+          value: u.idUsuario,
+          child: Text(u.nombreCompleto),
+        );
+      }).toList();
+      idUsuario = state.informe.idUsuario;
+    }
+    List<Widget> content = [
+      DropdownButton<int>(
+        value: idUsuario,
+        elevation: 16,
+        underline: Container(
+          height: 2,
+        ),
+        onChanged: (int? idUsuario) {
+          _onSelectUsuario(
+              context, idProgramacionJuego, idUsuario ?? 3, iuBloc);
+        },
+        items: usersItems,
+      )
+    ];
+
+    appFilters(context, 'Seleccione Usuario', content);
+  }
+
+  void _onSelectUsuario(context, int idProgramacionJuego, int idUsuario,
+      InformeUsuarioBloc iuBloc) {
+    iuBloc.add(GetInformeUsuario(idProgramacionJuego, idUsuario));
+    Navigator.pop(context);
   }
 }

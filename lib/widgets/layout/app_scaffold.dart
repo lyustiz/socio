@@ -6,6 +6,7 @@ class AppScaffold extends StatelessWidget {
   final PreferredSizeWidget? titleBar;
   final String? color;
   final FloatingActionButton? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Widget? bottomSheet;
   final Widget? bottomNavigationBar;
   const AppScaffold({
@@ -15,6 +16,7 @@ class AppScaffold extends StatelessWidget {
     this.titleBar,
     this.bottomSheet,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.bottomNavigationBar,
     this.color = 'orange',
   }) : super(key: key);
@@ -23,7 +25,7 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     Map<String, BoxDecoration> background = {
       'orange': BoxDecoration(
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage('assets/images/background.png'),
             alignment: Alignment.topCenter,
           ),
@@ -37,13 +39,13 @@ class AppScaffold extends StatelessWidget {
           )),
       'white': BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/background.png'),
+              image: const AssetImage('assets/images/background.png'),
               alignment: Alignment.topCenter,
               colorFilter: ColorFilter.mode(
                   Colors.white.withOpacity(0.9), BlendMode.difference)),
           color: Colors.white),
       'purple': BoxDecoration(
-          image: DecorationImage(
+          image: const DecorationImage(
             image: AssetImage('assets/images/background.png'),
             alignment: Alignment.topCenter,
           ),
@@ -58,16 +60,17 @@ class AppScaffold extends StatelessWidget {
     };
 
     return Container(
-      decoration: background[this.color],
+      decoration: background[color],
       child: SafeArea(
         child: Scaffold(
-            appBar: this.titleBar,
+            appBar: titleBar,
             backgroundColor: Colors.transparent,
-            body: SafeArea(child: this.child),
-            drawer: this.drawer,
-            bottomSheet: this.bottomSheet,
-            floatingActionButton: this.floatingActionButton,
-            bottomNavigationBar: this.bottomNavigationBar),
+            body: SafeArea(child: child),
+            drawer: drawer,
+            bottomSheet: bottomSheet,
+            floatingActionButton: floatingActionButton,
+            floatingActionButtonLocation: floatingActionButtonLocation,
+            bottomNavigationBar: bottomNavigationBar),
       ),
     );
   }

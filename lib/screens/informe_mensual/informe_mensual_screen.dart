@@ -9,12 +9,14 @@ import 'package:socio/providers/dto/socio_porcentaje_dto.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
 import 'package:socio/widgets/layout/app_container.dart';
+import 'package:socio/widgets/layout/app_filters.dart';
 import 'package:socio/widgets/layout/app_info_list.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socio/blocs/items/items_bloc.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
+import 'package:flutter_date_pickers/flutter_date_pickers.dart' as dp;
 
 import 'package:socio/utils/format/format_data.dart' as Fd;
 
@@ -23,56 +25,69 @@ class InformeMensualScreen extends StatelessWidget {
 
   late Juego juego;
   late Fd.FormatLocale fL;
+  DateTime currentDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     juego = context.read<ItemsBloc>().state.juegoSelected.juego;
     fL = Fd.FormatLocale(locale: juego.moneda);
 
-    return DefaultTabController(
-        length: 5,
-        child: AppScaffold(
-            color: 'white',
-            titleBar: AppTitleBarVariant(
-              title: 'Informe Mensual',
-              leading: IconButton(
-                  onPressed: () => navigateTo(context, 'juego_list_alt'),
-                  icon: const Icon(Icons.chevron_left)),
-              helpScreen: null,
-            ),
-            drawer: const JuegoMenu(),
-            child: buildJuegoDetalles(context, juego.idProgramacionJuego),
-            bottomNavigationBar: TabBar(
-              indicatorColor: Theme.of(context).colorScheme.secondaryVariant,
-              tabs: [
-                Tab(
-                    icon: Icon(Icons.calendar_today,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.list_alt,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.file_download,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.file_upload,
-                        color: Theme.of(context).colorScheme.secondary)),
-                Tab(
-                    icon: Icon(Icons.groups,
-                        color: Theme.of(context).colorScheme.secondary)),
-              ],
-            )));
-  }
-
-  Widget buildJuegoDetalles(BuildContext context, int idJuego) {
     return BlocProvider(
       create: (context) => InformeMensualBloc(),
       child: BlocBuilder<InformeMensualBloc, InformeMensualState>(
         builder: (context, state) {
           if (state is InformeMensualInitial) {
-            context.read<InformeMensualBloc>().add(GetInformeMensual(2022, 11));
+            int year = currentDate.year;
+            int month = currentDate.month;
+            context
+                .read<InformeMensualBloc>()
+                .add(GetInformeMensual(year, month));
           }
-          return juegoInforme(context, state);
+          return DefaultTabController(
+              length: 5,
+              child: AppScaffold(
+                  color: 'white',
+                  titleBar: AppTitleBarVariant(
+                    title: 'Informe Mensual',
+                    leading: IconButton(
+                        onPressed: () => navigateTo(context, 'juego_list_alt'),
+                        icon: const Icon(Icons.chevron_left)),
+                    helpScreen: null,
+                  ),
+                  drawer: const JuegoMenu(),
+                  floatingActionButton: FloatingActionButton(
+                    tooltip: 'Seleccione Mes',
+                    onPressed: () => filter(
+                        context, context.read<InformeMensualBloc>(), state),
+                    child: const Icon(
+                      Icons.calendar_today,
+                      size: 28,
+                    ),
+                    backgroundColor: Colors.amber,
+                    mini: true,
+                  ),
+                  child: juegoInforme(context, state),
+                  bottomNavigationBar: TabBar(
+                    indicatorColor:
+                        Theme.of(context).colorScheme.secondaryVariant,
+                    tabs: [
+                      Tab(
+                          icon: Icon(Icons.calendar_today,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.list_alt,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.file_download,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.file_upload,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      Tab(
+                          icon: Icon(Icons.groups,
+                              color: Theme.of(context).colorScheme.secondary)),
+                    ],
+                  )));
         },
       ),
     );
@@ -95,23 +110,30 @@ class InformeMensualScreen extends StatelessWidget {
   }
 
   Widget informeContent(BuildContext context, InformeMensualDto informe) {
-    return TabBarView(
-      children: [
-        resumenMensual(context, informe),
-        resumenJuegos(context, informe),
-        ingresosGenerales(context, informe),
-        gastosGenerales(context, informe),
-        porcentajesSocios(context, informe),
-      ],
-    );
+    return Column(children: [
+      Expanded(
+        child: TabBarView(
+          children: [
+            resumenMensual(context, informe),
+            resumenJuegos(context, informe),
+            ingresosGenerales(context, informe),
+            gastosGenerales(context, informe),
+            porcentajesSocios(context, informe),
+          ],
+        ),
+      )
+    ]);
   }
 
   Widget resumenMensual(BuildContext context, InformeMensualDto informe) {
+    DateTime fdesde = DateTime.parse('${informe.anio}${informe.mes}01');
+    DateTime fhasta = DateTime.parse('${informe.anio}${informe.mes + 1}01')
+        .add(const Duration(days: -1));
     return AppContainer(
         variant: 'secondary',
         child: Column(children: [
           const Text(
-            'Resumen Mensual',
+            'RESUMEN MENSUAL',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
@@ -120,6 +142,9 @@ class InformeMensualScreen extends StatelessWidget {
             interactive: true,
             isAlwaysShown: true,
             child: ListView(padding: const EdgeInsets.all(0), children: [
+              AppInfoList(
+                  title: 'Fecha Desde/Hasta',
+                  text: '${fL.formatDate(fdesde)} - ${fL.formatDate(fhasta)}'),
               AppInfoList(
                   title: 'Utilidad Neta',
                   text: fL.currency(informe.utilidadNeta)),
@@ -255,7 +280,7 @@ class InformeMensualScreen extends StatelessWidget {
                       ...dataInforme.map((row) {
                         return DataRow(cells: [
                           DataCell(Text(fL.formatDate(row.fechaRegistro))),
-                          DataCell(Text(row.descripcion)),
+                          DataCell(Text(row.nombre)),
                           DataCell(Text(row.descripcion)),
                           DataCell(Text(fL.currency(row.valor))),
                         ]);
@@ -269,22 +294,7 @@ class InformeMensualScreen extends StatelessWidget {
                             const DataCell(Text('TOTAL')),
                             const DataCell(Text('')),
                             const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            DataCell(
-                                Text(fL.currency(informe.sumTotalPremios))),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            DataCell(
-                                Text(fL.currency(informe.sumAsistenciaSocial))),
-                            const DataCell(Text('')),
-                            DataCell(
-                                Text(fL.currency(informe.sumVentasTotales))),
-                            DataCell(Text(fL.currency(informe.sumComision))),
                             DataCell(Text(fL.currency(informe.sumIngresos))),
-                            DataCell(Text(fL.currency(informe.sumGastos))),
-                            DataCell(
-                                Text(fL.currency(informe.sumBeneficioNeto))),
                           ])
                     ]),
             ),
@@ -333,22 +343,7 @@ class InformeMensualScreen extends StatelessWidget {
                             const DataCell(Text('TOTAL')),
                             const DataCell(Text('')),
                             const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            DataCell(
-                                Text(fL.currency(informe.sumTotalPremios))),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            DataCell(
-                                Text(fL.currency(informe.sumAsistenciaSocial))),
-                            const DataCell(Text('')),
-                            DataCell(
-                                Text(fL.currency(informe.sumVentasTotales))),
-                            DataCell(Text(fL.currency(informe.sumComision))),
-                            DataCell(Text(fL.currency(informe.sumIngresos))),
                             DataCell(Text(fL.currency(informe.sumGastos))),
-                            DataCell(
-                                Text(fL.currency(informe.sumBeneficioNeto))),
                           ])
                     ]),
             ),
@@ -394,5 +389,33 @@ class InformeMensualScreen extends StatelessWidget {
             ),
           ))
         ]));
+  }
+
+  void filter(BuildContext context, InformeMensualBloc imBloc,
+      InformeMensualState state) async {
+    int currentYear = currentDate.year;
+    int firstYear = currentYear - 1;
+
+    if (state is InformeMensualLoaded) {
+      currentDate = DateTime(state.informe.anio, state.informe.mes, 1);
+    }
+
+    List<Widget> content = [
+      dp.MonthPicker.single(
+        selectedDate: currentDate,
+        onChanged: (newDate) => _onSelectedfecha(context, newDate, imBloc),
+        firstDate: DateTime(firstYear),
+        lastDate: DateTime.now(),
+      ),
+    ];
+
+    appFilters(context, 'Seleccione Mes', content);
+  }
+
+  void _onSelectedfecha(context, DateTime newDate, InformeMensualBloc imBloc) {
+    int year = newDate.year;
+    int month = newDate.month;
+    imBloc.add(GetInformeMensual(year, month));
+    Navigator.pop(context);
   }
 }

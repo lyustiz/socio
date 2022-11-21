@@ -42,9 +42,9 @@ class InformeJuegoDto {
   final double sumFaltante; //: 0,
   final double sumTotalRecibido; //: 126,
   final double sumVentaTotalCartones; //: 180,
-  final List<FiguraDto> figuras;
-  final List<RecaudosTotalesDto> recaudosTotalesDTO;
-  final List<VendedorCobroDto> vendedoresCobroDto;
+  final List<FiguraDto> listaFiguras;
+  final List<RecaudosTotalesDto> listaRecaudoTotales;
+  final List<VendedorCobroDto> listaVendedoresCobroCartones;
 
   InformeJuegoDto(
       {required this.numeroJuego,
@@ -85,26 +85,28 @@ class InformeJuegoDto {
       required this.sumFaltante,
       required this.sumTotalRecibido,
       required this.sumVentaTotalCartones,
-      required this.figuras,
-      required this.recaudosTotalesDTO,
-      required this.vendedoresCobroDto});
+      required this.listaFiguras,
+      required this.listaRecaudoTotales,
+      required this.listaVendedoresCobroCartones});
 
   factory InformeJuegoDto.fromJson(Map<String, dynamic> json) {
     var serializer = const JsonSerializer();
 
-    List<FiguraDto> listFiguras = [];
-    List<RecaudosTotalesDto> listRecaudosTotales = [];
-    List<VendedorCobroDto> listVendedoresCobro = [];
+    List<FiguraDto> listaFiguras = [];
+    List<RecaudosTotalesDto> listaRecaudoTotales = [];
+    List<VendedorCobroDto> listaVendedoresCobroCartones = [];
 
-    for (var figuraJson in (json['figuras'] as List)) {
-      listFiguras.add(FiguraDto.fromJson(figuraJson));
+    for (var figuraJson in (json['listaFiguras'] as List)) {
+      listaFiguras.add(FiguraDto.fromJson(figuraJson));
     }
-    for (var recaudoTotalJson in (json['recaudosTotales'] as List)) {
-      listRecaudosTotales.add(RecaudosTotalesDto.fromJson(recaudoTotalJson));
+    for (var recaudoTotalJson in (json['listaRecaudoTotales'] as List)) {
+      listaRecaudoTotales.add(RecaudosTotalesDto.fromJson(recaudoTotalJson));
     }
 
-    for (var vendedoresCobroJson in (json['vendedoresCobroCartones'] as List)) {
-      listVendedoresCobro.add(VendedorCobroDto.fromJson(vendedoresCobroJson));
+    for (var vendedoresCobroJson
+        in (json['listaVendedoresCobroCartones'] as List)) {
+      listaVendedoresCobroCartones
+          .add(VendedorCobroDto.fromJson(vendedoresCobroJson));
     }
 
     return InformeJuegoDto(
@@ -153,8 +155,8 @@ class InformeJuegoDto {
         sumTotalRecibido: serializer.fromJson<double>(json['sumTotalRecibido']),
         sumVentaTotalCartones:
             serializer.fromJson<double>(json['sumVentaTotalCartones']),
-        figuras: listFiguras,
-        recaudosTotalesDTO: listRecaudosTotales,
-        vendedoresCobroDto: listVendedoresCobro);
+        listaFiguras: listaFiguras,
+        listaRecaudoTotales: listaRecaudoTotales,
+        listaVendedoresCobroCartones: listaVendedoresCobroCartones);
   }
 }

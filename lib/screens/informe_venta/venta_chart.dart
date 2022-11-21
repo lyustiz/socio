@@ -2,17 +2,21 @@ import 'dart:math' as math;
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:socio/providers/dto/vendedores_promedio_ventas_dto.dart';
+import 'package:socio/screens/informe_venta/widgets/indicador.dart';
 
 class VentaChart extends StatefulWidget {
-  const VentaChart();
+  VentaChart(this.vendedores);
 
-  static const shadowColor = Color(0xFFCCCCCC);
-  static const dataList = [
-    _BarData(Color(0xFFecb206), 90, 89, 1),
-    _BarData(Color(0xFFa8bd1a), 30, 28, 2),
-    _BarData(Color(0xFF17987b), 30, 10, 5),
-    _BarData(Color(0xFF295ab5), 30, 8, 0),
-    _BarData(Color(0xFFb87d46), 30, 8, 1.5),
+  final List<VendedoresPromedioVentasDto> vendedores;
+  late List<_BarData> dataList = [];
+
+  static const List<Color> colors = [
+    Color(0xFFecb206),
+    Color(0xFFa8bd1a),
+    Color(0xFF17987b),
+    Color(0xFF295ab5),
+    Color(0xFFb87d46)
   ];
 
   @override
@@ -54,6 +58,15 @@ class _VentaChartState extends State<VentaChart> {
 
   @override
   Widget build(BuildContext context) {
+    int idxColor = -1;
+    num maxY = 10;
+    List<_BarData> dataList = widget.vendedores.take(5).map((v) {
+      idxColor++;
+      maxY = (maxY > v.totalCartones) ? maxY : v.totalCartones;
+      return _BarData(VentaChart.colors[idxColor], v.totalCartones,
+          v.cartonesVendidos, v.cartonesDevueltos);
+    }).toList();
+
     return Card(
       color: Colors.white,
       elevation: 4,
@@ -63,6 +76,7 @@ class _VentaChartState extends State<VentaChart> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            leyenda(),
             AspectRatio(
               aspectRatio: 1.4,
               child: BarChart(
@@ -103,7 +117,7 @@ class _VentaChartState extends State<VentaChart> {
                           return SideTitleWidget(
                             axisSide: meta.axisSide,
                             child: _IconWidget(
-                              color: VentaChart.dataList[index].color,
+                              color: dataList[index].color,
                               isSelected: touchedGroupIndex == index,
                             ),
                           );
@@ -121,18 +135,18 @@ class _VentaChartState extends State<VentaChart> {
                       strokeWidth: 1,
                     ),
                   ),
-                  barGroups: VentaChart.dataList.asMap().entries.map((e) {
+                  barGroups: dataList.asMap().entries.map((e) {
                     final index = e.key;
                     final data = e.value;
                     return generateBarGroup(
                       index,
                       data.color,
-                      data.total,
-                      data.vendidos,
-                      data.devueltos,
+                      data.total.toDouble(),
+                      data.vendidos.toDouble(),
+                      data.devueltos.toDouble(),
                     );
                   }).toList(),
-                  maxY: 90,
+                  maxY: maxY.toDouble(),
                   barTouchData: BarTouchData(
                     enabled: true,
                     handleBuiltInTouches: false,
@@ -179,8 +193,75 @@ class _VentaChartState extends State<VentaChart> {
                 ),
               ),
             ),
+            Expanded(
+                child: Container(
+              margin: const EdgeInsets.only(top: 5),
+              child: ListView.builder(
+                itemCount: dataList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var vendedor = widget.vendedores[index];
+                  return Indicator(
+                    color: VentaChart.colors[index],
+                    text:
+                        '${index + 1} - ${vendedor.nombreCompleto.toLowerCase()}',
+                    isSquare: true,
+                  );
+                },
+              ),
+            )),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget leyenda() {
+    double size = 15;
+    return Container(
+      margin: const EdgeInsets.only(left: 1, right: 1, bottom: 10, top: 1),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: size,
+            height: size,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blueAccent,
+            ),
+          ),
+          const Text(
+            'Total',
+            style: TextStyle(fontSize: 14, color: Colors.black),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: size,
+            height: size,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.greenAccent,
+            ),
+          ),
+          const Text(
+            'Vendidos',
+            style: TextStyle(fontSize: 14, color: Colors.black),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: size,
+            height: size,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.redAccent,
+            ),
+          ),
+          const Text(
+            'Devueltos',
+            style: TextStyle(fontSize: 14, color: Colors.black),
+          )
+        ],
       ),
     );
   }
@@ -189,9 +270,9 @@ class _VentaChartState extends State<VentaChart> {
 class _BarData {
   const _BarData(this.color, this.total, this.vendidos, this.devueltos);
   final Color color;
-  final double total;
-  final double vendidos;
-  final double devueltos;
+  final int total;
+  final int vendidos;
+  final int devueltos;
 }
 
 class _IconWidget extends ImplicitlyAnimatedWidget {

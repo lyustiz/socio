@@ -16,7 +16,7 @@ DateTime intToDate(int timestamp) {
 
 String intToDateString(int timestamp) {
   DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp);
-  return DateFormat('MM/dd/yyyy hh:mm a').format(dateTime);
+  return DateFormat('dd/MM/yyyy hh:mm a').format(dateTime);
 }
 
 int nowToInt() {
@@ -27,14 +27,14 @@ String formatDateTime(DateTime? dateTime) {
   if (dateTime == null) {
     return '';
   }
-  return DateFormat('MM/dd/yyyy hh:mm a').format(dateTime);
+  return DateFormat('dd/MM/yyyy hh:mm a').format(dateTime);
 }
 
 String formatDate(DateTime? dateTime) {
   if (dateTime == null) {
     return '';
   }
-  return DateFormat('MM/dd/yyyy').format(dateTime);
+  return DateFormat('dd/MM/yyyy').format(dateTime);
 }
 
 DateTime today() {
@@ -154,7 +154,7 @@ class FormatLocale {
     if (dateTime == null) {
       return '';
     }
-    return DateFormat('MM/dd/yyyy').format(dateTime);
+    return DateFormat('dd/MM/yyyy').format(dateTime);
   }
 
   String formatNumber(dynamic value) {
