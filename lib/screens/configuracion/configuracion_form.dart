@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -14,14 +16,9 @@ import 'package:socio/widgets/layout/app_title_bar_variant.dart';
 import 'package:socio/widgets/layout/app_message.dart' as msg;
 import 'package:socio/widgets/layout/app_dialog.dart' as dlg;
 
-class ConfiguracionForm extends StatefulWidget {
-  const ConfiguracionForm({Key? key}) : super(key: key);
+class ConfiguracionForm extends StatelessWidget {
+  ConfiguracionForm({Key? key}) : super(key: key);
 
-  @override
-  _ConfiguracionFormState createState() => _ConfiguracionFormState();
-}
-
-class _ConfiguracionFormState extends State<ConfiguracionForm> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   late JuegosWithConfiguracion juegoConfiguracion;
@@ -34,6 +31,7 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
   Widget build(BuildContext context) {
     juegoConfiguracion = context.read<ItemsBloc>().state.juegoSelected;
     juego = juegoConfiguracion.juego;
+
     if (juegoConfiguracion.configuracion != null) {
       configuracion = juegoConfiguracion.configuracion;
       hasConfiguracion = true;
@@ -42,228 +40,256 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
     return BlocProvider(
       create: (context) => ConfiguracionBloc(),
       child: BlocBuilder<ConfiguracionBloc, ConfiguracionState>(
-        buildWhen: (previous, current) {
-          if (current is ConfiguracionExito) {
-            juegoConfiguracion =
-                juegoConfiguracion.copyWith(configuracion: configuracion);
+          buildWhen: (previous, current) {
+        if (current is ConfiguracionExito) {
+          juegoConfiguracion =
+              juegoConfiguracion.copyWith(configuracion: configuracion);
 
-            context
-                .read<ItemsBloc>()
-                .add(SelectItem(tipoItem: 'juego', item: juegoConfiguracion));
+          context
+              .read<ItemsBloc>()
+              .add(SelectItem(tipoItem: 'juego', item: juegoConfiguracion));
 
-            ScaffoldMessenger.of(context).showSnackBar(msg.appMessage(
-                context, 'success', 'Configuracion Actualizada'));
-            navigateTo(context, 'configuracion');
-          }
-          return current is! ConfiguracionExito;
-        },
-        builder: (context, state) {
-          if (state is ConfiguracionInitial) {
-            Configuracion lconfiguracion = hasConfiguracion
-                ? configuracion!
-                : Configuracion(
-                    idConfiguracion: 0,
-                    idProgramacionJuego: 0,
-                    carton: 0,
-                    balotas: 0,
-                    idUsuario: 0,
-                    reconfigurado: true);
-
-            context
-                .read<ConfiguracionBloc>()
-                .add(SelectConfiguracion(lconfiguracion));
-          }
-
-          return AppScaffold(
-            color: 'white',
-            titleBar: AppTitleBarVariant(
-              title: 'Configurar',
-              leading: IconButton(
-                  onPressed: () => navigateTo(context, 'juego_list'),
-                  icon: const Icon(Icons.chevron_left)),
-              helpScreen: 'configurar',
-            ),
-            drawer: const JuegoMenu(),
-            child: SingleChildScrollView(
-                child: AppContainer(
-                    variant: 'secondary',
-                    borderRadius: 14,
-                    width: MediaQuery.of(context).size.width * 0.95,
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                    padding: const EdgeInsets.all(15),
-                    child: FormBuilder(
-                        enabled: (state is! ConfiguracionLoading),
-                        key: _formKey,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 5),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              FormBuilderTextField(
-                                name: 'serie',
-                                initialValue: juego.serie,
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                    labelText: 'Serie',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
+          ScaffoldMessenger.of(context).showSnackBar(
+              msg.appMessage(context, 'success', 'Configuracion Actualizada'));
+          navigateTo(context, 'configuracion');
+          return false;
+        }
+        if (current is ConfiguracionInitial) {
+          context
+              .read<ConfiguracionBloc>()
+              .add(SetConfiguracion(configuracion!));
+          return false;
+        }
+        return true;
+      }, builder: (context, state) {
+        if (state is ConfiguracionInitial) {
+          context
+              .read<ConfiguracionBloc>()
+              .add(SetConfiguracion(configuracion!));
+        }
+        return AppScaffold(
+          color: 'white',
+          titleBar: AppTitleBarVariant(
+            title: 'Configurar',
+            leading: IconButton(
+                onPressed: () => navigateTo(context, 'juego_list'),
+                icon: const Icon(Icons.chevron_left)),
+            helpScreen: 'configurar',
+          ),
+          drawer: const JuegoMenu(),
+          child: SingleChildScrollView(
+              child: AppContainer(
+                  variant: 'secondary',
+                  borderRadius: 14,
+                  width: MediaQuery.of(context).size.width * 0.95,
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  padding: const EdgeInsets.all(15),
+                  child: FormBuilder(
+                      enabled: (state is! ConfiguracionLoading),
+                      key: _formKey,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 5),
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            FormBuilderTextField(
+                              name: 'serie',
+                              initialValue: juego.serie,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                  labelText: 'Serie',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  isDense: true,
+                                  suffixIcon: const Icon(Icons.dynamic_feed)),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FormBuilderTextField(
+                              name: 'carton',
+                              initialValue:
+                                  '${(hasConfiguracion) ? configuracion!.carton : ''}',
+                              keyboardType: TextInputType.number,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                  labelText: 'Carton',
+                                  hintText:
+                                      'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  isDense: true,
+                                  suffixIcon: const Icon(Icons.table_view)),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(context,
+                                    errorText: 'El carton es requerido'),
+                                FormBuilderValidators.integer(context,
+                                    errorText: 'indicar Solo numeros'),
+                                FormBuilderValidators.min(context, 0,
+                                    errorText:
+                                        'Debe ser ${juego.cartonInicial} o superior'),
+                                FormBuilderValidators.max(
+                                    context, juego.cartonFinal,
+                                    errorText:
+                                        'No debe ser mayor de ${juego.cartonFinal}'),
+                                (val) {
+                                  final number = int.parse(val ?? '0');
+                                  if (number == 0) return null;
+                                  if (number < juego.cartonInicial) {
+                                    return 'Debe ser 0, ${juego.cartonInicial} o superior';
+                                  }
+                                  return null;
+                                }
+                              ]),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FormBuilderTextField(
+                              name: 'balotas',
+                              initialValue:
+                                  '${(hasConfiguracion) ? configuracion!.balotas : ''}',
+                              keyboardType: TextInputType.number,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                  labelText: 'Balota',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  isDense: true,
+                                  suffixIcon: const Icon(Icons.workspaces)),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(context,
+                                    errorText: 'la balota es requerida'),
+                                FormBuilderValidators.min(context, 1,
+                                    errorText: 'Debe ser mayor que 0'),
+                                FormBuilderValidators.max(context, 75,
+                                    errorText: 'No debe ser mayor que 75'),
+                              ]),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            FormBuilderTextField(
+                              name: 'cliente',
+                              initialValue:
+                                  '${(hasConfiguracion) ? configuracion!.clienteDefecto : ''}',
+                              keyboardType: TextInputType.text,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              decoration: InputDecoration(
+                                  labelText: 'Cliente por Defecto',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  isDense: true,
+                                  suffixIcon: const Icon(Icons.face)),
+                              validator: (val) {
+                                if (_formKey.currentState!.fields['carton']
+                                            ?.value ==
+                                        '0' &&
+                                    (val == null || val.isEmpty)) {
+                                  return 'Indique Cliente por defecto';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                                height:
+                                    (state is ConfiguracionLoading) ? 30 : 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: (state is ConfiguracionLoading)
+                                      ? const LinearProgressIndicator()
+                                      : null,
+                                )),
+                            SizedBox(
+                                height: (state is ConfiguracionError) ? 35 : 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: (state is ConfiguracionError)
+                                      ? Text(
+                                          state.mensaje,
+                                          style: const TextStyle(
+                                              color: Colors.red),
+                                        )
+                                      : null,
+                                )),
+                            SizedBox(
+                                height: (state is ConfiguracionExito) ? 35 : 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: (state is ConfiguracionExito)
+                                      ? Text(
+                                          state.mensaje,
+                                          style: const TextStyle(
+                                              color: Colors.green),
+                                        )
+                                      : null,
+                                )),
+                            const SizedBox(height: 05),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                FloatingActionButton(
+                                    onPressed: () {
+                                      return confirm(
+                                          context,
+                                          context.read<ConfiguracionBloc>(),
+                                          hasConfiguracion);
+                                    },
+                                    child: hasConfiguracion
+                                        ? const Icon(Icons.edit)
+                                        : const Icon(Icons.save),
+                                    backgroundColor: hasConfiguracion
+                                        ? Colors.orange
+                                        : Colors.green,
+                                    heroTag: '3',
+                                    elevation: 0,
+                                    shape: const CircleBorder(
+                                        side: BorderSide(
+                                            color: Colors.white, width: 2))),
+                                FloatingActionButton(
+                                    onPressed: () =>
+                                        (state is ConfiguracionLoading)
+                                            ? null
+                                            : onCancel(context),
+                                    child: const Icon(
+                                      Icons.close,
+                                      size: 36,
                                     ),
-                                    filled: true,
-                                    isDense: true,
-                                    suffixIcon: const Icon(Icons.workspaces)),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              FormBuilderTextField(
-                                name: 'carton',
-                                initialValue:
-                                    '${(hasConfiguracion) ? configuracion!.carton : ''}',
-                                keyboardType: TextInputType.number,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                decoration: InputDecoration(
-                                    labelText: 'Carton',
-                                    hintText:
-                                        'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    filled: true,
-                                    isDense: true,
-                                    suffixIcon: const Icon(Icons.table_view)),
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context,
-                                      errorText: 'El carton es requerido'),
-                                  FormBuilderValidators.min(
-                                      context, juego.cartonInicial,
-                                      errorText:
-                                          'Debe ser mayor que ${juego.cartonInicial}'),
-                                  FormBuilderValidators.max(
-                                      context, juego.cartonFinal,
-                                      errorText:
-                                          'No debe ser mayor que ${juego.cartonFinal}'),
-                                ]),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              FormBuilderTextField(
-                                name: 'balotas',
-                                initialValue:
-                                    '${(hasConfiguracion) ? configuracion!.balotas : ''}',
-                                keyboardType: TextInputType.number,
-                                autovalidateMode:
-                                    AutovalidateMode.onUserInteraction,
-                                decoration: InputDecoration(
-                                    labelText: 'Balota',
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    filled: true,
-                                    isDense: true,
-                                    suffixIcon: const Icon(Icons.workspaces)),
-                                validator: FormBuilderValidators.compose([
-                                  FormBuilderValidators.required(context,
-                                      errorText: 'la balota es requerida'),
-                                  FormBuilderValidators.min(context, 1,
-                                      errorText: 'Debe ser mayor que 0'),
-                                  FormBuilderValidators.max(context, 75,
-                                      errorText: 'No debe ser mayor que 75'),
-                                ]),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              SizedBox(
-                                  height:
-                                      (state is ConfiguracionLoading) ? 30 : 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (state is ConfiguracionLoading)
-                                        ? const LinearProgressIndicator()
-                                        : null,
-                                  )),
-                              SizedBox(
-                                  height:
-                                      (state is ConfiguracionError) ? 35 : 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (state is ConfiguracionError)
-                                        ? Text(
-                                            state.mensaje,
-                                            style: const TextStyle(
-                                                color: Colors.red),
-                                          )
-                                        : null,
-                                  )),
-                              SizedBox(
-                                  height:
-                                      (state is ConfiguracionExito) ? 35 : 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (state is ConfiguracionExito)
-                                        ? Text(
-                                            state.mensaje,
-                                            style: const TextStyle(
-                                                color: Colors.green),
-                                          )
-                                        : null,
-                                  )),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  FloatingActionButton(
-                                      onPressed: () {
-                                        return confirm(
-                                            context,
-                                            context.read<ConfiguracionBloc>(),
-                                            hasConfiguracion);
-                                      },
-                                      child: hasConfiguracion
-                                          ? const Icon(Icons.edit)
-                                          : const Icon(Icons.save),
-                                      backgroundColor: hasConfiguracion
-                                          ? Colors.orange
-                                          : Colors.green,
-                                      heroTag: '3',
-                                      elevation: 0,
-                                      shape: const CircleBorder(
-                                          side: BorderSide(
-                                              color: Colors.white, width: 2))),
-                                  FloatingActionButton(
-                                      onPressed: () =>
-                                          (state is ConfiguracionLoading)
-                                              ? null
-                                              : onCancel(context),
-                                      child: const Icon(
-                                        Icons.close,
-                                        size: 36,
-                                      ),
-                                      backgroundColor: Colors.red,
-                                      heroTag: '5',
-                                      elevation: 0,
-                                      shape: const CircleBorder(
-                                          side: BorderSide(
-                                              color: Colors.white, width: 2))),
-                                ],
-                              )
-                            ],
-                          ),
-                        )))),
-          );
+                                    backgroundColor: Colors.red,
+                                    heroTag: '5',
+                                    elevation: 0,
+                                    shape: const CircleBorder(
+                                        side: BorderSide(
+                                            color: Colors.white, width: 2))),
+                              ],
+                            )
+                          ],
+                        ),
+                      )))),
+        );
+      }
 
           /* */
-        },
-      ),
+
+          ),
     );
   }
 
@@ -276,6 +302,9 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
       formStatus.save();
 
       if (formStatus.validate()) {
+        if (formStatus.value['carton'] != '0') {
+          formStatus.fields['cliente']!.didChange('');
+        }
         List<Widget> content = [
           ListTile(
             title: const Text('Serie'),
@@ -298,9 +327,9 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
         final String title =
             '$action Configuracion Juego ${juego.idProgramacionJuego.toString().padLeft(3, '0')}?';
 
-        isConfirm =
-            await dlg.appDialog(context, title, content, action: 'Confirmar') ??
-                false;
+        await dlg
+            .appDialog(context, title, content, action: 'Confirmar')
+            .then((value) => isConfirm = value ?? false);
       }
     }
 
@@ -326,7 +355,8 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
         reconfigurado: true,
         fechaModificacion: actualizado,
         estado: 'A',
-        fechaRegistro: actualizado);
+        fechaRegistro: actualizado,
+        clienteDefecto: formStatus.value['cliente'] ?? '');
 
     configuracionBloc.add(InsertConfiguracion(addConfiguracion));
     configuracion = addConfiguracion;
@@ -336,12 +366,12 @@ class _ConfiguracionFormState extends State<ConfiguracionForm> {
       FormBuilderState formStatus) async {
     DateTime actualizado = DateTime.now();
     Configuracion updConfiguracion = configuracion!.copyWith(
-      carton: int.parse(formStatus.value['carton']),
-      serie: formStatus.value['serie'],
-      balotas: int.parse(formStatus.value['balotas']),
-      reconfigurado: true,
-      fechaModificacion: actualizado,
-    );
+        carton: int.parse(formStatus.value['carton']),
+        serie: formStatus.value['serie'],
+        balotas: int.parse(formStatus.value['balotas']),
+        reconfigurado: true,
+        fechaModificacion: actualizado,
+        clienteDefecto: formStatus.value['cliente'] ?? '');
 
     configuracionBloc.add(UpdateConfiguracion(updConfiguracion));
     configuracion = updConfiguracion;

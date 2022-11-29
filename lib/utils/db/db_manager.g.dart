@@ -2199,6 +2199,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
   final String? estado;
   final DateTime? fechaModificacion;
   final bool reconfigurado;
+  final String? clienteDefecto;
   Configuracion(
       {required this.idConfiguracion,
       required this.idProgramacionJuego,
@@ -2209,7 +2210,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       required this.idUsuario,
       this.estado,
       this.fechaModificacion,
-      required this.reconfigurado});
+      required this.reconfigurado,
+      this.clienteDefecto});
   factory Configuracion.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Configuracion(
@@ -2233,6 +2235,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           data['${effectivePrefix}fecha_modificacion']),
       reconfigurado: const BoolType()
           .mapFromDatabaseResponse(data['${effectivePrefix}reconfigurado'])!,
+      clienteDefecto: const StringType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}cliente_defecto']),
     );
   }
   @override
@@ -2256,6 +2260,9 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       map['fecha_modificacion'] = Variable<DateTime?>(fechaModificacion);
     }
     map['reconfigurado'] = Variable<bool>(reconfigurado);
+    if (!nullToAbsent || clienteDefecto != null) {
+      map['cliente_defecto'] = Variable<String?>(clienteDefecto);
+    }
     return map;
   }
 
@@ -2277,6 +2284,9 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           ? const Value.absent()
           : Value(fechaModificacion),
       reconfigurado: Value(reconfigurado),
+      clienteDefecto: clienteDefecto == null && nullToAbsent
+          ? const Value.absent()
+          : Value(clienteDefecto),
     );
   }
 
@@ -2296,6 +2306,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       fechaModificacion:
           serializer.fromJson<DateTime?>(json['fechaModificacion']),
       reconfigurado: serializer.fromJson<bool>(json['reconfigurado']),
+      clienteDefecto: serializer.fromJson<String?>(json['clienteDefecto']),
     );
   }
   @override
@@ -2312,6 +2323,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       'estado': serializer.toJson<String?>(estado),
       'fechaModificacion': serializer.toJson<DateTime?>(fechaModificacion),
       'reconfigurado': serializer.toJson<bool>(reconfigurado),
+      'clienteDefecto': serializer.toJson<String?>(clienteDefecto),
     };
   }
 
@@ -2325,7 +2337,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           int? idUsuario,
           String? estado,
           DateTime? fechaModificacion,
-          bool? reconfigurado}) =>
+          bool? reconfigurado,
+          String? clienteDefecto}) =>
       Configuracion(
         idConfiguracion: idConfiguracion ?? this.idConfiguracion,
         idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
@@ -2337,6 +2350,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
         estado: estado ?? this.estado,
         fechaModificacion: fechaModificacion ?? this.fechaModificacion,
         reconfigurado: reconfigurado ?? this.reconfigurado,
+        clienteDefecto: clienteDefecto ?? this.clienteDefecto,
       );
   @override
   String toString() {
@@ -2350,7 +2364,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           ..write('idUsuario: $idUsuario, ')
           ..write('estado: $estado, ')
           ..write('fechaModificacion: $fechaModificacion, ')
-          ..write('reconfigurado: $reconfigurado')
+          ..write('reconfigurado: $reconfigurado, ')
+          ..write('clienteDefecto: $clienteDefecto')
           ..write(')'))
         .toString();
   }
@@ -2366,7 +2381,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       idUsuario,
       estado,
       fechaModificacion,
-      reconfigurado);
+      reconfigurado,
+      clienteDefecto);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2380,7 +2396,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           other.idUsuario == this.idUsuario &&
           other.estado == this.estado &&
           other.fechaModificacion == this.fechaModificacion &&
-          other.reconfigurado == this.reconfigurado);
+          other.reconfigurado == this.reconfigurado &&
+          other.clienteDefecto == this.clienteDefecto);
 }
 
 class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
@@ -2394,6 +2411,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
   final Value<String?> estado;
   final Value<DateTime?> fechaModificacion;
   final Value<bool> reconfigurado;
+  final Value<String?> clienteDefecto;
   const ConfiguracionesCompanion({
     this.idConfiguracion = const Value.absent(),
     this.idProgramacionJuego = const Value.absent(),
@@ -2405,6 +2423,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     this.estado = const Value.absent(),
     this.fechaModificacion = const Value.absent(),
     this.reconfigurado = const Value.absent(),
+    this.clienteDefecto = const Value.absent(),
   });
   ConfiguracionesCompanion.insert({
     this.idConfiguracion = const Value.absent(),
@@ -2417,6 +2436,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     this.estado = const Value.absent(),
     this.fechaModificacion = const Value.absent(),
     required bool reconfigurado,
+    this.clienteDefecto = const Value.absent(),
   })  : idProgramacionJuego = Value(idProgramacionJuego),
         carton = Value(carton),
         balotas = Value(balotas),
@@ -2433,6 +2453,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     Expression<String?>? estado,
     Expression<DateTime?>? fechaModificacion,
     Expression<bool>? reconfigurado,
+    Expression<String?>? clienteDefecto,
   }) {
     return RawValuesInsertable({
       if (idConfiguracion != null) 'id_configuracion': idConfiguracion,
@@ -2446,6 +2467,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
       if (estado != null) 'estado': estado,
       if (fechaModificacion != null) 'fecha_modificacion': fechaModificacion,
       if (reconfigurado != null) 'reconfigurado': reconfigurado,
+      if (clienteDefecto != null) 'cliente_defecto': clienteDefecto,
     });
   }
 
@@ -2459,7 +2481,8 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
       Value<int>? idUsuario,
       Value<String?>? estado,
       Value<DateTime?>? fechaModificacion,
-      Value<bool>? reconfigurado}) {
+      Value<bool>? reconfigurado,
+      Value<String?>? clienteDefecto}) {
     return ConfiguracionesCompanion(
       idConfiguracion: idConfiguracion ?? this.idConfiguracion,
       idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
@@ -2471,6 +2494,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
       estado: estado ?? this.estado,
       fechaModificacion: fechaModificacion ?? this.fechaModificacion,
       reconfigurado: reconfigurado ?? this.reconfigurado,
+      clienteDefecto: clienteDefecto ?? this.clienteDefecto,
     );
   }
 
@@ -2507,6 +2531,9 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     if (reconfigurado.present) {
       map['reconfigurado'] = Variable<bool>(reconfigurado.value);
     }
+    if (clienteDefecto.present) {
+      map['cliente_defecto'] = Variable<String?>(clienteDefecto.value);
+    }
     return map;
   }
 
@@ -2522,7 +2549,8 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
           ..write('idUsuario: $idUsuario, ')
           ..write('estado: $estado, ')
           ..write('fechaModificacion: $fechaModificacion, ')
-          ..write('reconfigurado: $reconfigurado')
+          ..write('reconfigurado: $reconfigurado, ')
+          ..write('clienteDefecto: $clienteDefecto')
           ..write(')'))
         .toString();
   }
@@ -2582,6 +2610,11 @@ class $ConfiguracionesTable extends Configuraciones
       typeName: 'INTEGER',
       requiredDuringInsert: true,
       defaultConstraints: 'CHECK (reconfigurado IN (0, 1))');
+  final VerificationMeta _clienteDefectoMeta =
+      const VerificationMeta('clienteDefecto');
+  late final GeneratedColumn<String?> clienteDefecto = GeneratedColumn<String?>(
+      'cliente_defecto', aliasedName, true,
+      typeName: 'TEXT', requiredDuringInsert: false);
   @override
   List<GeneratedColumn> get $columns => [
         idConfiguracion,
@@ -2593,7 +2626,8 @@ class $ConfiguracionesTable extends Configuraciones
         idUsuario,
         estado,
         fechaModificacion,
-        reconfigurado
+        reconfigurado,
+        clienteDefecto
       ];
   @override
   String get aliasedName => _alias ?? 'configuraciones';
@@ -2663,6 +2697,12 @@ class $ConfiguracionesTable extends Configuraciones
               data['reconfigurado']!, _reconfiguradoMeta));
     } else if (isInserting) {
       context.missing(_reconfiguradoMeta);
+    }
+    if (data.containsKey('cliente_defecto')) {
+      context.handle(
+          _clienteDefectoMeta,
+          clienteDefecto.isAcceptableOrUnknown(
+              data['cliente_defecto']!, _clienteDefectoMeta));
     }
     return context;
   }

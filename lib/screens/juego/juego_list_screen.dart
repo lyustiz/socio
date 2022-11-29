@@ -75,6 +75,12 @@ class JuegoListScreen extends StatelessWidget {
               case 'configurar_figuras':
                 navigateTo(context, 'figura');
                 break;
+              case 'auditoria_acumulado':
+                navigateTo(context, 'auditoria_acumulado');
+                break;
+              case 'auditoria_configuracion':
+                navigateTo(context, 'auditoria_configuracion');
+                break;
               default:
             }
           }
@@ -83,11 +89,35 @@ class JuegoListScreen extends StatelessWidget {
         itemBuilder: (context) => [
               const PopupMenuItem(
                 value: 'configurar_juego',
-                child: Text('Configurar Juego'),
+                child: ListTile(
+                  title: Text('Configurar Juego'),
+                  leading: Icon(Icons.build),
+                  dense: true,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'auditoria_configuracion',
+                child: ListTile(
+                  title: Text('Historial Configuracion'), //Configurar Figuras
+                  leading: Icon(Icons.pending_actions_rounded),
+                  dense: true,
+                ),
               ),
               const PopupMenuItem(
                 value: 'configurar_figuras',
-                child: Text('Configurar Figuras'),
+                child: ListTile(
+                  title: Text('Configurar Figuras'), //Configurar Figuras
+                  leading: Icon(Icons.category),
+                  dense: true,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'auditoria_acumulado',
+                child: ListTile(
+                  title: Text('Historia Figuras'), //Configurar Figuras
+                  leading: Icon(Icons.pending_actions_rounded),
+                  dense: true,
+                ),
               )
             ],
         icon: const Icon(Icons.settings),

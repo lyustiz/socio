@@ -74,6 +74,9 @@ class ConfiguracionScreen extends StatelessWidget {
           configuracion.reconfigurado
               ? Icons.check_circle
               : Icons.radio_button_unchecked),
+      (configuracion.carton == 0)
+          ? itemData('Cliente', '${configuracion.clienteDefecto}', Icons.face)
+          : const Text(''),
     ];
   }
 
@@ -103,7 +106,7 @@ class ConfiguracionScreen extends StatelessWidget {
   }
 
   void setConfiguracion(context) async {
-    if (juego.estado == 'C') {
+    if (juego.idJuego != null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(Msg.appMessage(context, 'warning', 'Juego Terminado'));
     } else {

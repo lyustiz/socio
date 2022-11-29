@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:socio/screens/auditoria_acumulado/auditoria_acumulado_screen.dart';
+import 'package:socio/screens/auditoria_configuracion/auditoria_configuracion_screen.dart';
 import 'package:socio/screens/configuracion/configuracion_form.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/endpoint/endpoint_screen.dart';
@@ -36,8 +38,10 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'informe_usuario': (_) => InformeUsuarioScreen(),
   'informe_venta': (_) => InformeVentaScreen(),
   'configuracion': (_) => ConfiguracionScreen(),
-  'configuracion_form': (_) => const ConfiguracionForm(),
+  'configuracion_form': (_) => ConfiguracionForm(),
   'figura': (_) => FiguraScreen(),
+  'auditoria_acumulado': (_) => AuditoriaAcumuladoScreen(),
+  'auditoria_configuracion': (_) => AuditoriaConfiguracionScreen(),
   'estadistica': (_) => EstadisticaScreen(),
   'condiciones': (_) => const CondicionesScreen(),
   'helper_screen': (_) => const HelperScreen(),

@@ -22,6 +22,7 @@ class ConfiguracionBloc extends Bloc<ConfiguracionEvent, ConfiguracionState> {
           (event, emit) => _onDeleteConfiguracion(event, emit));
       on<SelectConfiguracion>(
           (event, emit) => _onSelectConfiguracion(event, emit));
+      on<SetConfiguracion>((event, emit) => _onSetConfiguracion(event, emit));
     });
   }
 
@@ -38,12 +39,15 @@ class ConfiguracionBloc extends Bloc<ConfiguracionEvent, ConfiguracionState> {
     bool isUpdated = await rep.updateConfiguracion(configuracion);
     if (isUpdated) {
       emit(ConfiguracionExito(
-        'Registro Actualizado',
-        configuracion.idConfiguracion,
-      ));
+          'Registro Actualizado', configuracion.idConfiguracion));
     } else {
       emit(ConfiguracionError('Registro no Acualizado'));
     }
+  }
+
+  void _onSetConfiguracion(event, emit) async {
+    Configuracion configuracion = event.configuracion;
+    emit(ConfiguracionLoaded(configuracion));
   }
 
   void _onInsertConfiguracion(event, emit) async {

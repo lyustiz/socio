@@ -6,6 +6,7 @@ class VendedorCobroDto {
   final int idProgramacionJuego;
   final String nombreVendedor;
   final int totalCartones;
+  final int ventaTotalCartones;
   final int cartonesDevueltos;
   final int numeroHojasEntregadas;
   final double porcentajeComision;
@@ -28,6 +29,7 @@ class VendedorCobroDto {
       required this.idProgramacionJuego,
       required this.nombreVendedor,
       required this.totalCartones,
+      required this.ventaTotalCartones,
       required this.cartonesDevueltos,
       required this.numeroHojasEntregadas,
       required this.porcentajeComision,
@@ -58,6 +60,8 @@ class VendedorCobroDto {
             serializer.fromJson<int>(json['idProgramacionJuego']),
         nombreVendedor: serializer.fromJson<String>(json['nombreVendedor']),
         totalCartones: serializer.fromJson<int>(json['totalCartones']),
+        ventaTotalCartones:
+            serializer.fromJson<int>(json['ventaTotalCartones']),
         cartonesDevueltos: serializer.fromJson<int>(json['cartonesDevueltos']),
         numeroHojasEntregadas:
             serializer.fromJson<int>(json['numeroHojasEntregadas']),

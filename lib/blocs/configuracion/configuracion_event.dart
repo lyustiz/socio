@@ -19,6 +19,18 @@ class GetConfiguracion extends ConfiguracionEvent {
   String toString() => 'GetConfiguracion';
 }
 
+class SetConfiguracion extends ConfiguracionEvent {
+  final Configuracion configuracion;
+
+  SetConfiguracion(this.configuracion);
+
+  @override
+  List<Object> get props => [configuracion];
+
+  @override
+  String toString() => 'GetConfiguracion';
+}
+
 class GetAllConfiguracion extends ConfiguracionEvent {
   final String terminado;
   GetAllConfiguracion(this.terminado);

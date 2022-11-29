@@ -12,6 +12,7 @@ class ConfiguracionDto {
   final String? estado;
   final String? fechaModificacion;
   final int reconfigurado;
+  final String? clienteDefecto;
 
   ConfiguracionDto(
       {required this.idConfiguracion,
@@ -23,7 +24,8 @@ class ConfiguracionDto {
       required this.idUsuario,
       required this.estado,
       this.fechaModificacion,
-      required this.reconfigurado});
+      required this.reconfigurado,
+      this.clienteDefecto});
 
   factory ConfiguracionDto.fromConfiguracion(Configuracion configuracion,
       {required int idUsuario}) {
@@ -38,26 +40,27 @@ class ConfiguracionDto {
       estado: configuracion.estado!,
       fechaModificacion: configuracion.fechaModificacion!.toIso8601String(),
       reconfigurado: (configuracion.reconfigurado) ? 1 : 0,
+      clienteDefecto: configuracion.clienteDefecto,
     );
   }
 
   static Configuracion toConfiguracion(ConfiguracionDto configuracionDTO) {
     return Configuracion(
-      idConfiguracion: configuracionDTO.idConfiguracion,
-      idProgramacionJuego: configuracionDTO.numeroJuego,
-      carton: configuracionDTO.carton,
-      serie: configuracionDTO.serie,
-      balotas: configuracionDTO.balotas,
-      fechaRegistro: configuracionDTO.fechaRegistro != null
-          ? DateTime.parse(configuracionDTO.fechaRegistro!)
-          : null,
-      idUsuario: configuracionDTO.idUsuario,
-      estado: configuracionDTO.estado,
-      fechaModificacion: configuracionDTO.fechaModificacion == null
-          ? null
-          : DateTime.parse(configuracionDTO.fechaModificacion!),
-      reconfigurado: (configuracionDTO.reconfigurado == 1),
-    );
+        idConfiguracion: configuracionDTO.idConfiguracion,
+        idProgramacionJuego: configuracionDTO.numeroJuego,
+        carton: configuracionDTO.carton,
+        serie: configuracionDTO.serie,
+        balotas: configuracionDTO.balotas,
+        fechaRegistro: configuracionDTO.fechaRegistro != null
+            ? DateTime.parse(configuracionDTO.fechaRegistro!)
+            : null,
+        idUsuario: configuracionDTO.idUsuario,
+        estado: configuracionDTO.estado,
+        fechaModificacion: configuracionDTO.fechaModificacion == null
+            ? null
+            : DateTime.parse(configuracionDTO.fechaModificacion!),
+        reconfigurado: (configuracionDTO.reconfigurado == 1),
+        clienteDefecto: configuracionDTO.clienteDefecto);
   }
 
   static List<ConfiguracionDto> fromListConfiguraciones(
@@ -85,6 +88,7 @@ class ConfiguracionDto {
       'estado': serializer.toJson<String?>(estado),
       'fechaModificacion': serializer.toJson<String?>(fechaModificacion),
       'reconfigurado': serializer.toJson<int>(reconfigurado),
+      'clienteDefecto': serializer.toJson<String?>(clienteDefecto),
     };
   }
 
@@ -103,6 +107,7 @@ class ConfiguracionDto {
       fechaModificacion: serializer
           .fromJson<String>(json['fechaModificacion'] ?? json['fechaRegistro']),
       reconfigurado: serializer.fromJson<int>(json['reconfigurado']),
+      clienteDefecto: serializer.fromJson<String>(json['clienteDefecto']),
     );
   }
 }

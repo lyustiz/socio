@@ -204,7 +204,7 @@ class InformeJuegoScreen extends StatelessWidget {
                     DataCell(Text(fL.formatCantidad(vc.totalCartones))),
                     DataCell(Text(fL.formatCantidad(vc.totalModulos))),
                     DataCell(Text(fL.formatCantidad(vc.cartonesCortesia))),
-                    DataCell(Text(fL.formatCantidad(0))),
+                    DataCell(Text(fL.formatCantidad(vc.ventaTotalCartones))),
                     DataCell(Text(fL.formatCantidad(vc.cartonesDevueltos))),
                     DataCell(Text(fL.currency(vc.gastoCortesia))),
                     DataCell(Text(fL.percent(vc.porcentajeComision))),
