@@ -18,15 +18,3 @@ class GetInformeJuego extends InformeJuegoEvent {
   @override
   String toString() => 'GetJuegoDetalle idJuego $idJuego ';
 }
-
-class SelectJuegoDetalle extends InformeJuegoEvent {
-  final InformeJuegoDto informeJuego;
-
-  const SelectJuegoDetalle(this.informeJuego);
-
-  @override
-  List<Object> get props => [informeJuego];
-
-  @override
-  String toString() => 'SelectJuegoDetalle';
-}

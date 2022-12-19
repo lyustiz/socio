@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:socio/providers/dto/figura_dto.dart';
 import 'package:socio/utils/db/db_manager.dart';
 
 class FiguraIcon extends StatelessWidget {
-  final Figura figura;
+  final FiguraDto figura;
   final String tipoJuego;
 
   FiguraIcon({Key? key, required this.figura, required this.tipoJuego});
@@ -33,7 +34,7 @@ class FiguraIcon extends StatelessWidget {
   }
 
   Widget rombo(
-      {required Figura figura,
+      {required FiguraDto figura,
       required double squareSize,
       required double fontSize}) {
     List<String> posicion = figura.posiciones.split('');
@@ -164,7 +165,7 @@ class FiguraIcon extends StatelessWidget {
 }
 
 Widget bingo(
-    {required Figura figura,
+    {required FiguraDto figura,
     required double squareSize,
     required double fontSize}) {
   List<String> posicion = figura.posiciones.padRight(25, '0').split('');

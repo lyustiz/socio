@@ -9,7 +9,7 @@ abstract class AuditoriaAcumuladoState extends Equatable {
 
 class AuditoriaAcumuladoInitial extends AuditoriaAcumuladoState {
   @override
-  String toString() => 'AuditoriaAcumuladoInitial { juegos: [] }';
+  String toString() => 'AuditoriaAcumuladoInitial';
 }
 
 class AuditoriaAcumuladoLoading extends AuditoriaAcumuladoState {
@@ -19,12 +19,9 @@ class AuditoriaAcumuladoLoading extends AuditoriaAcumuladoState {
 
 class AuditoriaAcumuladoLoaded extends AuditoriaAcumuladoState {
   final List<AuditoriaAcumuladoDto> auditoria;
-
   const AuditoriaAcumuladoLoaded(this.auditoria);
-
   @override
   List<Object> get props => [auditoria];
-
   @override
   String toString() => 'AuditoriaAcumuladoLoaded { auditoria: $auditoria }';
 }

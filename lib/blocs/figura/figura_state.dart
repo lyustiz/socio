@@ -21,9 +21,9 @@ class FiguraLoading extends FiguraState {
 }
 
 class FigurasLoaded extends FiguraState {
-  final List<Figura> figuras;
+  final List<FiguraDto> figuras;
 
-  FigurasLoaded(this.figuras);
+  const FigurasLoaded(this.figuras);
 
   @override
   List<Object> get props => [figuras];
@@ -33,7 +33,7 @@ class FigurasLoaded extends FiguraState {
 }
 
 class FiguraLoaded extends FiguraState {
-  final Figura figuras;
+  final FiguraDto figuras;
 
   const FiguraLoaded(this.figuras);
 

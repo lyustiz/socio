@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:socio/providers/custom_exeption.dart';
 import 'package:socio/repository/preferences_repository_impl.dart';
+import 'package:socio/utils/db/json_serializer.dart';
 
 class Api {
   final String prefix;
@@ -106,9 +107,10 @@ class Api {
         data = convert.jsonDecode(response.body);
         isSucess = true;
       } else {
+        isSucess = false;
         data = {
           'code': response.statusCode,
-          'message': errorMessage(response.statusCode),
+          'message': errorMessage(response.statusCode, response.body),
           'body':
               (response.body == '') ? null : convert.jsonDecode(response.body)
         };
@@ -118,13 +120,18 @@ class Api {
     return {'isSuccess': isSucess, 'data': data};
   }
 
-  String errorMessage(int codeError) {
+  String errorMessage(int codeError, String body) {
     Map<int, String> messages = {
       401: 'Credenciales Invalidas',
       403: 'No autorizado',
       404: 'No encontrado',
       500: 'Problemas en el servidor'
     };
+
+    if (codeError == 409) {
+      var data = convert.jsonDecode(body);
+      return data['message'];
+    }
 
     return messages[codeError] ?? 'Error $codeError';
   }
@@ -175,4 +182,10 @@ class Api {
     }
     return false;
   }
+}
+
+class ResultApi {
+  final bool success;
+  final String message;
+  ResultApi({required this.success, this.message = '0'});
 }

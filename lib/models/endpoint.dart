@@ -17,5 +17,5 @@ Map<String, String> endpoints = {
   'Huaquillas': 'apihuaquillas.sistemasyayudas.online',
   'Ipiales': 'apiipiales.sistemasyayudas.online',
   'Pradera': 'apipradera.sistemasyayudas.online',
+  'Naranjal': 'apinaranjal.sistemasyayudas.online',
 };
-

@@ -9,10 +9,7 @@ abstract class ConfiguracionState extends Equatable {
 
 class ConfiguracionInitial extends ConfiguracionState {
   @override
-  List<Object> get props => [];
-
-  @override
-  String toString() => 'ConfiguracionInitial { $props }';
+  String toString() => 'ConfiguracionInitial';
 }
 
 class ConfiguracionLoading extends ConfiguracionState {
@@ -21,20 +18,17 @@ class ConfiguracionLoading extends ConfiguracionState {
 }
 
 class ConfiguracionesLoaded extends ConfiguracionState {
-  final List<Configuracion> configuraciones;
-
-  ConfiguracionesLoaded(this.configuraciones);
-
+  final List<ConfiguracionDto> configuraciones;
+  const ConfiguracionesLoaded(this.configuraciones);
   @override
-  List<Object> get props => [configuraciones];
-
+  List<Object> get props => configuraciones;
   @override
   String toString() =>
       'ConfiguracionLoaded { configuraciones: $configuraciones }';
 }
 
 class ConfiguracionLoaded extends ConfiguracionState {
-  final Configuracion configuracion;
+  final ConfiguracionDto configuracion;
 
   const ConfiguracionLoaded(this.configuracion);
 
@@ -46,24 +40,19 @@ class ConfiguracionLoaded extends ConfiguracionState {
 }
 
 class ConfiguracionSelected extends ConfiguracionState {
-  final Configuracion configuracion;
-
-  ConfiguracionSelected(this.configuracion);
-
+  final ConfiguracionDto configuracion;
+  const ConfiguracionSelected(this.configuracion);
   @override
   List<Object> get props => [configuracion];
-
   @override
   String toString() => 'ConfiguracionSelected $configuracion';
 }
 
 class ConfiguracionError extends ConfiguracionState {
   final String mensaje;
-  ConfiguracionError(this.mensaje);
-
+  const ConfiguracionError(this.mensaje);
   @override
   List<Object> get props => [mensaje];
-
   @override
   String toString() => 'ConfiguracionError $mensaje';
 }
@@ -71,11 +60,9 @@ class ConfiguracionError extends ConfiguracionState {
 class ConfiguracionExito extends ConfiguracionState {
   final String mensaje;
   final int idConfiguracion;
-  ConfiguracionExito(this.mensaje, this.idConfiguracion);
-
+  const ConfiguracionExito(this.mensaje, this.idConfiguracion);
   @override
   List<Object> get props => [mensaje, idConfiguracion];
-
   @override
   String toString() => 'ConfiguracionExisto $mensaje';
 }

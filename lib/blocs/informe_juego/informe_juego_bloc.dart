@@ -8,6 +8,7 @@ part 'informe_juego_state.dart';
 
 class InformeJuegoBloc extends Bloc<InformeJuegoEvent, InformeJuegoState> {
   InformeJuegoRepository rep = InformeJuegoRepository();
+
   InformeJuegoBloc() : super(InformeJuegoInitial()) {
     on<GetInformeJuego>((event, emit) => _onGetInformeJuego(event, emit));
   }

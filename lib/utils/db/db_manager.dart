@@ -58,8 +58,6 @@ class AppDatabase extends _$AppDatabase {
             SincronizadosCompanion.insert(
                 fechaSincronizado: fechaInit, tabla: 'juegos', estado: 'A'),
             SincronizadosCompanion.insert(
-                fechaSincronizado: fechaInit, tabla: 'figuras', estado: 'A'),
-            SincronizadosCompanion.insert(
                 fechaSincronizado: fechaInit,
                 tabla: 'configuracion',
                 estado: 'A'),

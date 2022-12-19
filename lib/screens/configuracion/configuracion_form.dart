@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:socio/providers/dto/configuracion_dto.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ class ConfiguracionForm extends StatelessWidget {
   late JuegosWithConfiguracion juegoConfiguracion;
   late Juego juego;
   late Configuracion? configuracion;
+  late ConfiguracionDto configuracionDto;
   late String serie = juego.serie;
   late bool hasConfiguracion = false;
 
@@ -34,7 +36,10 @@ class ConfiguracionForm extends StatelessWidget {
 
     if (juegoConfiguracion.configuracion != null) {
       configuracion = juegoConfiguracion.configuracion;
+      configuracionDto = ConfiguracionDto.fromConfiguracion(configuracion!);
       hasConfiguracion = true;
+    } else {
+      configuracionDto = ConfiguracionDto.initial(juego.serie);
     }
 
     return BlocProvider(
@@ -55,9 +60,9 @@ class ConfiguracionForm extends StatelessWidget {
           return false;
         }
         if (current is ConfiguracionInitial) {
-          context
-              .read<ConfiguracionBloc>()
-              .add(SetConfiguracion(configuracion!));
+          context.read<ConfiguracionBloc>().add(SetConfiguracion(
+              ConfiguracionDto.fromConfiguracion(configuracion!,
+                  idUsuario: 9)));
           return false;
         }
         return true;
@@ -65,7 +70,7 @@ class ConfiguracionForm extends StatelessWidget {
         if (state is ConfiguracionInitial) {
           context
               .read<ConfiguracionBloc>()
-              .add(SetConfiguracion(configuracion!));
+              .add(SetConfiguracion(configuracionDto));
         }
         return AppScaffold(
           color: 'white',
@@ -115,7 +120,7 @@ class ConfiguracionForm extends StatelessWidget {
                             FormBuilderTextField(
                               name: 'carton',
                               initialValue:
-                                  '${(hasConfiguracion) ? configuracion!.carton : ''}',
+                                  '${(hasConfiguracion) ? configuracion!.carton : '0'}',
                               keyboardType: TextInputType.number,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
@@ -131,7 +136,8 @@ class ConfiguracionForm extends StatelessWidget {
                                   suffixIcon: const Icon(Icons.table_view)),
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(context,
-                                    errorText: 'El carton es requerido'),
+                                    errorText:
+                                        'Debe ser 0 (auto), ${juego.cartonInicial} o superior'),
                                 FormBuilderValidators.integer(context,
                                     errorText: 'indicar Solo numeros'),
                                 FormBuilderValidators.min(context, 0,
@@ -157,7 +163,7 @@ class ConfiguracionForm extends StatelessWidget {
                             FormBuilderTextField(
                               name: 'balotas',
                               initialValue:
-                                  '${(hasConfiguracion) ? configuracion!.balotas : ''}',
+                                  '${(hasConfiguracion) ? configuracion!.balotas : '0'}',
                               keyboardType: TextInputType.number,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
@@ -171,9 +177,11 @@ class ConfiguracionForm extends StatelessWidget {
                                   suffixIcon: const Icon(Icons.workspaces)),
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(context,
-                                    errorText: 'la balota es requerida'),
-                                FormBuilderValidators.min(context, 1,
-                                    errorText: 'Debe ser mayor que 0'),
+                                    errorText:
+                                        'Debe ser 0 (automatico) o superior'),
+                                FormBuilderValidators.min(context, 0,
+                                    errorText:
+                                        'Debe ser 0 (automatico) o superior'),
                                 FormBuilderValidators.max(context, 75,
                                     errorText: 'No debe ser mayor que 75'),
                               ]),
@@ -358,7 +366,8 @@ class ConfiguracionForm extends StatelessWidget {
         fechaRegistro: actualizado,
         clienteDefecto: formStatus.value['cliente'] ?? '');
 
-    configuracionBloc.add(InsertConfiguracion(addConfiguracion));
+    configuracionBloc.add(InsertConfiguracion(
+        ConfiguracionDto.fromConfiguracion(addConfiguracion)));
     configuracion = addConfiguracion;
   }
 
@@ -373,7 +382,8 @@ class ConfiguracionForm extends StatelessWidget {
         fechaModificacion: actualizado,
         clienteDefecto: formStatus.value['cliente'] ?? '');
 
-    configuracionBloc.add(UpdateConfiguracion(updConfiguracion));
+    configuracionBloc.add(UpdateConfiguracion(
+        ConfiguracionDto.fromConfiguracion(updConfiguracion)));
     configuracion = updConfiguracion;
   }
 

@@ -31,10 +31,10 @@ class SincronizarRepository {
           }
         }
 
-        if ((juego['premios'] as List).isNotEmpty) {
+        /* if ((juego['premios'] as List).isNotEmpty) {
           sincronizarFiguras(
               juego['premios'], juego['idProgramacionJuego'], actualizado);
-        }
+        }*/
       }
 
       for (var juego in juegosList) {

@@ -8,7 +8,7 @@ abstract class FiguraEvent extends Equatable {
 }
 
 class GetFigura extends FiguraEvent {
-  final Figura figura;
+  final FiguraDto figura;
 
   const GetFigura(this.figura);
 
@@ -31,19 +31,20 @@ class GetAllFiguras extends FiguraEvent {
 }
 
 class UpdateFigura extends FiguraEvent {
-  final Figura figura;
+  final FiguraDto figura;
+  final int idProgramacionJuego;
 
-  const UpdateFigura(this.figura);
+  const UpdateFigura(this.figura, this.idProgramacionJuego);
 
   @override
-  List<Object> get props => [figura];
+  List<Object> get props => [figura, idProgramacionJuego];
 
   @override
   String toString() => 'UpdateFigura';
 }
 
 class InsertFigura extends FiguraEvent {
-  final Figura figura;
+  final FiguraDto figura;
 
   const InsertFigura(this.figura);
 
@@ -55,7 +56,7 @@ class InsertFigura extends FiguraEvent {
 }
 
 class DeleteFigura extends FiguraEvent {
-  final Figura figura;
+  final FiguraDto figura;
 
   const DeleteFigura(this.figura);
 
@@ -67,7 +68,7 @@ class DeleteFigura extends FiguraEvent {
 }
 
 class SelectFigura extends FiguraEvent {
-  final Figura figura;
+  final FiguraDto figura;
 
   const SelectFigura(this.figura);
 

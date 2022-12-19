@@ -1,47 +1,50 @@
 import 'package:socio/utils/db/db_manager.dart';
-import 'package:socio/providers/DTO/figura_dto.dart';
+import 'package:socio/providers/dto/figura_dto.dart';
 import 'package:socio/providers/api.dart';
 import 'package:socio/utils/db/db_init.dart';
 
 class FiguraRepository {
   final Api api = Api();
   Map<String, dynamic> data = {};
+  Map<String, dynamic> result = {'isSuccess': false, 'data': null};
 
-  Future<Figura> selectfigura(Figura figura) async {
+  Future<Figura> selectfigura(FiguraDto figura) async {
     return db<AppDatabase>().figurasDao.selectFigura(figura.idFigura);
   }
 
-  Future<List<Figura>> selectfiguras(int idProgramacionJuego) async {
-    return db<AppDatabase>().figurasDao.selectFiguras(idProgramacionJuego);
-  }
+  Future<List<FiguraDto>> selectfiguras(int idProgramacionJuego) async {
+    var params = {'IdProgramacionJuego': '$idProgramacionJuego'};
 
-  Future<int> insertFigura(Figura figura, int idProgramacionJuego) async {
-    FiguraDto figuraDto = FiguraDto.fromFigura(figura);
-
-    data = await api.postData('juegosfigura', params: figuraDto.toJson());
-
-    if (data['isSuccess']) {
-      FiguraDto newFiguraDto = FiguraDto.fromJson(data['data']);
-      Figura newFigura = newFiguraDto.toFigura(idProgramacionJuego);
-      await db<AppDatabase>().figurasDao.insertFigura(newFigura);
-      return newFigura.idFigura;
+    try {
+      result = await api.getData('figurasplenoautomatico', params);
+    } catch (e) {
+      return [];
     }
-    return 0;
+
+    List<FiguraDto> listFiguras = [];
+
+    if (result['isSuccess'] && result['data'] != null) {
+      for (var jsonfig in result['data']) {
+        listFiguras.add(FiguraDto.fromJson(jsonfig));
+      }
+    }
+    return listFiguras.where((figura) => figura.nombre != 'Lleno').toList();
   }
 
-  Future<bool> updateFigura(Figura figura) async {
-    FiguraDto figuraDto = FiguraDto.fromFigura(figura);
+  Future<ResultApi> updateFigura(FiguraDto figura) async {
+    FiguraDto figuraDto = figura;
 
     try {
       data = await api.putData('figurasplenoautomatico', figuraDto.toJson());
     } catch (e) {
-      return false;
+      return ResultApi(success: false, message: 'Error al actulizar figura');
     }
-    if (data['isSuccess']) {
-      await db<AppDatabase>().figurasDao.upsertFigura(figura);
+    bool isSuccess = data['isSuccess'];
+    Map<String, dynamic> respond = data['data'];
+    if (isSuccess) {
     } else {
-      return false;
+      return ResultApi(success: false, message: respond['message']);
     }
-    return true;
+    return ResultApi(success: true, message: respond['message']);
   }
 }

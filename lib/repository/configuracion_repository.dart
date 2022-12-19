@@ -1,41 +1,48 @@
-import 'package:socio/utils/db/db_manager.dart';
-import 'package:socio/providers/DTO/configuracion_dto.dart';
+import 'package:socio/providers/dto/configuracion_dto.dart';
 import 'package:socio/providers/api.dart';
-import 'package:socio/utils/db/db_init.dart';
 
 class ConfiguracionRepository {
   final Api api = Api();
   Map<String, dynamic> data = {};
+  Map<String, dynamic> result = {'isSuccess': false, 'data': null};
 
-  Future<Configuracion> selectConfiguracion(Configuracion configuracion) async {
-    return db<AppDatabase>()
-        .configuracionesDao
-        .selectConfiguracion(configuracion);
+  Future<ConfiguracionDto?> getConfiguracion(
+      {required int idProgramacionJuego}) async {
+    var params = {'idProgramacionJuego': '$idProgramacionJuego'};
+
+    try {
+      result = await api.getData('configuracion', params);
+    } catch (e) {
+      return null;
+    }
+
+    ConfiguracionDto? informeJuegoDto;
+
+    if (result['isSuccess']) {
+      informeJuegoDto = ConfiguracionDto.fromJson(result['data']);
+    }
+
+    return informeJuegoDto;
   }
 
-  Future<int> insertConfiguracion(Configuracion configuracion) async {
-    ConfiguracionDto configuracionDto =
-        ConfiguracionDto.fromConfiguracion(configuracion, idUsuario: 0);
-
-    data = await api.postData('juegosconfiguracion',
-        params: configuracionDto.toJson());
-
+  Future<int> insertConfiguracion(ConfiguracionDto configuracionDto) async {
+    try {
+      data = await api.postData('juegosconfiguracion',
+          params: configuracionDto.toJson());
+    } catch (e) {
+      return 0;
+    }
     if (data['isSuccess']) {
       ConfiguracionDto newConfiguracionDto =
           ConfiguracionDto.fromJson(data['data']);
       var newConfiguracion =
           ConfiguracionDto.toConfiguracion(newConfiguracionDto);
-      await db<AppDatabase>()
-          .configuracionesDao
-          .insertConfiguracion(newConfiguracion);
       return newConfiguracion.idConfiguracion;
     }
     return 0;
   }
 
-  Future<bool> updateConfiguracion(Configuracion configuracion) async {
-    ConfiguracionDto configuracionDto =
-        ConfiguracionDto.fromConfiguracion(configuracion, idUsuario: 0);
+  Future<bool> updateConfiguracion(ConfiguracionDto configuracionDto) async {
     try {
       data =
           await api.putData('juegosconfiguracion', configuracionDto.toJson());
@@ -43,16 +50,9 @@ class ConfiguracionRepository {
       return false;
     }
     if (data['isSuccess']) {
-      await db<AppDatabase>()
-          .configuracionesDao
-          .updateConfiguracion(configuracion);
+      return true;
+    } else {
+      return false;
     }
-    return true;
-  }
-
-  Future<int> deleteConfiguracion(Configuracion configuracion) async {
-    return await db<AppDatabase>()
-        .configuracionesDao
-        .deleteConfiguracion(configuracion);
   }
 }

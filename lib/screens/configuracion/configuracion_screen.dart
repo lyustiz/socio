@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:socio/screens/configuracion/configuracion_form.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
 import 'package:socio/widgets/layout/app_container.dart';
@@ -38,7 +39,7 @@ class ConfiguracionScreen extends StatelessWidget {
           child: configuracionDetail(context, configuracion)),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.green,
-        onPressed: () => setConfiguracion(context),
+        onPressed: () => setConfiguracion(context, configuracion),
         child:
             hasConfiguracion ? const Icon(Icons.edit) : const Icon(Icons.add),
       ),
@@ -105,12 +106,21 @@ class ConfiguracionScreen extends StatelessWidget {
     );
   }
 
-  void setConfiguracion(context) async {
+  void setConfiguracion(context, Configuracion? configuracion) async {
     if (juego.idJuego != null) {
       ScaffoldMessenger.of(context)
           .showSnackBar(Msg.appMessage(context, 'warning', 'Juego Terminado'));
     } else {
-      pushScreen(context, 'configuracion_form');
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConfiguracionForm()),
+      );
     }
   }
+}
+
+class ScreenArguments {
+  final int idProgramacionJuego;
+
+  ScreenArguments({required this.idProgramacionJuego});
 }

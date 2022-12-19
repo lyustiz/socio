@@ -27,18 +27,37 @@ class ConfiguracionDto {
       required this.reconfigurado,
       this.clienteDefecto});
 
+  factory ConfiguracionDto.initial(String serie) {
+    return ConfiguracionDto(
+        idConfiguracion: 0,
+        numeroJuego: 0,
+        carton: 0,
+        serie: '',
+        balotas: 0,
+        fechaRegistro: DateTime.now().toIso8601String(),
+        idUsuario: 0,
+        estado: serie,
+        fechaModificacion: DateTime.now().toIso8601String(),
+        reconfigurado: 0,
+        clienteDefecto: '');
+  }
+
   factory ConfiguracionDto.fromConfiguracion(Configuracion configuracion,
-      {required int idUsuario}) {
+      {int idUsuario = 0}) {
     return ConfiguracionDto(
       idConfiguracion: configuracion.idConfiguracion,
       numeroJuego: configuracion.idProgramacionJuego,
       carton: configuracion.carton,
       serie: configuracion.serie!,
       balotas: configuracion.balotas,
-      fechaRegistro: configuracion.fechaRegistro!.toIso8601String(),
+      fechaRegistro: (configuracion.fechaRegistro == null)
+          ? null
+          : configuracion.fechaRegistro!.toIso8601String(),
       idUsuario: configuracion.idUsuario,
       estado: configuracion.estado!,
-      fechaModificacion: configuracion.fechaModificacion!.toIso8601String(),
+      fechaModificacion: (configuracion.fechaModificacion == null)
+          ? null
+          : configuracion.fechaModificacion!.toIso8601String(),
       reconfigurado: (configuracion.reconfigurado) ? 1 : 0,
       clienteDefecto: configuracion.clienteDefecto,
     );

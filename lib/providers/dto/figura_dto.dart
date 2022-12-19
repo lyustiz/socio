@@ -32,6 +32,7 @@ class FiguraDto {
         ? DateTime.parse(json['fechaAjuste'])
         : null;
 
+    String acumula = (json['acumula'] != null) ? json['acumula'] : 'N';
     return FiguraDto(
       idFigura: serializer.fromJson<int>(json['idFigura']),
       idPlenoAutomatico: serializer.fromJson<int>(json['idPlenoAutomatico']),
@@ -39,11 +40,19 @@ class FiguraDto {
       posiciones: serializer.fromJson<String>(json['posiciones']),
       estado: serializer.fromJson<String>(json['estado']),
       valorPremio: serializer.fromJson<double>(json['valorPremio']),
-      acumula: serializer.fromJson<String>(json['acumula']),
+      acumula: acumula,
       carton: serializer.fromJson<int>(json['carton']),
       fechaAjuste: fechaAjuste,
       idUsuario: serializer.fromJson<int?>(json['idUsuario']),
     );
+  }
+
+  static List<FiguraDto> fromListJson(List<Map<String, dynamic>> jsonFiguras) {
+    List<FiguraDto> listFigurasDto = [];
+    for (var jsonfig in jsonFiguras) {
+      listFigurasDto.add(FiguraDto.fromJson(jsonfig));
+    }
+    return listFigurasDto;
   }
 
   factory FiguraDto.fromFigura(Figura figura) {

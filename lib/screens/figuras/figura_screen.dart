@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:socio/blocs/figura/figura_bloc.dart';
+import 'package:socio/providers/dto/figura_dto.dart';
 import 'package:socio/screens/figuras/widgets/figura_icon.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/screens/juego/juego_menu.dart';
@@ -26,6 +27,18 @@ class FiguraScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => FiguraBloc(),
       child: BlocBuilder<FiguraBloc, FiguraState>(
+        buildWhen: (previous, current) {
+          if (current is FiguraExito) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                Msg.appMessage(context, 'success', current.mensaje));
+            return true;
+          }
+          if (current is FiguraError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+                Msg.appMessage(context, 'error', current.mensaje));
+          }
+          return true;
+        },
         builder: (context, stateFigura) {
           if (stateFigura is FiguraInitial) {
             context
@@ -61,6 +74,13 @@ class FiguraScreen extends StatelessWidget {
                 ],
               ),
             ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.green,
+              onPressed: () => context
+                  .read<FiguraBloc>()
+                  .add(GetAllFiguras(juego.idProgramacionJuego)),
+              child: const Icon(Icons.refresh),
+            ),
           );
         },
       ),
@@ -68,24 +88,12 @@ class FiguraScreen extends StatelessWidget {
   }
 
   List<Widget> showEstatus(BuildContext context, FiguraState stateFigura) {
-    if (stateFigura is FiguraExito) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          Msg.appMessage(context, 'success', stateFigura.mensaje));
-    }
-    if (stateFigura is FiguraError) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(Msg.appMessage(context, 'error', stateFigura.mensaje));
-    }
     return [const LinearProgressIndicator()];
   }
 
   List<Widget> listFiguras(BuildContext context, Juego juego,
-      List<Figura> figuras, FiguraBloc figuraBlock) {
+      List<FiguraDto> figuras, FiguraBloc figuraBlock) {
     List<Widget> itemsFiguras = [];
-
-    figuras = figuras
-        .where((figura) => !figura.nombre.toLowerCase().startsWith('lleno'))
-        .toList();
 
     for (var figura in figuras) {
       var item = Container(
@@ -171,7 +179,7 @@ class FiguraScreen extends StatelessWidget {
     return itemsFiguras;
   }
 
-  void confirm(BuildContext context, Juego juego, Figura figura, bool active,
+  void confirm(BuildContext context, Juego juego, FiguraDto figura, bool active,
       FiguraBloc figuraBlock) async {
     String mensaje = active ? ', se Acumule? ' : ', "NO" se Acumule? ';
 
@@ -271,14 +279,13 @@ class FiguraScreen extends StatelessWidget {
   void setAcumula(
     BuildContext context,
     Juego juego,
-    Figura figura,
+    FiguraDto figura,
     bool active,
     int carton,
     FiguraBloc figuraBlock,
   ) {
-    Figura updFigura = Figura(
+    FiguraDto updFigura = FiguraDto(
         idFigura: figura.idFigura,
-        idProgramacionJuego: figura.idProgramacionJuego,
         idPlenoAutomatico: figura.idPlenoAutomatico,
         nombre: figura.nombre,
         posiciones: figura.posiciones,
@@ -287,6 +294,6 @@ class FiguraScreen extends StatelessWidget {
         acumula: active ? 'S' : 'N',
         carton: active ? carton : 0);
 
-    figuraBlock.add(UpdateFigura(updFigura));
+    figuraBlock.add(UpdateFigura(updFigura, juego.idProgramacionJuego));
   }
 }

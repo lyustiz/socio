@@ -231,7 +231,7 @@ class _JuegoFormState extends State<JuegoForm> {
           fechaModificacion: actualizado,
         );
 
-        configuracionBloc.add(UpdateConfiguracion(updConfiguracion));
+        //configuracionBloc.add(UpdateConfiguracion(updConfiguracion));
       }
     }
   }

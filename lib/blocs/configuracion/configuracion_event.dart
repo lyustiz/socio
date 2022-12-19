@@ -8,32 +8,31 @@ abstract class ConfiguracionEvent extends Equatable {
 }
 
 class GetConfiguracion extends ConfiguracionEvent {
-  final Configuracion configuracion;
+  final int idProgramacionJuego;
 
-  GetConfiguracion(this.configuracion);
-
-  @override
-  List<Object> get props => [configuracion];
+  const GetConfiguracion(this.idProgramacionJuego);
 
   @override
-  String toString() => 'GetConfiguracion';
+  List<Object> get props => [idProgramacionJuego];
+
+  @override
+  String toString() => 'GetConfiguracion id $idProgramacionJuego';
 }
 
 class SetConfiguracion extends ConfiguracionEvent {
-  final Configuracion configuracion;
-
-  SetConfiguracion(this.configuracion);
+  final ConfiguracionDto configuracion;
+  const SetConfiguracion(this.configuracion);
 
   @override
   List<Object> get props => [configuracion];
 
   @override
-  String toString() => 'GetConfiguracion';
+  String toString() => 'SetConfiguracion';
 }
 
 class GetAllConfiguracion extends ConfiguracionEvent {
   final String terminado;
-  GetAllConfiguracion(this.terminado);
+  const GetAllConfiguracion(this.terminado);
 
   @override
   List<Object> get props => [terminado];
@@ -43,9 +42,9 @@ class GetAllConfiguracion extends ConfiguracionEvent {
 }
 
 class UpdateConfiguracion extends ConfiguracionEvent {
-  final Configuracion configuracion;
+  final ConfiguracionDto configuracion;
 
-  UpdateConfiguracion(this.configuracion);
+  const UpdateConfiguracion(this.configuracion);
 
   @override
   List<Object> get props => [configuracion];
@@ -55,9 +54,9 @@ class UpdateConfiguracion extends ConfiguracionEvent {
 }
 
 class InsertConfiguracion extends ConfiguracionEvent {
-  final Configuracion configuracion;
+  final ConfiguracionDto configuracion;
 
-  InsertConfiguracion(this.configuracion);
+  const InsertConfiguracion(this.configuracion);
 
   @override
   List<Object> get props => [configuracion];
@@ -67,9 +66,9 @@ class InsertConfiguracion extends ConfiguracionEvent {
 }
 
 class DeleteConfiguracion extends ConfiguracionEvent {
-  final Configuracion configuracion;
+  final ConfiguracionDto configuracion;
 
-  DeleteConfiguracion(this.configuracion);
+  const DeleteConfiguracion(this.configuracion);
 
   @override
   List<Object> get props => [configuracion];
@@ -79,9 +78,9 @@ class DeleteConfiguracion extends ConfiguracionEvent {
 }
 
 class SelectConfiguracion extends ConfiguracionEvent {
-  final Configuracion configuracion;
+  final ConfiguracionDto configuracion;
 
-  SelectConfiguracion(this.configuracion);
+  const SelectConfiguracion(this.configuracion);
 
   @override
   List<Object> get props => [configuracion];

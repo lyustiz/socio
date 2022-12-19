@@ -1,3 +1,5 @@
+import 'package:socio/providers/api.dart';
+import 'package:socio/providers/dto/figura_dto.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/repository/figura_repository.dart';
 
@@ -13,38 +15,38 @@ class FiguraBloc extends Bloc<FiguraEvent, FiguraState> {
     on<GetFigura>((event, emit) => _onGetFigura(event, emit));
     on<GetAllFiguras>((event, emit) => _onGetAllFiguras(event, emit));
     on<UpdateFigura>((event, emit) => _onUpdateFigura(event, emit));
-    on<InsertFigura>((event, emit) => _onInsertFigura(event, emit));
+    //on<InsertFigura>((event, emit) => _onInsertFigura(event, emit));
   }
 
   void _onGetFigura(event, emit) async {
     emit(FiguraLoading());
     final Figura figura = await rep.selectfigura(event.idFigura);
-    emit(FiguraLoaded(figura));
+    emit(FiguraLoaded(FiguraDto.fromFigura(figura)));
   }
 
   void _onGetAllFiguras(event, emit) async {
     emit(FiguraLoading());
-    final List<Figura> figuras =
+    final List<FiguraDto> figuras =
         await rep.selectfiguras(event.idProgramacionJuego);
     emit(FigurasLoaded(figuras));
   }
 
   void _onUpdateFigura(event, emit) async {
     emit(FiguraLoading());
-    Figura figura = event.figura;
-    bool isUpdated = await rep.updateFigura(figura);
-    if (isUpdated) {
-      emit(const FiguraExito('Figura Actualizada'));
+    FiguraDto figura = event.figura;
+    ResultApi respuesta = await rep.updateFigura(figura);
+    if (respuesta.success) {
+      emit(FiguraExito(respuesta.message));
     } else {
-      emit(const FiguraError('Figura no Acualizada'));
+      emit(FiguraError(respuesta.message));
     }
-    final List<Figura> figuras =
-        await rep.selectfiguras(figura.idProgramacionJuego);
+    final List<FiguraDto> figuras =
+        await rep.selectfiguras(event.idProgramacionJuego);
     Future.delayed(const Duration(milliseconds: 800), () {});
     emit(FigurasLoaded(figuras));
   }
 
-  void _onInsertFigura(event, emit) async {
+  /* void _onInsertFigura(event, emit) async {
     emit(FiguraLoading());
     final Figura figura = event.figura;
     final int idProgramacionJuego = event.idProgramacionJuego;
@@ -54,5 +56,5 @@ class FiguraBloc extends Bloc<FiguraEvent, FiguraState> {
     } else {
       emit(const FiguraExito('Registro Creado'));
     }
-  }
+  }*/
 }

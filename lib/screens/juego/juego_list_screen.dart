@@ -63,26 +63,31 @@ class JuegoListScreen extends StatelessWidget {
     var action = PopupMenuButton(
         elevation: 7,
         onSelected: (tipo) {
-          if (isClose) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                Msg.appMessage(context, 'error', 'El Juego ya ha sido Jugado'));
-          } else {
-            itemsBloc.add(SelectItem(tipoItem: 'juego', item: juegoC));
-            switch (tipo) {
-              case 'configurar_juego':
+          itemsBloc.add(SelectItem(tipoItem: 'juego', item: juegoC));
+          switch (tipo) {
+            case 'configurar_juego':
+              if (isClose) {
+                ScaffoldMessenger.of(context).showSnackBar(Msg.appMessage(
+                    context, 'error', 'El Juego ya ha sido Jugado'));
+              } else {
                 setConfiguracion(context);
-                break;
-              case 'configurar_figuras':
+              }
+              break;
+            case 'configurar_figuras':
+              if (isClose) {
+                ScaffoldMessenger.of(context).showSnackBar(Msg.appMessage(
+                    context, 'error', 'El Juego ya ha sido Jugado'));
+              } else {
                 navigateTo(context, 'figura');
-                break;
-              case 'auditoria_acumulado':
-                navigateTo(context, 'auditoria_acumulado');
-                break;
-              case 'auditoria_configuracion':
-                navigateTo(context, 'auditoria_configuracion');
-                break;
-              default:
-            }
+              }
+              break;
+            case 'auditoria_acumulado':
+              navigateTo(context, 'auditoria_acumulado');
+              break;
+            case 'auditoria_configuracion':
+              navigateTo(context, 'auditoria_configuracion');
+              break;
+            default:
           }
         },
         color: Theme.of(context).colorScheme.secondary,
