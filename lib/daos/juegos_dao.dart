@@ -47,8 +47,7 @@ class JuegosDao extends DatabaseAccessor<AppDatabase> with _$JuegosDaoMixin {
   }
 
   Future eliminarJuegos(List<int> juegosIds) async {
-    return delete(juegos)
-      ..where((t) => t.idProgramacionJuego.isNotIn(juegosIds));
+    return delete(juegos);
   }
 
   Future<int> deleteJuego(Juego juego) async {

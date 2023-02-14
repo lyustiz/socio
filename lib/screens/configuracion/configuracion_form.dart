@@ -192,7 +192,7 @@ class ConfiguracionForm extends StatelessWidget {
                             FormBuilderTextField(
                               name: 'cliente',
                               initialValue:
-                                  '${(hasConfiguracion) ? configuracion!.clienteDefecto : ''}',
+                                  '${(hasConfiguracion) ? configuracion!.clienteDefecto ?? '' : ''}',
                               keyboardType: TextInputType.text,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_container.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
@@ -52,10 +51,10 @@ class _SetupScreenState extends State<SetupScreen> {
           if (isUnlocked)
             Container(
               child: Column(
-                children: [
+                children: const [
                   Text('Seleccione Empresa', style: TextStyle(fontSize: 18)),
                   EmpresaSelector(),
-                  Row(
+                  /*Row(
                     children: [
                       FloatingActionButton(
                         backgroundColor: Colors.green,
@@ -64,7 +63,7 @@ class _SetupScreenState extends State<SetupScreen> {
                         child: const Icon(Icons.add),
                       ),
                     ],
-                  ),
+                  ),*/
                 ],
               ),
             ),
@@ -105,7 +104,7 @@ class _SetupScreenState extends State<SetupScreen> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: const [
                               Icon(Icons.lock_open),
                               Text(' Desbloquear'),
                             ],

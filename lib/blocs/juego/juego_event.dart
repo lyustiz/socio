@@ -30,6 +30,14 @@ class GetAllJuego extends JuegoEvent {
   String toString() => 'GetAllJuegos';
 }
 
+class ClearJuego extends JuegoEvent {
+  @override
+  List<Juego> get props => [];
+
+  @override
+  String toString() => 'ClearJuegos';
+}
+
 class UpdateJuego extends JuegoEvent {
   final Juego juego;
 

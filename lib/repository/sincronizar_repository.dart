@@ -8,6 +8,9 @@ class SincronizarRepository {
   Map<String, dynamic> data = {};
 
   Future<bool> sincronizarJuego() async {
+    db<AppDatabase>().juegosDao.eliminarJuegos([]);
+    db<AppDatabase>().configuracionesDao.cancelarConfiguraciones([]);
+
     data = await api.getData('juegosconfiguracion', {});
     DateTime actualizado = DateTime.now();
 
@@ -30,22 +33,11 @@ class SincronizarRepository {
             configuracionIds.add(juego['configuracion']['idConfiguracion']);
           }
         }
-
-        /* if ((juego['premios'] as List).isNotEmpty) {
-          sincronizarFiguras(
-              juego['premios'], juego['idProgramacionJuego'], actualizado);
-        }*/
       }
 
       for (var juego in juegosList) {
         db<AppDatabase>().juegosDao.upsertJuego(juego);
       }
-
-      // terminar los juegos que no esten en los datos -- pendiente eliminar
-      db<AppDatabase>().juegosDao.eliminarJuegos(juegosIds);
-      db<AppDatabase>()
-          .configuracionesDao
-          .cancelarConfiguraciones(configuracionIds);
 
       if (juegosList.isNotEmpty) {
         await updateSincronizados('juegos', actualizado: actualizado);

@@ -24,7 +24,7 @@ class ConfiguracionBloc extends Bloc<ConfiguracionEvent, ConfiguracionState> {
         idProgramacionJuego: event.idProgramacionJuego);
 
     if (configuracionDto == null) {
-      emit(ConfiguracionError('No se ha podido cargar la configuracion'));
+      emit(ConfiguracionError('No se ha creado configuracion'));
     } else {
       emit(ConfiguracionLoaded(configuracionDto));
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:socio/blocs/auth/auth_bloc.dart';
 import 'package:socio/blocs/items/items_bloc.dart';
-import 'package:socio/blocs/preferences/preferences_bloc.dart';
+import 'package:socio/blocs/juego/juego_bloc.dart';
 import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar.dart';
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                HomeButton(
+                /*HomeButton(
                   icon: Icons.sync_outlined,
                   title: 'Sincronizar',
                   color: Theme.of(context).colorScheme.primary,
@@ -105,7 +105,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                ),
+                ),*/
               ],
             ),
           ),

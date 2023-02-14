@@ -32,10 +32,10 @@ class LoginScreen extends StatelessWidget {
                     IconButton(
                         onPressed: () => pushScreen(context, 'setup'),
                         icon: const Icon(Icons.settings)),
-                    const Padding(
+                    /* const Padding(
                       padding: EdgeInsets.only(right: 6),
                       child: HelpButton(),
-                    ),
+                    ),*/
                   ],
                 ),
                 const Logo(
@@ -46,23 +46,33 @@ class LoginScreen extends StatelessWidget {
                     margin: const EdgeInsets.only(bottom: 8),
                     alignment: Alignment.center,
                     height: 18,
-                    width: MediaQuery.of(context).size.width * 0.60,
+                    width: MediaQuery.of(context).size.width * 0.8,
                     child: BlocBuilder<PreferencesBloc, PreferencesState>(
                       builder: (context, state) {
                         String empresa = '';
+                        String endpoint = '';
                         if (state is PreferenceLoaded) {
                           empresa = endpoints.keys.firstWhere(
                               (k) => endpoints[k] == state.endpoint);
+                          endpoint = state.endpoint;
                         }
                         return ListTile(
-                          leading: const Icon(Icons.apartment_rounded),
+                          dense: true,
+                          leading: const Icon(
+                            Icons.apartment_rounded,
+                            size: 32,
+                          ),
                           title: Text(
                             empresa,
                             style: const TextStyle(fontSize: 16),
                           ),
+                          subtitle: Text(endpoint),
                         );
                       },
                     )),
+                const SizedBox(
+                  height: 5,
+                ),
                 LoginForm(),
               ],
             ),

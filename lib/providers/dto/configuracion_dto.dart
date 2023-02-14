@@ -48,13 +48,13 @@ class ConfiguracionDto {
       idConfiguracion: configuracion.idConfiguracion,
       numeroJuego: configuracion.idProgramacionJuego,
       carton: configuracion.carton,
-      serie: configuracion.serie!,
+      serie: configuracion.serie ?? 'A',
       balotas: configuracion.balotas,
       fechaRegistro: (configuracion.fechaRegistro == null)
           ? null
           : configuracion.fechaRegistro!.toIso8601String(),
       idUsuario: configuracion.idUsuario,
-      estado: configuracion.estado!,
+      estado: configuracion.estado ?? 'A',
       fechaModificacion: (configuracion.fechaModificacion == null)
           ? null
           : configuracion.fechaModificacion!.toIso8601String(),

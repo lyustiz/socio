@@ -36,8 +36,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // login efectivo y sincronizacion pendiente
     if ((login.isLogged) & (!login.isSync)) {
       try {
-        emit(const AuthLoading(message: 'Sincronizando Juegos...'));
-        await syncRep.sincronizarJuego();
+        //emit(const AuthLoading(message: 'Sincronizando Juegos...'));
+        //await syncRep.sincronizarJuego();
       } catch (errorMessage) {
         emit(AuthError(error: errorMessage.toString()));
       }

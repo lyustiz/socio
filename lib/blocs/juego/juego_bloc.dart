@@ -29,7 +29,8 @@ class JuegoBloc extends Bloc<JuegoEvent, JuegoState> {
   void _onGetAllJuego(event, emit) async {
     emit(JuegoLoading());
     final List<JuegosWithConfiguracion> juegosPremios =
-        await db<AppDatabase>().allJuegosWithConfiguracion(event.estado);
+        await rep.getAllJuegos(event.estado);
+    //   await db<AppDatabase>().allJuegosWithConfiguracion(event.estado);
     emit(JuegosLoaded(juegosPremios));
   }
 
@@ -59,5 +60,10 @@ class JuegoBloc extends Bloc<JuegoEvent, JuegoState> {
 
   void _onSelectJuego(event, emit) async {
     emit(JuegoSelected(event.juego));
+  }
+
+  void _onClearJuego(event, emit) async {
+    final List<JuegosWithConfiguracion> juegos = [];
+    emit(JuegosLoaded(juegos));
   }
 }

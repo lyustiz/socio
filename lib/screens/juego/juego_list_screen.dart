@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:socio/blocs/preferences/preferences_bloc.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/juego/juego_screen.dart';
 import 'package:socio/screens/juego/witgets/juego_icon.dart';
