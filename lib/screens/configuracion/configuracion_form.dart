@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -28,6 +26,7 @@ class ConfiguracionForm extends StatelessWidget {
   late ConfiguracionDto configuracionDto;
   late String serie = juego.serie;
   late bool hasConfiguracion = false;
+  late bool isMultiple = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +37,7 @@ class ConfiguracionForm extends StatelessWidget {
       configuracion = juegoConfiguracion.configuracion;
       configuracionDto = ConfiguracionDto.fromConfiguracion(configuracion!);
       hasConfiguracion = true;
+      isMultiple = juegoConfiguracion.configuracion!.balotas == 76;
     } else {
       configuracionDto = ConfiguracionDto.initial(juego.serie);
     }
@@ -137,10 +137,11 @@ class ConfiguracionForm extends StatelessWidget {
                               validator: FormBuilderValidators.compose([
                                 FormBuilderValidators.required(context,
                                     errorText:
-                                        'Debe ser 0 (auto), ${juego.cartonInicial} o superior'),
+                                        'Debe ser ${juego.cartonInicial} o superior'),
                                 FormBuilderValidators.integer(context,
                                     errorText: 'indicar Solo numeros'),
-                                FormBuilderValidators.min(context, 0,
+                                FormBuilderValidators.min(
+                                    context, isMultiple ? 1 : 0,
                                     errorText:
                                         'Debe ser ${juego.cartonInicial} o superior'),
                                 FormBuilderValidators.max(
@@ -149,7 +150,11 @@ class ConfiguracionForm extends StatelessWidget {
                                         'No debe ser mayor de ${juego.cartonFinal}'),
                                 (val) {
                                   final number = int.parse(val ?? '0');
-                                  if (number == 0) return null;
+                                  if (number == 0) {
+                                    return isMultiple
+                                        ? 'Debe ser ${juego.cartonInicial} o superior'
+                                        : null;
+                                  }
                                   if (number < juego.cartonInicial) {
                                     return 'Debe ser 0, ${juego.cartonInicial} o superior';
                                   }
@@ -167,12 +172,13 @@ class ConfiguracionForm extends StatelessWidget {
                               keyboardType: TextInputType.number,
                               autovalidateMode:
                                   AutovalidateMode.onUserInteraction,
+                              readOnly: isMultiple,
                               decoration: InputDecoration(
                                   labelText: 'Balota',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
                                   ),
-                                  filled: true,
+                                  filled: !isMultiple,
                                   isDense: true,
                                   suffixIcon: const Icon(Icons.workspaces)),
                               validator: FormBuilderValidators.compose([
@@ -182,37 +188,57 @@ class ConfiguracionForm extends StatelessWidget {
                                 FormBuilderValidators.min(context, 0,
                                     errorText:
                                         'Debe ser 0 (automatico) o superior'),
-                                FormBuilderValidators.max(context, 75,
-                                    errorText: 'No debe ser mayor que 75'),
+                                FormBuilderValidators.max(
+                                    context, isMultiple ? 76 : 75,
+                                    errorText:
+                                        'No debe ser mayor que ${isMultiple ? 76 : 75}'),
                               ]),
                             ),
                             const SizedBox(
                               height: 10,
                             ),
-                            FormBuilderTextField(
-                              name: 'cliente',
-                              initialValue:
-                                  '${(hasConfiguracion) ? configuracion!.clienteDefecto ?? '' : ''}',
-                              keyboardType: TextInputType.text,
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              decoration: InputDecoration(
-                                  labelText: 'Cliente por Defecto',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(18),
+                                  color: Colors.white),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Ganador Multiple',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
                                   ),
-                                  filled: true,
-                                  isDense: true,
-                                  suffixIcon: const Icon(Icons.face)),
-                              validator: (val) {
-                                if (_formKey.currentState!.fields['carton']
-                                            ?.value ==
-                                        '0' &&
-                                    (val == null || val.isEmpty)) {
-                                  return 'Indique Cliente por defecto';
-                                }
-                                return null;
-                              },
+                                  Switch(
+                                    value: isMultiple,
+                                    onChanged: (value) {
+                                      var form = _formKey.currentState;
+                                      if (isMultiple) {
+                                        isMultiple = false;
+                                        form!.fields['balotas']!.didChange('0');
+                                      } else {
+                                        isMultiple = true;
+                                        form!.fields['balotas']!
+                                            .didChange('76');
+                                        if (form.fields['carton']!.value ==
+                                            '0') {
+                                          form.fields['carton']!.didChange('');
+                                        }
+                                      }
+                                      form.validate();
+                                      context.read<ConfiguracionBloc>().add(
+                                          SetConfiguracion(configuracionDto));
+                                    },
+                                    activeColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    inactiveTrackColor: Colors.blue[50],
+                                  ),
+                                ],
+                              ),
                             ),
                             const SizedBox(
                               height: 10,
@@ -310,9 +336,9 @@ class ConfiguracionForm extends StatelessWidget {
       formStatus.save();
 
       if (formStatus.validate()) {
-        if (formStatus.value['carton'] != '0') {
+        /*if (formStatus.value['carton'] != '0') {
           formStatus.fields['cliente']!.didChange('');
-        }
+        }*/
         List<Widget> content = [
           ListTile(
             title: const Text('Serie'),
@@ -364,7 +390,7 @@ class ConfiguracionForm extends StatelessWidget {
         fechaModificacion: actualizado,
         estado: 'A',
         fechaRegistro: actualizado,
-        clienteDefecto: formStatus.value['cliente'] ?? '');
+        clienteDefecto: '');
 
     configuracionBloc.add(InsertConfiguracion(
         ConfiguracionDto.fromConfiguracion(addConfiguracion)));
@@ -380,7 +406,7 @@ class ConfiguracionForm extends StatelessWidget {
         balotas: int.parse(formStatus.value['balotas']),
         reconfigurado: true,
         fechaModificacion: actualizado,
-        clienteDefecto: formStatus.value['cliente'] ?? '');
+        clienteDefecto: '');
 
     configuracionBloc.add(UpdateConfiguracion(
         ConfiguracionDto.fromConfiguracion(updConfiguracion)));

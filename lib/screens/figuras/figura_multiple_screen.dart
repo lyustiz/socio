@@ -16,8 +16,8 @@ import 'package:socio/utils/format/format_data.dart' as Fd;
 import 'package:socio/widgets/layout/app_dialog.dart' as Dlg;
 import 'package:socio/widgets/layout/app_message.dart' as Msg;
 
-class FiguraScreen extends StatelessWidget {
-  FiguraScreen({Key? key}) : super(key: key);
+class FiguraMultipleScreen extends StatelessWidget {
+  FiguraMultipleScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,9 +98,9 @@ class FiguraScreen extends StatelessWidget {
     itemsFiguras.add(Container(
         margin: EdgeInsets.only(bottom: 2),
         child: const Text(
-          'Acumular Figuras',
+          'Figuras con Ganadores Multiples',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         )));
@@ -141,7 +141,7 @@ class FiguraScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              trailing: figura.multiple == 'S'
+              trailing: figura.acumula == 'S'
                   ? const SizedBox(
                       width: 40,
                       child: Tooltip(
@@ -150,12 +150,12 @@ class FiguraScreen extends StatelessWidget {
                           color: Colors.red,
                           size: 40,
                         ),
-                        message: 'Multiple',
+                        message: 'Acumula',
                         triggerMode: TooltipTriggerMode.tap,
                       ),
                     )
                   : Switch(
-                      value: figura.acumula == 'S',
+                      value: figura.multiple == 'S',
                       onChanged: (value) {
                         confirm(context, juego, figura, value, figuraBlock);
                       },
@@ -203,7 +203,9 @@ class FiguraScreen extends StatelessWidget {
 
   void confirm(BuildContext context, Juego juego, FiguraDto figura, bool active,
       FiguraBloc figuraBlock) async {
-    String mensaje = active ? ', se Acumule? ' : ', "NO" se Acumule? ';
+    String mensaje = active
+        ? ' sea con Ganador Multiple? '
+        : ' "NO" sea con Ganador Multiple? ';
 
     final _formKey = GlobalKey<FormBuilderState>();
     List<Widget> content = [
@@ -260,22 +262,17 @@ class FiguraScreen extends StatelessWidget {
                         errorText: 'No debe ser mayor de ${juego.cartonFinal}'),
                     (val) {
                       final number = int.parse(val ?? '0');
-                      if (number == 0) return null;
                       if (number < juego.cartonInicial) {
-                        return 'Debe ser 0, ${juego.cartonInicial} o superior';
+                        return 'Debe ser ${juego.cartonInicial} o superior';
                       }
                       return null;
                     }
                   ])),
             ),
       const SizedBox(height: 4),
-      (!active)
-          ? const SizedBox(height: 5)
-          : const Text('Cero (0) selecciona un carton aleatorio no vendido',
-              style: TextStyle(color: Colors.amber)),
     ];
 
-    bool? isConfirm = await Dlg.appDialog(context, 'Acumular Figura?', content,
+    bool? isConfirm = await Dlg.appDialog(context, 'Figuras Multiple?', content,
         action: 'Confirmar');
 
     if (active) {
@@ -285,7 +282,7 @@ class FiguraScreen extends StatelessWidget {
           formStatus.save();
           if (formStatus.validate()) {
             int carton = int.parse(formStatus.value['carton']);
-            setAcumula(context, juego, figura, active, carton, figuraBlock);
+            setMultiple(context, juego, figura, active, carton, figuraBlock);
           }
         } else {
           Msg.appMessage(context, 'info', 'Debe asignar un carton');
@@ -293,12 +290,12 @@ class FiguraScreen extends StatelessWidget {
       }
     } else {
       if (isConfirm ?? false) {
-        setAcumula(context, juego, figura, active, 0, figuraBlock);
+        setMultiple(context, juego, figura, active, 0, figuraBlock);
       }
     }
   }
 
-  void setAcumula(
+  void setMultiple(
     BuildContext context,
     Juego juego,
     FiguraDto figura,
@@ -313,10 +310,10 @@ class FiguraScreen extends StatelessWidget {
         posiciones: figura.posiciones,
         estado: figura.estado,
         valorPremio: figura.valorPremio,
-        acumula: active ? 'S' : 'N',
-        multiple: 'N',
+        acumula: 'N',
+        multiple: active ? 'S' : 'N',
         carton: active ? carton : 0);
 
-    figuraBlock.add(UpdateFigura(updFigura, juego.idProgramacionJuego));
+    figuraBlock.add(UpdateFiguraMultiple(updFigura, juego.idProgramacionJuego));
   }
 }

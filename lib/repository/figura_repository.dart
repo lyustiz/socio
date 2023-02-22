@@ -47,4 +47,21 @@ class FiguraRepository {
     }
     return ResultApi(success: true, message: respond['message']);
   }
+
+  Future<ResultApi> updateFiguraMultple(FiguraDto figura) async {
+    FiguraDto figuraDto = figura;
+
+    try {
+      data = await api.putData('FigurasGanadoresMultiples', figuraDto.toJson());
+    } catch (e) {
+      return ResultApi(success: false, message: 'Error al actulizar figura');
+    }
+    bool isSuccess = data['isSuccess'];
+    Map<String, dynamic> respond = data['data'];
+    if (isSuccess) {
+    } else {
+      return ResultApi(success: false, message: respond['message']);
+    }
+    return ResultApi(success: true, message: respond['message']);
+  }
 }

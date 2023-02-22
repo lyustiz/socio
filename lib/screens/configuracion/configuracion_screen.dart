@@ -112,6 +112,12 @@ class ConfiguracionScreen extends StatelessWidget {
       itemData('Serie', configuracion.serie, Icons.dynamic_feed),
       itemData('Carton', '${configuracion.carton}', Icons.table_view_rounded),
       itemData('Balota', '${configuracion.balotas}', Icons.workspaces),
+      itemData(
+          'Ganador Multiple',
+          configuracion.balotas == 76 ? 'SI' : 'NO',
+          configuracion.balotas == 76
+              ? Icons.check_circle
+              : Icons.radio_button_unchecked),
       itemData('Fecha Modificacion', configuracion.fechaModificacion ?? '',
           Icons.calendar_today),
       itemData(

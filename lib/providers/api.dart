@@ -130,7 +130,7 @@ class Api {
 
     if (codeError == 409) {
       var data = convert.jsonDecode(body);
-      return data['message'];
+      return data['message'] ?? data['mensaje'];
     }
 
     return messages[codeError] ?? 'Error $codeError';
@@ -139,8 +139,8 @@ class Api {
   void errorHandler(var e) {
     if (e is StateError) throw Exception(StateError);
     if (e is SocketException) {
-      throw Exception(
-          e.osError); //  FetchDataException('Sin Conexion a Internet');
+      throw Exception(e.osError);
+      //  FetchDataException('Sin Conexion a Internet');
     }
     if (e is TimeoutException) {
       throw FetchDataException('Tiempo de conexion excedido');

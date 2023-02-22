@@ -13,9 +13,6 @@ import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/utils/format/format_data.dart' as Fd;
 import 'package:socio/widgets/layout/app_message.dart' as Msg;
 
-// repository
-import 'package:socio/repository/preferences_repository.dart';
-
 class JuegoListScreen extends StatelessWidget {
   JuegoListScreen({Key? key}) : super(key: key);
 
@@ -43,13 +40,19 @@ class JuegoListScreen extends StatelessWidget {
           drawer: const JuegoMenu(),
           child: Container(
               child: (state is JuegosLoaded)
-                  ? ListView.builder(
-                      padding: const EdgeInsets.only(top: 4),
-                      itemCount: state.juegos.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return itemsJuegos(context, context.read<ItemsBloc>(),
-                            state.juegos[index]);
-                      })
+                  ? RefreshIndicator(
+                      onRefresh: () async {
+                        return juegoBlock.add(GetAllJuego(''));
+                      },
+                      child: ListView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          padding: const EdgeInsets.only(top: 4),
+                          itemCount: state.juegos.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return itemsJuegos(context,
+                                context.read<ItemsBloc>(), state.juegos[index]);
+                          }),
+                    )
                   : const LinearProgressIndicator()),
         );
       },
@@ -86,7 +89,19 @@ class JuegoListScreen extends StatelessWidget {
             case 'auditoria_configuracion':
               navigateTo(context, 'auditoria_configuracion');
               break;
+
+            case 'configurar_figuras_multiple':
+              if (isClose) {
+                ScaffoldMessenger.of(context).showSnackBar(Msg.appMessage(
+                    context, 'error', 'El Juego ya ha sido Jugado'));
+              } else {
+                navigateTo(context, 'figura_multilpe');
+              }
+              break;
+
             default:
+              ScaffoldMessenger.of(context).showSnackBar(
+                  Msg.appMessage(context, 'error', 'Opcion no valida'));
           }
         },
         color: Theme.of(context).colorScheme.secondary,
@@ -120,6 +135,15 @@ class JuegoListScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text('Historia Figuras'), //Configurar Figuras
                   leading: Icon(Icons.pending_actions_rounded),
+                  dense: true,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'configurar_figuras_multiple',
+                child: ListTile(
+                  title: Text(
+                      'Configurar Figuras Ganadores Multiple'), //Configurar Figuras
+                  leading: Icon(Icons.backup_table),
                   dense: true,
                 ),
               )

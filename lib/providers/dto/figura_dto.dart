@@ -9,6 +9,7 @@ class FiguraDto {
   final String estado;
   final double valorPremio;
   final String acumula;
+  final String multiple;
   final int carton;
   final DateTime? fechaAjuste;
   final int? idUsuario;
@@ -21,6 +22,7 @@ class FiguraDto {
       required this.estado,
       required this.valorPremio,
       required this.acumula,
+      required this.multiple,
       required this.carton,
       this.fechaAjuste,
       this.idUsuario});
@@ -33,6 +35,7 @@ class FiguraDto {
         : null;
 
     String acumula = (json['acumula'] != null) ? json['acumula'] : 'N';
+    String multiple = (json['multiple'] != null) ? json['multiple'] : 'N';
     return FiguraDto(
       idFigura: serializer.fromJson<int>(json['idFigura']),
       idPlenoAutomatico: serializer.fromJson<int>(json['idPlenoAutomatico']),
@@ -41,6 +44,7 @@ class FiguraDto {
       estado: serializer.fromJson<String>(json['estado']),
       valorPremio: serializer.fromJson<double>(json['valorPremio']),
       acumula: acumula,
+      multiple: multiple,
       carton: serializer.fromJson<int>(json['carton']),
       fechaAjuste: fechaAjuste,
       idUsuario: serializer.fromJson<int?>(json['idUsuario']),
@@ -64,6 +68,7 @@ class FiguraDto {
         estado: figura.estado,
         valorPremio: figura.valorPremio,
         acumula: figura.acumula ?? 'N',
+        multiple: figura.multiple ?? 'N',
         carton: figura.carton,
         fechaAjuste: DateTime.now(),
         idUsuario: figura.idUsuario ?? 0);
@@ -79,6 +84,7 @@ class FiguraDto {
       'estado': serializer.toJson<String>(estado),
       'valorPremio': serializer.toJson<double>(0),
       'acumula': serializer.toJson<String>(acumula),
+      'multiple': serializer.toJson<String>(multiple),
       'carton': serializer.toJson<int>(carton),
       'fechaAjuste': serializer.toJson<String?>(null),
       'idUsuario': serializer.toJson<int>(idUsuario ?? 0),
@@ -95,6 +101,7 @@ class FiguraDto {
       estado: estado,
       valorPremio: valorPremio,
       acumula: acumula,
+      multiple: multiple,
       carton: carton,
       fechaAjuste: fechaAjuste,
       idUsuario: idUsuario,

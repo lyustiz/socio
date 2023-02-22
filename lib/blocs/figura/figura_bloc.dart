@@ -15,7 +15,8 @@ class FiguraBloc extends Bloc<FiguraEvent, FiguraState> {
     on<GetFigura>((event, emit) => _onGetFigura(event, emit));
     on<GetAllFiguras>((event, emit) => _onGetAllFiguras(event, emit));
     on<UpdateFigura>((event, emit) => _onUpdateFigura(event, emit));
-    //on<InsertFigura>((event, emit) => _onInsertFigura(event, emit));
+    on<UpdateFiguraMultiple>(
+        (event, emit) => _onUpdateFiguraMultiple(event, emit));
   }
 
   void _onGetFigura(event, emit) async {
@@ -46,15 +47,18 @@ class FiguraBloc extends Bloc<FiguraEvent, FiguraState> {
     emit(FigurasLoaded(figuras));
   }
 
-  /* void _onInsertFigura(event, emit) async {
+  void _onUpdateFiguraMultiple(event, emit) async {
     emit(FiguraLoading());
-    final Figura figura = event.figura;
-    final int idProgramacionJuego = event.idProgramacionJuego;
-    int idFigura = await rep.insertFigura(figura, idProgramacionJuego);
-    if (idFigura == 0) {
-      emit(const FiguraError('Error al Crear Figura'));
+    FiguraDto figura = event.figura;
+    ResultApi respuesta = await rep.updateFiguraMultple(figura);
+    if (respuesta.success) {
+      emit(FiguraExito(respuesta.message));
     } else {
-      emit(const FiguraExito('Registro Creado'));
+      emit(FiguraError(respuesta.message));
     }
-  }*/
+    final List<FiguraDto> figuras =
+        await rep.selectfiguras(event.idProgramacionJuego);
+    Future.delayed(const Duration(milliseconds: 800), () {});
+    emit(FigurasLoaded(figuras));
+  }
 }

@@ -5,6 +5,7 @@ import 'package:socio/screens/configuracion/configuracion_form.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/endpoint/endpoint_screen.dart';
 import 'package:socio/screens/estadistica/estadistica_screen.dart';
+import 'package:socio/screens/figuras/figura_multiple_screen.dart';
 import 'package:socio/screens/figuras/figura_screen.dart';
 import 'package:socio/screens/informe_juego/informe_juego_screen.dart';
 import 'package:socio/screens/informe_mensual/informe_mensual_screen.dart';
@@ -40,6 +41,7 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'configuracion': (_) => ConfiguracionScreen(),
   //'configuracion_form': (_) => ConfiguracionForm(),
   'figura': (_) => FiguraScreen(),
+  'figura_multilpe': (_) => FiguraMultipleScreen(),
   'auditoria_acumulado': (_) => AuditoriaAcumuladoScreen(),
   'auditoria_configuracion': (_) => AuditoriaConfiguracionScreen(),
   'estadistica': (_) => EstadisticaScreen(),
