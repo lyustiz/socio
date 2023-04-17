@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:socio/blocs/preferences/preferences_bloc.dart';
+import 'package:socio/models/endpoint.dart';
+import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_container.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/app_title_bar_variant.dart';
-import 'package:socio/widgets/layout/empresa_selector.dart';
 import 'package:socio/widgets/layout/app_message.dart' as Msg;
 
 class SetupScreen extends StatefulWidget {
@@ -15,13 +18,12 @@ class SetupScreen extends StatefulWidget {
 class _SetupScreenState extends State<SetupScreen> {
   TextEditingController textController = TextEditingController();
   late FocusNode myFocusNode;
-  late bool isUnlocked;
+  EndPoint endpoint = EndPoint(0, '', '');
 
   @override
   void initState() {
     super.initState();
     myFocusNode = FocusNode();
-    isUnlocked = false;
   }
 
   @override
@@ -48,86 +50,64 @@ class _SetupScreenState extends State<SetupScreen> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if (isUnlocked)
-            Container(
-              child: Column(
-                children: const [
-                  Text('Seleccione Empresa', style: TextStyle(fontSize: 18)),
-                  EmpresaSelector(),
-                  /*Row(
-                    children: [
-                      FloatingActionButton(
-                        backgroundColor: Colors.green,
-                        mini: true,
-                        onPressed: () => pushScreen(context, 'endpoint'),
-                        child: const Icon(Icons.add),
-                      ),
-                    ],
-                  ),*/
-                ],
+          Column(
+            children: [
+              const SizedBox(height: 16),
+              const Text('Cambio de Empresa', style: TextStyle(fontSize: 18)),
+              const SizedBox(height: 20),
+              TextField(
+                focusNode: myFocusNode,
+                controller: textController,
+                keyboardType: TextInputType.number,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  border: InputBorder.none,
+                  hintText: 'Codigo de Empresa',
+                  suffixIcon: Icon(Icons.vpn_key),
+                  filled: true,
+                ),
               ),
-            ),
-          if (!isUnlocked)
-            Container(
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 16,
-                  ),
-                  Text(
-                    'Desbloquear Configuracion',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextField(
-                    focusNode: myFocusNode,
-                    controller: textController,
-                    decoration: new InputDecoration(
-                      isDense: true,
-                      border: InputBorder.none,
-                      hintText: 'Contraseña',
-                      suffixIcon: Icon(Icons.vpn_key),
-                      filled: true,
+              Container(
+                margin: const EdgeInsets.only(top: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(Colors.green),
                     ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(Colors.green),
-                        ),
-                        child: Center(
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Icon(Icons.lock_open),
-                              Text(' Desbloquear'),
-                            ],
-                          ),
-                        ),
-                        onPressed: () => unlockForm(context)),
-                  )
-                ],
-              ),
-            )
+                    child: Center(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.sync_alt),
+                          const Text('Cambiar'),
+                        ],
+                      ),
+                    ),
+                    onPressed: () => unlockForm(context)),
+              )
+            ],
+          ),
         ],
       )),
     );
   }
 
   void unlockForm(context) {
-    if (textController.text == '12345') {
-      setState(() {
-        isUnlocked = true;
-      });
+    EndPoint endpointSel = EndPoint(0, '', '');
+
+    if (textController.text.isNotEmpty) {
+      endpointSel = endpoints
+          .firstWhere((ep) => ep.id == int.tryParse(textController.text));
+    }
+
+    if (endpointSel.id > 0) {
+      BlocProvider.of<PreferencesBloc>(context)
+          .add(UpdateEndPoint(endpointSel.url));
+      pushScreen(context, 'login');
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-          Msg.appMessage(context, 'error', 'Contraseña Invalida'));
+      ScaffoldMessenger.of(context)
+          .showSnackBar(Msg.appMessage(context, 'error', 'Código Inválido'));
     }
     textController.clear();
   }

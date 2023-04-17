@@ -1,8 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:socio/models/theme.dart';
-import 'package:socio/models/endpoint.dart';
-
 import 'package:socio/repository/preferences_repository.dart';
 
 part 'preferences_event.dart';
@@ -26,8 +24,7 @@ class PreferencesBloc extends Bloc<PreferencesEvent, PreferencesState> {
 
     on<UpdateEndPoint>((event, emit) async {
       preferencesRepository.setEndPoint(event.empresa);
-      emit(PreferenceLoaded(
-          theme: Theme.dark, endpoint: endpoints[event.empresa]!));
+      emit(PreferenceLoaded(theme: Theme.dark, endpoint: event.empresa));
     });
 
     on<UpdateLocale>((event, emit) async {

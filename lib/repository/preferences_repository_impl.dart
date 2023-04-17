@@ -22,15 +22,15 @@ class PreferenceRepositoryImpl implements PreferencesRepository {
   @override
   Future<String> getEndPoint() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String empresa =
-        prefs.getString(_endPointKey) ?? endpoints.keys.first;
-    return endpoints[empresa]!;
+    final String endpoint =
+        prefs.getString(_endPointKey) ?? endpoints.first.url;
+    return endpoint;
   }
 
   @override
-  Future<void> setEndPoint(String empresa) async {
+  Future<void> setEndPoint(String endpoint) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_endPointKey, empresa);
+    await prefs.setString(_endPointKey, endpoint);
   }
 
   @override

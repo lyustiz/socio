@@ -7,7 +7,6 @@ import 'package:socio/utils/route_helper.dart';
 import 'package:socio/widgets/layout/app_scaffold.dart';
 import 'package:socio/widgets/layout/logo.dart';
 import 'package:socio/screens/login/login_form.dart';
-import '../../widgets/layout/help_button.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -32,10 +31,6 @@ class LoginScreen extends StatelessWidget {
                     IconButton(
                         onPressed: () => pushScreen(context, 'setup'),
                         icon: const Icon(Icons.settings)),
-                    /* const Padding(
-                      padding: EdgeInsets.only(right: 6),
-                      child: HelpButton(),
-                    ),*/
                   ],
                 ),
                 const Logo(
@@ -49,12 +44,11 @@ class LoginScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.8,
                     child: BlocBuilder<PreferencesBloc, PreferencesState>(
                       builder: (context, state) {
-                        String empresa = '';
-                        String endpoint = '';
+                        EndPoint endpoint = EndPoint(0, '', '');
+
                         if (state is PreferenceLoaded) {
-                          empresa = endpoints.keys.firstWhere(
-                              (k) => endpoints[k] == state.endpoint);
-                          endpoint = state.endpoint;
+                          endpoint = endpoints
+                              .firstWhere((ep) => ep.url == state.endpoint);
                         }
                         return ListTile(
                           dense: true,
@@ -63,10 +57,11 @@ class LoginScreen extends StatelessWidget {
                             size: 32,
                           ),
                           title: Text(
-                            empresa,
+                            endpoint.nombre,
                             style: const TextStyle(fontSize: 16),
                           ),
-                          subtitle: Text(endpoint),
+                          subtitle: Text(endpoint.url,
+                              overflow: TextOverflow.ellipsis),
                         );
                       },
                     )),
