@@ -87,7 +87,6 @@ class __FormState extends State<LoginForm> {
                         margin: const EdgeInsets.only(left: 8),
                         child: FormBuilderTextField(
                           name: 'inputPasword',
-                          keyboardType: TextInputType.number,
                           obscureText: _isObscureText,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           decoration: InputDecoration(
