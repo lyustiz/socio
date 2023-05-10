@@ -22,6 +22,7 @@ class AuthRepository {
     if (usuario is! Usuario) {
       var apilogin = await apiLogin(celular: celular, password: password);
       return Result(
+          isOk: apilogin.isLogged,
           isLogged: apilogin.isLogged,
           isSync: false,
           message: apilogin.message,
@@ -35,6 +36,7 @@ class AuthRepository {
         await db<AppDatabase>().clearDatabase();
       }
       return Result(
+          isOk: apilogin.isLogged,
           isLogged: apilogin.isLogged,
           isSync: false,
           message: apilogin.message,
@@ -45,6 +47,7 @@ class AuthRepository {
     if (usuario.fechaIngreso.isAfter(today)) {
       var apilogin = await apiLogin(celular: celular, password: password);
       return Result(
+          isOk: apilogin.isLogged,
           isLogged: apilogin.isLogged,
           isSync: false,
           message: apilogin.message,
@@ -53,11 +56,14 @@ class AuthRepository {
 
     // login standart
     if ((usuario.celular == celular) & (usuario.password == password)) {
-      return Result(isLogged: true, isSync: true, usuario: usuario);
+      return Result(isOk: true, isLogged: true, isSync: true, usuario: usuario);
     }
 
-    return Result(
-        isLogged: false, isSync: false, message: 'Usuario o password Invalido');
+    return const Result(
+        isOk: false,
+        isLogged: false,
+        isSync: false,
+        message: 'Usuario o password Invalido');
   }
 
   Future<Result> apiLogin(
@@ -72,6 +78,15 @@ class AuthRepository {
       'password': crypt.encryp(password),
       'tipoUsuario': tipoUsuario
     };
+
+    bool connect = await api.checkConnect();
+    if (!connect) {
+      return const Result(
+          isOk: false,
+          isLogged: false,
+          isSync: false,
+          message: 'Verificar Conexion a Internet');
+    }
 
     var result =
         await api.postData('login/authenticate', params: params, isAuth: true);
@@ -93,10 +108,12 @@ class AuthRepository {
       await prefs.setInt('idUsuario', usuario.idUsuario);
       await prefs.setString(
           'nombre', '${usuario.nombres} ${usuario.apellidos}');
-      return Result(isLogged: true, isSync: false, usuario: usuario);
+      return Result(
+          isOk: true, isLogged: true, isSync: false, usuario: usuario);
     }
 
     return Result(
+        isOk: false,
         isLogged: false,
         isSync: false,
         message:

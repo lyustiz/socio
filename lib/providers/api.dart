@@ -108,11 +108,18 @@ class Api {
         isSucess = true;
       } else {
         isSucess = false;
+        var body = response.body;
+        if (body == '') {
+          try {
+            body = convert.jsonDecode(response.body);
+          } catch (e) {
+            body = '';
+          }
+        }
         data = {
           'code': response.statusCode,
-          'message': errorMessage(response.statusCode, response.body),
-          'body':
-              (response.body == '') ? null : convert.jsonDecode(response.body)
+          'message': errorMessage(response.statusCode, body),
+          'body': body
         };
       }
     }
@@ -124,8 +131,8 @@ class Api {
     Map<int, String> messages = {
       401: 'Credenciales Invalidas',
       403: 'No autorizado',
-      404: 'No encontrado',
-      500: 'Problemas en el servidor'
+      404: 'Servidor no encontrado',
+      500: 'Problemas en Servidor'
     };
 
     if (codeError == 409) {
@@ -156,7 +163,6 @@ class Api {
         await prefs.setString('token', token);
       }
     }
-
     return true;
   }
 

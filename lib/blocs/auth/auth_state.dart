@@ -61,7 +61,7 @@ class AuthLogged extends AuthState {
 
 class AuthError extends AuthState {
   final String error;
-  const AuthError({required this.error});
+  const AuthError({this.error = 'Error'});
 
   @override
   List<Object> get props => [error];

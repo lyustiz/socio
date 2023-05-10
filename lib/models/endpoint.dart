@@ -28,4 +28,5 @@ List<EndPoint> endpoints = [
   EndPoint(11919, 'Santodomingo', 'apisantodomingo.sistemasyayudas.online'),
   EndPoint(12020, 'Sevilla', 'apisevilla.sistemasyayudas.online'),
   EndPoint(12121, 'Bahia', 'apibahia.sistemasyayudas.online'),
+  EndPoint(12222, 'Tuquerres', 'apituquerres.sistemasyayudas.online'),
 ];

@@ -20,7 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onLogin(event, emit) async {
     emit(const AuthLoading(message: 'autenticando usuario ...'));
 
-    Result login = Result(isLogged: false, isSync: false, message: '');
+    Result login =
+        const Result(isOk: false, isLogged: false, isSync: false, message: '');
 
     if (event.celular == null || event.password == null) {
       emit(const AuthError(error: 'Celular o Password invalido'));
@@ -43,7 +44,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthLogged(usuario: login.usuario!));
     } else {
       if (state is AuthLoading) {
-        emit(const AuthError(error: 'Usuario o Contraseña Invalidos'));
+        if (!login.isOk) {
+          emit(AuthError(error: login.message ?? 'Error Login'));
+        } else {
+          emit(const AuthError(error: 'Usuario o Contraseña Invalidos'));
+        }
       }
     }
   }
