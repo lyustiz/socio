@@ -27,6 +27,7 @@ class ConfiguracionForm extends StatelessWidget {
   late String serie = juego.serie;
   late bool hasConfiguracion = false;
   late bool isMultiple = false;
+  late bool isDual = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +39,7 @@ class ConfiguracionForm extends StatelessWidget {
       configuracionDto = ConfiguracionDto.fromConfiguracion(configuracion!);
       hasConfiguracion = true;
       isMultiple = juegoConfiguracion.configuracion!.balotas == 76;
+      isDual = juegoConfiguracion.configuracion!.cartonDual > 0;
     } else {
       configuracionDto = ConfiguracionDto.initial(juego.serie);
     }
@@ -99,7 +101,7 @@ class ConfiguracionForm extends StatelessWidget {
                         child: Column(
                           children: [
                             const SizedBox(
-                              height: 20,
+                              height: 5,
                             ),
                             FormBuilderTextField(
                               name: 'serie',
@@ -151,7 +153,7 @@ class ConfiguracionForm extends StatelessWidget {
                                 (val) {
                                   final number = int.parse(val ?? '0');
                                   if (number == 0) {
-                                    return isMultiple
+                                    return (isDual || isDual)
                                         ? 'Debe ser ${juego.cartonInicial} o superior'
                                         : null;
                                   }
@@ -162,6 +164,61 @@ class ConfiguracionForm extends StatelessWidget {
                                 }
                               ]),
                             ),
+                            SizedBox(
+                              height: isDual ? 10 : 0,
+                            ),
+                            isDual
+                                ? FormBuilderTextField(
+                                    name: 'cartonDual',
+                                    initialValue:
+                                        '${(hasConfiguracion) ? configuracion!.cartonDual : '0'}',
+                                    keyboardType: TextInputType.number,
+                                    autovalidateMode:
+                                        AutovalidateMode.onUserInteraction,
+                                    decoration: InputDecoration(
+                                        labelText: 'Carton Dual',
+                                        hintText:
+                                            'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        filled: true,
+                                        isDense: true,
+                                        suffixIcon:
+                                            const Icon(Icons.table_view)),
+                                    validator: FormBuilderValidators.compose([
+                                      (val) {
+                                        if (isDual) {
+                                          if (val == '') {
+                                            return 'Debe indicar Numero de Carton Dual';
+                                          }
+                                          var form = _formKey.currentState;
+                                          final cartonDual =
+                                              int.parse(val ?? '0');
+                                          final carton = int.parse(
+                                              form!.value['carton'] ?? '0');
+
+                                          if (cartonDual <
+                                              juego.cartonInicial) {
+                                            return 'Debe ser ${juego.cartonInicial} o superior';
+                                          }
+
+                                          if (carton == cartonDual) {
+                                            return 'El carton $carton ya ha sido asignado ';
+                                          }
+
+                                          if (cartonDual > juego.cartonFinal) {
+                                            return 'No debe ser mayor de ${juego.cartonFinal}';
+                                          }
+                                        } else {
+                                          return null;
+                                        }
+                                        return null;
+                                      }
+                                    ]),
+                                  )
+                                : const SizedBox(width: 0, height: 0),
                             const SizedBox(
                               height: 10,
                             ),
@@ -199,7 +256,7 @@ class ConfiguracionForm extends StatelessWidget {
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(18),
+                                  borderRadius: BorderRadius.circular(10),
                                   color: Colors.white),
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -222,6 +279,7 @@ class ConfiguracionForm extends StatelessWidget {
                                         form!.fields['balotas']!.didChange('0');
                                       } else {
                                         isMultiple = true;
+                                        isDual = false;
                                         form!.fields['balotas']!
                                             .didChange('76');
                                         if (form.fields['carton']!.value ==
@@ -230,6 +288,48 @@ class ConfiguracionForm extends StatelessWidget {
                                         }
                                       }
                                       form.validate();
+                                      context.read<ConfiguracionBloc>().add(
+                                          SetConfiguracion(configuracionDto));
+                                    },
+                                    activeColor:
+                                        Theme.of(context).colorScheme.secondary,
+                                    inactiveTrackColor: Colors.blue[50],
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Acumulado Dual',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
+                                  ),
+                                  Switch(
+                                    value: isDual,
+                                    onChanged: (value) {
+                                      var form = _formKey.currentState;
+                                      if (isDual) {
+                                        isDual = false;
+                                        form!.fields['cartonDual']!
+                                            .didChange('1');
+                                        form.validate();
+                                      } else {
+                                        isDual = true;
+                                        isMultiple = false;
+                                        form!.fields['balotas']!.didChange('0');
+                                      }
+
                                       context.read<ConfiguracionBloc>().add(
                                           SetConfiguracion(configuracionDto));
                                     },
@@ -336,9 +436,6 @@ class ConfiguracionForm extends StatelessWidget {
       formStatus.save();
 
       if (formStatus.validate()) {
-        /*if (formStatus.value['carton'] != '0') {
-          formStatus.fields['cliente']!.didChange('');
-        }*/
         List<Widget> content = [
           ListTile(
             title: const Text('Serie'),
@@ -350,6 +447,14 @@ class ConfiguracionForm extends StatelessWidget {
               '${formStatus.value['carton']}',
             ),
           ),
+          (isDual)
+              ? ListTile(
+                  title: const Text('Nro. Carton Dual'),
+                  subtitle: Text(
+                    '${formStatus.value['cartonDual']}',
+                  ),
+                )
+              : const SizedBox(),
           ListTile(
             title: const Text('Balota'),
             subtitle: Text('${formStatus.value['balotas']}'),
@@ -390,7 +495,8 @@ class ConfiguracionForm extends StatelessWidget {
         fechaModificacion: actualizado,
         estado: 'A',
         fechaRegistro: actualizado,
-        clienteDefecto: '');
+        clienteDefecto: '',
+        cartonDual: int.parse(formStatus.value['cartonDual'] ?? '0')); //TODO
 
     configuracionBloc.add(InsertConfiguracion(
         ConfiguracionDto.fromConfiguracion(addConfiguracion)));
@@ -406,7 +512,8 @@ class ConfiguracionForm extends StatelessWidget {
         balotas: int.parse(formStatus.value['balotas']),
         reconfigurado: true,
         fechaModificacion: actualizado,
-        clienteDefecto: '');
+        clienteDefecto: '',
+        cartonDual: int.parse(formStatus.value['cartonDual'] ?? '0'));
 
     configuracionBloc.add(UpdateConfiguracion(
         ConfiguracionDto.fromConfiguracion(updConfiguracion)));

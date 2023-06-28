@@ -124,7 +124,8 @@ class JuegoDetalleDto {
             fechaRegistro: config['fechaRegistro'],
             idUsuario: config['idUsuario'],
             estado: config['estado'],
-            reconfigurado: 1);
+            reconfigurado: 1,
+            cartonDual: config['cartonDual'] ?? 0);
       }
     }
 
@@ -240,7 +241,8 @@ class JuegoDetalleDto {
               : null,
           idUsuario: jc.idUsuario,
           estado: jc.estado,
-          reconfigurado: jc.reconfigurado == 1);
+          reconfigurado: jc.reconfigurado == 1,
+          cartonDual: jc.cartonDual);
     }
 
     return JuegosWithDetalles(

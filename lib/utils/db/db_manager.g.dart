@@ -2200,6 +2200,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
   final DateTime? fechaModificacion;
   final bool reconfigurado;
   final String? clienteDefecto;
+  final int cartonDual;
   Configuracion(
       {required this.idConfiguracion,
       required this.idProgramacionJuego,
@@ -2211,7 +2212,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       this.estado,
       this.fechaModificacion,
       required this.reconfigurado,
-      this.clienteDefecto});
+      this.clienteDefecto,
+      required this.cartonDual});
   factory Configuracion.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Configuracion(
@@ -2237,6 +2239,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           .mapFromDatabaseResponse(data['${effectivePrefix}reconfigurado'])!,
       clienteDefecto: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}cliente_defecto']),
+      cartonDual: const IntType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}carton_dual'])!,
     );
   }
   @override
@@ -2263,6 +2267,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
     if (!nullToAbsent || clienteDefecto != null) {
       map['cliente_defecto'] = Variable<String?>(clienteDefecto);
     }
+    map['carton_dual'] = Variable<int>(cartonDual);
     return map;
   }
 
@@ -2287,6 +2292,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       clienteDefecto: clienteDefecto == null && nullToAbsent
           ? const Value.absent()
           : Value(clienteDefecto),
+      cartonDual: Value(cartonDual),
     );
   }
 
@@ -2307,6 +2313,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           serializer.fromJson<DateTime?>(json['fechaModificacion']),
       reconfigurado: serializer.fromJson<bool>(json['reconfigurado']),
       clienteDefecto: serializer.fromJson<String?>(json['clienteDefecto']),
+      cartonDual: serializer.fromJson<int>(json['cartonDual']),
     );
   }
   @override
@@ -2324,6 +2331,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       'fechaModificacion': serializer.toJson<DateTime?>(fechaModificacion),
       'reconfigurado': serializer.toJson<bool>(reconfigurado),
       'clienteDefecto': serializer.toJson<String?>(clienteDefecto),
+      'cartonDual': serializer.toJson<int>(cartonDual),
     };
   }
 
@@ -2338,7 +2346,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           String? estado,
           DateTime? fechaModificacion,
           bool? reconfigurado,
-          String? clienteDefecto}) =>
+          String? clienteDefecto,
+          int? cartonDual}) =>
       Configuracion(
         idConfiguracion: idConfiguracion ?? this.idConfiguracion,
         idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
@@ -2351,6 +2360,7 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
         fechaModificacion: fechaModificacion ?? this.fechaModificacion,
         reconfigurado: reconfigurado ?? this.reconfigurado,
         clienteDefecto: clienteDefecto ?? this.clienteDefecto,
+        cartonDual: cartonDual ?? this.cartonDual,
       );
   @override
   String toString() {
@@ -2365,7 +2375,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           ..write('estado: $estado, ')
           ..write('fechaModificacion: $fechaModificacion, ')
           ..write('reconfigurado: $reconfigurado, ')
-          ..write('clienteDefecto: $clienteDefecto')
+          ..write('clienteDefecto: $clienteDefecto, ')
+          ..write('cartonDual: $cartonDual')
           ..write(')'))
         .toString();
   }
@@ -2382,7 +2393,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
       estado,
       fechaModificacion,
       reconfigurado,
-      clienteDefecto);
+      clienteDefecto,
+      cartonDual);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2397,7 +2409,8 @@ class Configuracion extends DataClass implements Insertable<Configuracion> {
           other.estado == this.estado &&
           other.fechaModificacion == this.fechaModificacion &&
           other.reconfigurado == this.reconfigurado &&
-          other.clienteDefecto == this.clienteDefecto);
+          other.clienteDefecto == this.clienteDefecto &&
+          other.cartonDual == this.cartonDual);
 }
 
 class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
@@ -2412,6 +2425,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
   final Value<DateTime?> fechaModificacion;
   final Value<bool> reconfigurado;
   final Value<String?> clienteDefecto;
+  final Value<int> cartonDual;
   const ConfiguracionesCompanion({
     this.idConfiguracion = const Value.absent(),
     this.idProgramacionJuego = const Value.absent(),
@@ -2424,6 +2438,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     this.fechaModificacion = const Value.absent(),
     this.reconfigurado = const Value.absent(),
     this.clienteDefecto = const Value.absent(),
+    this.cartonDual = const Value.absent(),
   });
   ConfiguracionesCompanion.insert({
     this.idConfiguracion = const Value.absent(),
@@ -2437,6 +2452,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     this.fechaModificacion = const Value.absent(),
     required bool reconfigurado,
     this.clienteDefecto = const Value.absent(),
+    this.cartonDual = const Value.absent(),
   })  : idProgramacionJuego = Value(idProgramacionJuego),
         carton = Value(carton),
         balotas = Value(balotas),
@@ -2454,6 +2470,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     Expression<DateTime?>? fechaModificacion,
     Expression<bool>? reconfigurado,
     Expression<String?>? clienteDefecto,
+    Expression<int>? cartonDual,
   }) {
     return RawValuesInsertable({
       if (idConfiguracion != null) 'id_configuracion': idConfiguracion,
@@ -2468,6 +2485,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
       if (fechaModificacion != null) 'fecha_modificacion': fechaModificacion,
       if (reconfigurado != null) 'reconfigurado': reconfigurado,
       if (clienteDefecto != null) 'cliente_defecto': clienteDefecto,
+      if (cartonDual != null) 'carton_dual': cartonDual,
     });
   }
 
@@ -2482,7 +2500,8 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
       Value<String?>? estado,
       Value<DateTime?>? fechaModificacion,
       Value<bool>? reconfigurado,
-      Value<String?>? clienteDefecto}) {
+      Value<String?>? clienteDefecto,
+      Value<int>? cartonDual}) {
     return ConfiguracionesCompanion(
       idConfiguracion: idConfiguracion ?? this.idConfiguracion,
       idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
@@ -2495,6 +2514,7 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
       fechaModificacion: fechaModificacion ?? this.fechaModificacion,
       reconfigurado: reconfigurado ?? this.reconfigurado,
       clienteDefecto: clienteDefecto ?? this.clienteDefecto,
+      cartonDual: cartonDual ?? this.cartonDual,
     );
   }
 
@@ -2534,6 +2554,9 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
     if (clienteDefecto.present) {
       map['cliente_defecto'] = Variable<String?>(clienteDefecto.value);
     }
+    if (cartonDual.present) {
+      map['carton_dual'] = Variable<int>(cartonDual.value);
+    }
     return map;
   }
 
@@ -2550,7 +2573,8 @@ class ConfiguracionesCompanion extends UpdateCompanion<Configuracion> {
           ..write('estado: $estado, ')
           ..write('fechaModificacion: $fechaModificacion, ')
           ..write('reconfigurado: $reconfigurado, ')
-          ..write('clienteDefecto: $clienteDefecto')
+          ..write('clienteDefecto: $clienteDefecto, ')
+          ..write('cartonDual: $cartonDual')
           ..write(')'))
         .toString();
   }
@@ -2615,6 +2639,12 @@ class $ConfiguracionesTable extends Configuraciones
   late final GeneratedColumn<String?> clienteDefecto = GeneratedColumn<String?>(
       'cliente_defecto', aliasedName, true,
       typeName: 'TEXT', requiredDuringInsert: false);
+  final VerificationMeta _cartonDualMeta = const VerificationMeta('cartonDual');
+  late final GeneratedColumn<int?> cartonDual = GeneratedColumn<int?>(
+      'carton_dual', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultValue: const Constant(0));
   @override
   List<GeneratedColumn> get $columns => [
         idConfiguracion,
@@ -2627,7 +2657,8 @@ class $ConfiguracionesTable extends Configuraciones
         estado,
         fechaModificacion,
         reconfigurado,
-        clienteDefecto
+        clienteDefecto,
+        cartonDual
       ];
   @override
   String get aliasedName => _alias ?? 'configuraciones';
@@ -2703,6 +2734,12 @@ class $ConfiguracionesTable extends Configuraciones
           _clienteDefectoMeta,
           clienteDefecto.isAcceptableOrUnknown(
               data['cliente_defecto']!, _clienteDefectoMeta));
+    }
+    if (data.containsKey('carton_dual')) {
+      context.handle(
+          _cartonDualMeta,
+          cartonDual.isAcceptableOrUnknown(
+              data['carton_dual']!, _cartonDualMeta));
     }
     return context;
   }

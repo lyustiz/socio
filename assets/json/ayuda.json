@@ -49,6 +49,18 @@
             {
                 "icono": "check_circle",
                 "tipo": "info",
+                "titulo": "Multiple",
+                "texto": "Asigna un carton ganador en paralelo al Ganador del lleno principal"
+            },
+            {
+                "icono": "check_circle",
+                "tipo": "info",
+                "titulo": "Acumulado Dual",
+                "texto": "Asigna 2 cartones ganadores para el lleno principal, que deben asignarse de forma obligatoria"
+            },
+            {
+                "icono": "check_circle",
+                "tipo": "info",
                 "titulo": "Reconfigurado",
                 "texto": "Indica si fue actualizada la configuracion"
             }

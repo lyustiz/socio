@@ -15,6 +15,7 @@ class Configuraciones extends Table {
   DateTimeColumn get fechaModificacion => dateTime().nullable()();
   BoolColumn get reconfigurado => boolean()();
   TextColumn get clienteDefecto => text().nullable()();
+  IntColumn get cartonDual => integer().withDefault(const Constant(0))();
 }
 
 @DriftDatabase(tables: [Configuraciones])

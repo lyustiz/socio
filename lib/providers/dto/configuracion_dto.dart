@@ -13,6 +13,7 @@ class ConfiguracionDto {
   final String? fechaModificacion;
   final int reconfigurado;
   final String? clienteDefecto;
+  final int cartonDual;
 
   ConfiguracionDto(
       {required this.idConfiguracion,
@@ -25,7 +26,8 @@ class ConfiguracionDto {
       required this.estado,
       this.fechaModificacion,
       required this.reconfigurado,
-      this.clienteDefecto});
+      this.clienteDefecto,
+      required this.cartonDual});
 
   factory ConfiguracionDto.initial(String serie) {
     return ConfiguracionDto(
@@ -39,28 +41,29 @@ class ConfiguracionDto {
         estado: serie,
         fechaModificacion: DateTime.now().toIso8601String(),
         reconfigurado: 0,
-        clienteDefecto: '');
+        clienteDefecto: '',
+        cartonDual: 0);
   }
 
   factory ConfiguracionDto.fromConfiguracion(Configuracion configuracion,
       {int idUsuario = 0}) {
     return ConfiguracionDto(
-      idConfiguracion: configuracion.idConfiguracion,
-      numeroJuego: configuracion.idProgramacionJuego,
-      carton: configuracion.carton,
-      serie: configuracion.serie ?? 'A',
-      balotas: configuracion.balotas,
-      fechaRegistro: (configuracion.fechaRegistro == null)
-          ? null
-          : configuracion.fechaRegistro!.toIso8601String(),
-      idUsuario: configuracion.idUsuario,
-      estado: configuracion.estado ?? 'A',
-      fechaModificacion: (configuracion.fechaModificacion == null)
-          ? null
-          : configuracion.fechaModificacion!.toIso8601String(),
-      reconfigurado: (configuracion.reconfigurado) ? 1 : 0,
-      clienteDefecto: configuracion.clienteDefecto,
-    );
+        idConfiguracion: configuracion.idConfiguracion,
+        numeroJuego: configuracion.idProgramacionJuego,
+        carton: configuracion.carton,
+        serie: configuracion.serie ?? 'A',
+        balotas: configuracion.balotas,
+        fechaRegistro: (configuracion.fechaRegistro == null)
+            ? null
+            : configuracion.fechaRegistro!.toIso8601String(),
+        idUsuario: configuracion.idUsuario,
+        estado: configuracion.estado ?? 'A',
+        fechaModificacion: (configuracion.fechaModificacion == null)
+            ? null
+            : configuracion.fechaModificacion!.toIso8601String(),
+        reconfigurado: (configuracion.reconfigurado) ? 1 : 0,
+        clienteDefecto: configuracion.clienteDefecto,
+        cartonDual: configuracion.cartonDual);
   }
 
   static Configuracion toConfiguracion(ConfiguracionDto configuracionDTO) {
@@ -79,7 +82,8 @@ class ConfiguracionDto {
             ? null
             : DateTime.parse(configuracionDTO.fechaModificacion!),
         reconfigurado: (configuracionDTO.reconfigurado == 1),
-        clienteDefecto: configuracionDTO.clienteDefecto);
+        clienteDefecto: configuracionDTO.clienteDefecto,
+        cartonDual: configuracionDTO.cartonDual);
   }
 
   static List<ConfiguracionDto> fromListConfiguraciones(
@@ -108,6 +112,7 @@ class ConfiguracionDto {
       'fechaModificacion': serializer.toJson<String?>(fechaModificacion),
       'reconfigurado': serializer.toJson<int>(reconfigurado),
       'clienteDefecto': serializer.toJson<String?>(clienteDefecto),
+      'cartonDual': serializer.toJson<int>(cartonDual),
     };
   }
 
@@ -115,18 +120,18 @@ class ConfiguracionDto {
     var serializer = const JsonSerializer();
 
     return ConfiguracionDto(
-      idConfiguracion: serializer.fromJson<int>(json['idConfiguracion']),
-      numeroJuego: serializer.fromJson<int>(json['numeroJuego']),
-      carton: serializer.fromJson<int>(json['carton']),
-      serie: serializer.fromJson<String>(json['serie']),
-      balotas: serializer.fromJson<int>(json['balotas']),
-      fechaRegistro: serializer.fromJson<String>(json['fechaRegistro']),
-      idUsuario: serializer.fromJson<int>(json['idUsuario']),
-      estado: serializer.fromJson<String>(json['estado']),
-      fechaModificacion: serializer
-          .fromJson<String>(json['fechaModificacion'] ?? json['fechaRegistro']),
-      reconfigurado: serializer.fromJson<int>(json['reconfigurado']),
-      clienteDefecto: serializer.fromJson<String>(json['clienteDefecto']),
-    );
+        idConfiguracion: serializer.fromJson<int>(json['idConfiguracion']),
+        numeroJuego: serializer.fromJson<int>(json['numeroJuego']),
+        carton: serializer.fromJson<int>(json['carton']),
+        serie: serializer.fromJson<String>(json['serie']),
+        balotas: serializer.fromJson<int>(json['balotas']),
+        fechaRegistro: serializer.fromJson<String>(json['fechaRegistro']),
+        idUsuario: serializer.fromJson<int>(json['idUsuario']),
+        estado: serializer.fromJson<String>(json['estado']),
+        fechaModificacion: serializer.fromJson<String>(
+            json['fechaModificacion'] ?? json['fechaRegistro']),
+        reconfigurado: serializer.fromJson<int>(json['reconfigurado']),
+        clienteDefecto: serializer.fromJson<String>(json['clienteDefecto']),
+        cartonDual: serializer.fromJson<int>(json['cartonDual']));
   }
 }

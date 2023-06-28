@@ -38,7 +38,7 @@ class ConfiguracionBloc extends Bloc<ConfiguracionEvent, ConfiguracionState> {
       emit(ConfiguracionExito(
           'Registro Actualizado', configuracion.idConfiguracion));
     } else {
-      emit(ConfiguracionError('Registro no Acualizado'));
+      emit(const ConfiguracionError('Registro no Acualizado'));
     }
   }
 

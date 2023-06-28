@@ -92,7 +92,7 @@ class ConfiguracionScreen extends StatelessWidget {
     if (configuracionState is ConfiguracionLoaded) {
       if (configuracionState.configuracion.idConfiguracion < 0) {
         return const Card(
-          child: Text('No se ha Creado Configuracion b'),
+          child: Text('No se ha Creado Configuracion'),
           color: Colors.white,
         );
       } else {
@@ -108,16 +108,21 @@ class ConfiguracionScreen extends StatelessWidget {
   }
 
   List<Widget> configuracionInfo(context, ConfiguracionDto configuracion) {
+    bool isMultiple = configuracion.balotas == 76;
+    bool isDual = configuracion.cartonDual > 0;
+
     return [
       itemData('Serie', configuracion.serie, Icons.dynamic_feed),
       itemData('Carton', '${configuracion.carton}', Icons.table_view_rounded),
+      isDual
+          ? itemData('Carton Acumulado Dual', '${configuracion.cartonDual}',
+              Icons.table_view_rounded)
+          : const SizedBox(),
       itemData('Balota', '${configuracion.balotas}', Icons.workspaces),
-      itemData(
-          'Ganador Multiple',
-          configuracion.balotas == 76 ? 'SI' : 'NO',
-          configuracion.balotas == 76
-              ? Icons.check_circle
-              : Icons.radio_button_unchecked),
+      itemData('Ganador Multiple', isMultiple ? 'SI' : 'NO',
+          isMultiple ? Icons.check_circle : Icons.radio_button_unchecked),
+      itemData('Acumulado Dual', isDual ? 'SI' : 'NO',
+          isDual ? Icons.check_circle : Icons.radio_button_unchecked),
       itemData('Fecha Modificacion', configuracion.fechaModificacion ?? '',
           Icons.calendar_today),
       itemData(
@@ -134,9 +139,9 @@ class ConfiguracionScreen extends StatelessWidget {
 
   Widget itemData(String title, String data, IconData icon) {
     return Container(
-      margin: const EdgeInsets.only(top: 3),
+      margin: const EdgeInsets.only(top: 2),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30), color: Colors.white),
+          borderRadius: BorderRadius.circular(12), color: Colors.white),
       child: ListTile(
         selected: true,
         dense: true,
