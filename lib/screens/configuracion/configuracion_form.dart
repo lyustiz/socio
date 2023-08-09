@@ -153,7 +153,7 @@ class ConfiguracionForm extends StatelessWidget {
                                 (val) {
                                   final number = int.parse(val ?? '0');
                                   if (number == 0) {
-                                    return (isDual || isDual)
+                                    return (isDual)
                                         ? 'Debe ser ${juego.cartonInicial} o superior'
                                         : null;
                                   }
@@ -197,7 +197,10 @@ class ConfiguracionForm extends StatelessWidget {
                                           final cartonDual =
                                               int.parse(val ?? '0');
                                           final carton = int.parse(
-                                              form!.value['carton'] ?? '0');
+                                              form!.value['carton'] == ''
+                                                  ? '0'
+                                                  : form.value['carton'] ??
+                                                      '0');
 
                                           if (cartonDual <
                                               juego.cartonInicial) {
@@ -279,12 +282,11 @@ class ConfiguracionForm extends StatelessWidget {
                                         form!.fields['balotas']!.didChange('0');
                                       } else {
                                         isMultiple = true;
-                                        isDual = false;
                                         form!.fields['balotas']!
                                             .didChange('76');
                                         if (form.fields['carton']!.value ==
                                             '0') {
-                                          form.fields['carton']!.didChange('');
+                                          form.fields['carton']!.didChange('0');
                                         }
                                       }
                                       form.validate();
@@ -326,8 +328,6 @@ class ConfiguracionForm extends StatelessWidget {
                                         form.validate();
                                       } else {
                                         isDual = true;
-                                        isMultiple = false;
-                                        form!.fields['balotas']!.didChange('0');
                                       }
 
                                       context.read<ConfiguracionBloc>().add(

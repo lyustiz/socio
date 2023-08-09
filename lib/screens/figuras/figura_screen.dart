@@ -201,8 +201,45 @@ class FiguraScreen extends StatelessWidget {
     return itemsFiguras;
   }
 
+  Future<bool> advertencia(
+      BuildContext context, FiguraDto figura, bool active) async {
+    int nroPosiciones = 0;
+    for (var rune in figura.posiciones.runes) {
+      var posicion = String.fromCharCode(rune);
+      nroPosiciones = (posicion == "1") ? nroPosiciones + 1 : nroPosiciones;
+      if (nroPosiciones > 4) {
+        return true;
+      }
+    }
+
+    List<Widget> content = [
+      const SizedBox(height: 20),
+      RichText(
+        textAlign: TextAlign.justify,
+        text: TextSpan(
+          text:
+              'NO se recomienda configurar figuras con solo 4 balota, ya que es probable que ganen cartones antes del configurado. Figura: ',
+          children: <TextSpan>[
+            TextSpan(
+                text: figura.nombre.toUpperCase(),
+                style: const TextStyle(color: Colors.amber)),
+          ],
+        ),
+      ),
+    ];
+
+    bool? isConfirm = await Dlg.appDialog(context, 'Advertencia', content,
+        action: 'Continuar');
+
+    return isConfirm ?? false;
+  }
+
   void confirm(BuildContext context, Juego juego, FiguraDto figura, bool active,
       FiguraBloc figuraBlock) async {
+    bool continuar = await advertencia(context, figura, active);
+    if (!continuar) {
+      return;
+    }
     String mensaje = active ? ', se Acumule? ' : ', "NO" se Acumule? ';
 
     final _formKey = GlobalKey<FormBuilderState>();
