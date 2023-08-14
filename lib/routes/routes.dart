@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socio/screens/auditoria_acumulado/auditoria_acumulado_screen.dart';
 import 'package:socio/screens/auditoria_configuracion/auditoria_configuracion_screen.dart';
-import 'package:socio/screens/configuracion/configuracion_form.dart';
+//import 'package:socio/screens/configuracion/configuracion_form.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/endpoint/endpoint_screen.dart';
 import 'package:socio/screens/estadistica/estadistica_screen.dart';
@@ -23,6 +23,7 @@ import 'package:socio/screens/condiciones/condiciones_screen.dart';
 import 'package:socio/screens/help/helper_screen.dart';
 import 'package:socio/screens/help/helper_global.dart';
 import 'package:socio/screens/cuenta/cuenta_screen.dart';
+import 'package:socio/screens/yapas/yapa_screen.dart';
 
 final Map<String, Widget Function(BuildContext)> appRoutes = {
   'login': (_) => const LoginScreen(),
@@ -49,4 +50,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'helper_screen': (_) => const HelperScreen(),
   'helper': (_) => const HelperGlobal(),
   'cuenta': (_) => const CuentaScreen(),
+  'yapas': (_) => YapaScreen(),
 };

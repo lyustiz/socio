@@ -83,6 +83,14 @@ class JuegoListScreen extends StatelessWidget {
                 navigateTo(context, 'figura');
               }
               break;
+            case 'configurar_yapas':
+              if (isClose) {
+                ScaffoldMessenger.of(context).showSnackBar(Msg.appMessage(
+                    context, 'error', 'El Juego ya ha sido Jugado'));
+              } else {
+                navigateTo(context, 'yapas');
+              }
+              break;
             case 'auditoria_acumulado':
               navigateTo(context, 'auditoria_acumulado');
               break;
@@ -127,6 +135,14 @@ class JuegoListScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text('Configurar Figuras'), //Configurar Figuras
                   leading: Icon(Icons.category),
+                  dense: true,
+                ),
+              ),
+              const PopupMenuItem(
+                value: 'configurar_yapas',
+                child: ListTile(
+                  title: Text('Configurar Yapas'), //Configurar Figuras
+                  leading: Icon(Icons.view_week_rounded),
                   dense: true,
                 ),
               ),
