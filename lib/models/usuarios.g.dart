@@ -16,6 +16,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
   final String celular;
   final String? password;
   final String isAdmin;
+  final bool activarYapa;
   final String estado;
   final DateTime fechaCreacion;
   final DateTime fechaIngreso;
@@ -29,6 +30,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       required this.celular,
       this.password,
       required this.isAdmin,
+      required this.activarYapa,
       required this.estado,
       required this.fechaCreacion,
       required this.fechaIngreso,
@@ -52,6 +54,8 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           .mapFromDatabaseResponse(data['${effectivePrefix}password']),
       isAdmin: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}is_admin'])!,
+      activarYapa: const BoolType()
+          .mapFromDatabaseResponse(data['${effectivePrefix}activar_yapa'])!,
       estado: const StringType()
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
       fechaCreacion: const DateTimeType()
@@ -75,6 +79,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       map['password'] = Variable<String?>(password);
     }
     map['is_admin'] = Variable<String>(isAdmin);
+    map['activar_yapa'] = Variable<bool>(activarYapa);
     map['estado'] = Variable<String>(estado);
     map['fecha_creacion'] = Variable<DateTime>(fechaCreacion);
     map['fecha_ingreso'] = Variable<DateTime>(fechaIngreso);
@@ -96,6 +101,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           ? const Value.absent()
           : Value(password),
       isAdmin: Value(isAdmin),
+      activarYapa: Value(activarYapa),
       estado: Value(estado),
       fechaCreacion: Value(fechaCreacion),
       fechaIngreso: Value(fechaIngreso),
@@ -117,6 +123,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       celular: serializer.fromJson<String>(json['celular']),
       password: serializer.fromJson<String?>(json['password']),
       isAdmin: serializer.fromJson<String>(json['isAdmin']),
+      activarYapa: serializer.fromJson<bool>(json['activarYapa']),
       estado: serializer.fromJson<String>(json['estado']),
       fechaCreacion: serializer.fromJson<DateTime>(json['fechaCreacion']),
       fechaIngreso: serializer.fromJson<DateTime>(json['fechaIngreso']),
@@ -135,6 +142,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       'celular': serializer.toJson<String>(celular),
       'password': serializer.toJson<String?>(password),
       'isAdmin': serializer.toJson<String>(isAdmin),
+      'activarYapa': serializer.toJson<bool>(activarYapa),
       'estado': serializer.toJson<String>(estado),
       'fechaCreacion': serializer.toJson<DateTime>(fechaCreacion),
       'fechaIngreso': serializer.toJson<DateTime>(fechaIngreso),
@@ -151,6 +159,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           String? celular,
           String? password,
           String? isAdmin,
+          bool? activarYapa,
           String? estado,
           DateTime? fechaCreacion,
           DateTime? fechaIngreso,
@@ -164,6 +173,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
         celular: celular ?? this.celular,
         password: password ?? this.password,
         isAdmin: isAdmin ?? this.isAdmin,
+        activarYapa: activarYapa ?? this.activarYapa,
         estado: estado ?? this.estado,
         fechaCreacion: fechaCreacion ?? this.fechaCreacion,
         fechaIngreso: fechaIngreso ?? this.fechaIngreso,
@@ -180,6 +190,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           ..write('celular: $celular, ')
           ..write('password: $password, ')
           ..write('isAdmin: $isAdmin, ')
+          ..write('activarYapa: $activarYapa, ')
           ..write('estado: $estado, ')
           ..write('fechaCreacion: $fechaCreacion, ')
           ..write('fechaIngreso: $fechaIngreso, ')
@@ -198,6 +209,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
       celular,
       password,
       isAdmin,
+      activarYapa,
       estado,
       fechaCreacion,
       fechaIngreso,
@@ -214,6 +226,7 @@ class Usuario extends DataClass implements Insertable<Usuario> {
           other.celular == this.celular &&
           other.password == this.password &&
           other.isAdmin == this.isAdmin &&
+          other.activarYapa == this.activarYapa &&
           other.estado == this.estado &&
           other.fechaCreacion == this.fechaCreacion &&
           other.fechaIngreso == this.fechaIngreso &&
@@ -229,6 +242,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
   final Value<String> celular;
   final Value<String?> password;
   final Value<String> isAdmin;
+  final Value<bool> activarYapa;
   final Value<String> estado;
   final Value<DateTime> fechaCreacion;
   final Value<DateTime> fechaIngreso;
@@ -242,6 +256,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     this.celular = const Value.absent(),
     this.password = const Value.absent(),
     this.isAdmin = const Value.absent(),
+    this.activarYapa = const Value.absent(),
     this.estado = const Value.absent(),
     this.fechaCreacion = const Value.absent(),
     this.fechaIngreso = const Value.absent(),
@@ -256,6 +271,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     required String celular,
     this.password = const Value.absent(),
     required String isAdmin,
+    this.activarYapa = const Value.absent(),
     required String estado,
     required DateTime fechaCreacion,
     this.fechaIngreso = const Value.absent(),
@@ -277,6 +293,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     Expression<String>? celular,
     Expression<String?>? password,
     Expression<String>? isAdmin,
+    Expression<bool>? activarYapa,
     Expression<String>? estado,
     Expression<DateTime>? fechaCreacion,
     Expression<DateTime>? fechaIngreso,
@@ -291,6 +308,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
       if (celular != null) 'celular': celular,
       if (password != null) 'password': password,
       if (isAdmin != null) 'is_admin': isAdmin,
+      if (activarYapa != null) 'activar_yapa': activarYapa,
       if (estado != null) 'estado': estado,
       if (fechaCreacion != null) 'fecha_creacion': fechaCreacion,
       if (fechaIngreso != null) 'fecha_ingreso': fechaIngreso,
@@ -307,6 +325,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
       Value<String>? celular,
       Value<String?>? password,
       Value<String>? isAdmin,
+      Value<bool>? activarYapa,
       Value<String>? estado,
       Value<DateTime>? fechaCreacion,
       Value<DateTime>? fechaIngreso,
@@ -320,6 +339,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
       celular: celular ?? this.celular,
       password: password ?? this.password,
       isAdmin: isAdmin ?? this.isAdmin,
+      activarYapa: activarYapa ?? this.activarYapa,
       estado: estado ?? this.estado,
       fechaCreacion: fechaCreacion ?? this.fechaCreacion,
       fechaIngreso: fechaIngreso ?? this.fechaIngreso,
@@ -354,6 +374,9 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
     if (isAdmin.present) {
       map['is_admin'] = Variable<String>(isAdmin.value);
     }
+    if (activarYapa.present) {
+      map['activar_yapa'] = Variable<bool>(activarYapa.value);
+    }
     if (estado.present) {
       map['estado'] = Variable<String>(estado.value);
     }
@@ -380,6 +403,7 @@ class UsuariosCompanion extends UpdateCompanion<Usuario> {
           ..write('celular: $celular, ')
           ..write('password: $password, ')
           ..write('isAdmin: $isAdmin, ')
+          ..write('activarYapa: $activarYapa, ')
           ..write('estado: $estado, ')
           ..write('fechaCreacion: $fechaCreacion, ')
           ..write('fechaIngreso: $fechaIngreso, ')
@@ -427,6 +451,14 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
   late final GeneratedColumn<String?> isAdmin = GeneratedColumn<String?>(
       'is_admin', aliasedName, false,
       typeName: 'TEXT', requiredDuringInsert: true);
+  final VerificationMeta _activarYapaMeta =
+      const VerificationMeta('activarYapa');
+  late final GeneratedColumn<bool?> activarYapa = GeneratedColumn<bool?>(
+      'activar_yapa', aliasedName, false,
+      typeName: 'INTEGER',
+      requiredDuringInsert: false,
+      defaultConstraints: 'CHECK (activar_yapa IN (0, 1))',
+      defaultValue: const Constant(false));
   final VerificationMeta _estadoMeta = const VerificationMeta('estado');
   late final GeneratedColumn<String?> estado = GeneratedColumn<String?>(
       'estado', aliasedName, false,
@@ -458,6 +490,7 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
         celular,
         password,
         isAdmin,
+        activarYapa,
         estado,
         fechaCreacion,
         fechaIngreso,
@@ -515,6 +548,12 @@ class $UsuariosTable extends Usuarios with TableInfo<$UsuariosTable, Usuario> {
           isAdmin.isAcceptableOrUnknown(data['is_admin']!, _isAdminMeta));
     } else if (isInserting) {
       context.missing(_isAdminMeta);
+    }
+    if (data.containsKey('activar_yapa')) {
+      context.handle(
+          _activarYapaMeta,
+          activarYapa.isAcceptableOrUnknown(
+              data['activar_yapa']!, _activarYapaMeta));
     }
     if (data.containsKey('estado')) {
       context.handle(_estadoMeta,

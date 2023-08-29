@@ -12,6 +12,7 @@ class Usuarios extends Table {
   TextColumn get celular => text()();
   TextColumn get password => text().nullable()();
   TextColumn get isAdmin => text()();
+  BoolColumn get activarYapa => boolean().withDefault(const Constant(false))();
   TextColumn get estado => text()();
   DateTimeColumn get fechaCreacion => dateTime()();
   DateTimeColumn get fechaIngreso => dateTime().withDefault(currentDate)();

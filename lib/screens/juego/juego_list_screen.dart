@@ -1,4 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:socio/blocs/auth/auth_bloc.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/juego/juego_screen.dart';
 import 'package:socio/screens/juego/witgets/juego_icon.dart';
@@ -17,11 +19,17 @@ class JuegoListScreen extends StatelessWidget {
   JuegoListScreen({Key? key}) : super(key: key);
 
   late JuegoBloc juegoBlock;
+  late bool hasYapa;
 
   @override
   Widget build(BuildContext context) {
     juegoBlock = context.read<JuegoBloc>();
+    AuthState authState = context.read<AuthBloc>().state;
     juegoBlock.add(GetAllJuego(''));
+
+    if (authState is AuthLogged) {
+      hasYapa = false; //authState.usuario.activarYapa;
+    }
 
     return BlocBuilder<JuegoBloc, JuegoState>(
       builder: (context, state) {
@@ -61,7 +69,6 @@ class JuegoListScreen extends StatelessWidget {
 
   Widget itemsJuegos(context, itemsBloc, JuegosWithConfiguracion juegoC) {
     bool isClose = (juegoC.juego.idJuego != null);
-
     var action = PopupMenuButton(
         elevation: 7,
         onSelected: (tipo) {
@@ -138,13 +145,16 @@ class JuegoListScreen extends StatelessWidget {
                   dense: true,
                 ),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: 'configurar_yapas',
-                child: ListTile(
-                  title: Text('Configurar Yapas'), //Configurar Figuras
-                  leading: Icon(Icons.view_week_rounded),
-                  dense: true,
-                ),
+                enabled: hasYapa,
+                child: hasYapa
+                    ? const ListTile(
+                        title: Text('Configurar Yapas'), //Configurar Figuras
+                        leading: Icon(Icons.view_week_rounded),
+                        dense: true,
+                      )
+                    : const Divider(),
               ),
               const PopupMenuItem(
                 value: 'auditoria_acumulado',
