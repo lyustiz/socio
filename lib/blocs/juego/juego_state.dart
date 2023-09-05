@@ -20,7 +20,7 @@ class JuegoLoading extends JuegoState {
 class JuegoLoaded extends JuegoState {
   final JuegosWithConfiguracion juego;
 
-  JuegoLoaded(juego) : this.juego = juego;
+  const JuegoLoaded(this.juego);
 
   @override
   List<Object> get props => [juego];
@@ -32,7 +32,7 @@ class JuegoLoaded extends JuegoState {
 class JuegosLoaded extends JuegoState {
   final List<JuegosWithConfiguracion> juegos;
 
-  JuegosLoaded(List<JuegosWithConfiguracion> juegos) : this.juegos = juegos;
+  const JuegosLoaded(this.juegos);
 
   @override
   List<Object> get props => [juegos];
@@ -44,12 +44,29 @@ class JuegosLoaded extends JuegoState {
 class JuegoSelected extends JuegoState {
   final JuegosWithConfiguracion juego;
 
-  JuegoSelected(JuegosWithConfiguracion juego) : this.juego = juego;
+  const JuegoSelected(this.juego);
   @override
   String toString() => 'JuegoSelected $juego';
 }
 
-class JuegoError extends JuegoState {
+class JuegoExito extends JuegoState {
+  final String mensaje;
+  const JuegoExito(this.mensaje);
+
   @override
-  String toString() => 'JuegoError';
+  List<Object> get props => [mensaje];
+
+  @override
+  String toString() => 'FiguraExito $mensaje';
+}
+
+class JuegoError extends JuegoState {
+  final String mensaje;
+  const JuegoError(this.mensaje);
+
+  @override
+  List<Object> get props => [mensaje];
+
+  @override
+  String toString() => 'JuegoError $mensaje';
 }

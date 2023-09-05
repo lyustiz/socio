@@ -85,3 +85,29 @@ class SelectJuego extends JuegoEvent {
   @override
   String toString() => 'SelectJuego';
 }
+
+class SetJuego extends JuegoEvent {
+  final JuegosWithConfiguracion juego;
+
+  const SetJuego(this.juego);
+
+  @override
+  List<Object> get props => [juego];
+
+  @override
+  String toString() => 'SetJuego';
+}
+
+class UpdateCartonesJuego extends JuegoEvent {
+  final int idProgramacionJuego;
+  final String cartonesEnJuego;
+
+  const UpdateCartonesJuego(this.idProgramacionJuego, this.cartonesEnJuego);
+
+  @override
+  List<Object> get props => [idProgramacionJuego, cartonesEnJuego];
+
+  @override
+  String toString() =>
+      'UpdateCartonesJuego $idProgramacionJuego $cartonesEnJuego';
+}

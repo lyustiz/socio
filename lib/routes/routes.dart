@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:socio/screens/auditoria_acumulado/auditoria_acumulado_screen.dart';
 import 'package:socio/screens/auditoria_configuracion/auditoria_configuracion_screen.dart';
-//import 'package:socio/screens/configuracion/configuracion_form.dart';
+import 'package:socio/screens/cartones_juego/cartones_juego_screen.dart';
 import 'package:socio/screens/configuracion/configuracion_screen.dart';
 import 'package:socio/screens/endpoint/endpoint_screen.dart';
 import 'package:socio/screens/estadistica/estadistica_screen.dart';
@@ -40,7 +40,6 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'informe_usuario': (_) => InformeUsuarioScreen(),
   'informe_venta': (_) => InformeVentaScreen(),
   'configuracion': (_) => ConfiguracionScreen(),
-  //'configuracion_form': (_) => ConfiguracionForm(),
   'figura': (_) => FiguraScreen(),
   'figura_multilpe': (_) => FiguraMultipleScreen(),
   'auditoria_acumulado': (_) => AuditoriaAcumuladoScreen(),
@@ -51,4 +50,5 @@ final Map<String, Widget Function(BuildContext)> appRoutes = {
   'helper': (_) => const HelperGlobal(),
   'cuenta': (_) => const CuentaScreen(),
   'yapas': (_) => YapaScreen(),
+  'cartones_en_juego': (_) => CartonesJuegoScreen(),
 };

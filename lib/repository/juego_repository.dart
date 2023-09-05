@@ -1,3 +1,4 @@
+import 'package:socio/blocs/juego/juego_bloc.dart';
 import 'package:socio/providers/api.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/utils/db/json_serializer.dart';
@@ -6,6 +7,8 @@ import 'package:socio/utils/db/db_init.dart';
 class JuegoRepository {
   final Api api = Api();
   Map<String, dynamic> data = {};
+  Map<String, dynamic> result = {'isSuccess': false, 'data': null};
+  Map<String, dynamic> respond = {'': ''};
 
   Future<List<JuegosWithConfiguracion>> getAllJuegos(String terminado) async {
     try {
@@ -45,6 +48,65 @@ class JuegoRepository {
     return juegosList;
   }
 
+  Future<JuegosWithConfiguracion> selectJuego(Juego juego, int IdJuego) async {
+    // return db<AppDatabase>().juegosDao.selectJuego(juego);
+
+    data = await api.getData('juegosconfiguracion/$IdJuego', {});
+    DateTime actualizado = DateTime.now();
+
+    if (data['isSuccess']) {
+      Map<String, dynamic> dataJuego = data['data'];
+
+      Juego juego;
+      Configuracion? configuracion;
+
+      dataJuego['actualizado'] = actualizado.toString();
+      juego = Juego.fromJson(dataJuego, serializer: const JsonSerializer());
+
+      if (dataJuego['configuracion'] != null) {
+        if (dataJuego['configuracion']['idConfiguracion'] != 0) {
+          configuracion = await getConfiguracion(
+            dataJuego['configuracion'],
+            dataJuego['idProgramacionJuego'],
+            actualizado,
+          );
+        }
+      }
+
+      return JuegosWithConfiguracion(
+        juego: juego,
+        configuracion: configuracion,
+      );
+    }
+
+    Juego juegoIni = Juego(
+        idProgramacionJuego: 0,
+        tipoJuego: '',
+        fechaProgramada: DateTime.now(),
+        moduloCartones: 0,
+        moneda: '',
+        valorCarton: 0,
+        totalCartones: 0,
+        valorModulo: 0,
+        totalModulos: 0,
+        totalPremios: 0,
+        serie: '',
+        cartonInicial: 0,
+        cartonFinal: 0,
+        hojaInicial: 0,
+        hojaFinal: 0,
+        horaCierre: DateTime.now(),
+        previoCierre: 1,
+        permitirDevolucion: '',
+        estado: '',
+        cartonesAleatorios: '',
+        cartonesEnJuego: '');
+    return JuegosWithConfiguracion(
+      juego: juegoIni,
+      configuracion: null,
+    );
+  }
+
   Future<Configuracion> getConfiguracion(
     Map<String, dynamic> configuracionJson,
     int idProgramacionJuego,
@@ -55,10 +117,6 @@ class JuegoRepository {
     configuracionJson['actualizado'] = actualizado.toString();
     return Configuracion.fromJson(configuracionJson,
         serializer: const JsonSerializer());
-  }
-
-  Future<Juego> selectJuego(Juego juego) async {
-    return db<AppDatabase>().juegosDao.selectJuego(juego);
   }
 
   Future<List<Juego>> allJuegos(String terminado) async {
@@ -76,5 +134,27 @@ class JuegoRepository {
 
   Future<int> deleteJuego(Juego juego) async {
     return db<AppDatabase>().juegosDao.deleteJuego(juego);
+  }
+
+  Future<ResultApi> updateCartonesEnJuego(
+      int idProgramacionJuego, String cartonesEnJuego) async {
+    var paramsq = {
+      'IdJuego': '$idProgramacionJuego',
+      'CartonesEnJuego': cartonesEnJuego
+    };
+
+    try {
+      data = await api.putData('juegos/cartonesenjuego', {}, paramsq: paramsq);
+    } catch (e) {
+      return ResultApi(
+          success: false, message: 'Error al actualizar Crtones en Juego');
+    }
+
+    respond = data['data'];
+    if (data['isSuccess']) {
+      return ResultApi(success: true, message: respond['message']);
+    } else {
+      return ResultApi(success: false, message: respond['message']);
+    }
   }
 }

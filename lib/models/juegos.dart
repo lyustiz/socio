@@ -25,6 +25,8 @@ class Juegos extends Table {
   TextColumn get permitirDevolucion => text()();
   TextColumn get estado => text()();
   DateTimeColumn get actualizado => dateTime().nullable()();
+  TextColumn get cartonesAleatorios => text()();
+  TextColumn get cartonesEnJuego => text()();
 
   String getNroJuego() {
     return '$idProgramacionJuego'.padLeft(3, '0');

@@ -29,6 +29,8 @@ class Juego extends DataClass implements Insertable<Juego> {
   final String permitirDevolucion;
   final String estado;
   final DateTime? actualizado;
+  final String cartonesAleatorios;
+  final String cartonesEnJuego;
   Juego(
       {required this.idProgramacionJuego,
       this.idJuego,
@@ -50,7 +52,9 @@ class Juego extends DataClass implements Insertable<Juego> {
       required this.previoCierre,
       required this.permitirDevolucion,
       required this.estado,
-      this.actualizado});
+      this.actualizado,
+      required this.cartonesAleatorios,
+      required this.cartonesEnJuego});
   factory Juego.fromData(Map<String, dynamic> data, {String? prefix}) {
     final effectivePrefix = prefix ?? '';
     return Juego(
@@ -96,6 +100,10 @@ class Juego extends DataClass implements Insertable<Juego> {
           .mapFromDatabaseResponse(data['${effectivePrefix}estado'])!,
       actualizado: const DateTimeType()
           .mapFromDatabaseResponse(data['${effectivePrefix}actualizado']),
+      cartonesAleatorios: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}cartones_aleatorios'])!,
+      cartonesEnJuego: const StringType().mapFromDatabaseResponse(
+          data['${effectivePrefix}cartones_en_juego'])!,
     );
   }
   @override
@@ -126,6 +134,8 @@ class Juego extends DataClass implements Insertable<Juego> {
     if (!nullToAbsent || actualizado != null) {
       map['actualizado'] = Variable<DateTime?>(actualizado);
     }
+    map['cartones_aleatorios'] = Variable<String>(cartonesAleatorios);
+    map['cartones_en_juego'] = Variable<String>(cartonesEnJuego);
     return map;
   }
 
@@ -156,6 +166,8 @@ class Juego extends DataClass implements Insertable<Juego> {
       actualizado: actualizado == null && nullToAbsent
           ? const Value.absent()
           : Value(actualizado),
+      cartonesAleatorios: Value(cartonesAleatorios),
+      cartonesEnJuego: Value(cartonesEnJuego),
     );
   }
 
@@ -186,6 +198,9 @@ class Juego extends DataClass implements Insertable<Juego> {
           serializer.fromJson<String>(json['permitirDevolucion']),
       estado: serializer.fromJson<String>(json['estado']),
       actualizado: serializer.fromJson<DateTime?>(json['actualizado']),
+      cartonesAleatorios:
+          serializer.fromJson<String>(json['cartonesAleatorios']),
+      cartonesEnJuego: serializer.fromJson<String>(json['cartonesEnJuego']),
     );
   }
   @override
@@ -213,6 +228,8 @@ class Juego extends DataClass implements Insertable<Juego> {
       'permitirDevolucion': serializer.toJson<String>(permitirDevolucion),
       'estado': serializer.toJson<String>(estado),
       'actualizado': serializer.toJson<DateTime?>(actualizado),
+      'cartonesAleatorios': serializer.toJson<String>(cartonesAleatorios),
+      'cartonesEnJuego': serializer.toJson<String>(cartonesEnJuego),
     };
   }
 
@@ -237,7 +254,9 @@ class Juego extends DataClass implements Insertable<Juego> {
           int? previoCierre,
           String? permitirDevolucion,
           String? estado,
-          DateTime? actualizado}) =>
+          DateTime? actualizado,
+          String? cartonesAleatorios,
+          String? cartonesEnJuego}) =>
       Juego(
         idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
         idJuego: idJuego ?? this.idJuego,
@@ -260,6 +279,8 @@ class Juego extends DataClass implements Insertable<Juego> {
         permitirDevolucion: permitirDevolucion ?? this.permitirDevolucion,
         estado: estado ?? this.estado,
         actualizado: actualizado ?? this.actualizado,
+        cartonesAleatorios: cartonesAleatorios ?? this.cartonesAleatorios,
+        cartonesEnJuego: cartonesEnJuego ?? this.cartonesEnJuego,
       );
   @override
   String toString() {
@@ -284,7 +305,9 @@ class Juego extends DataClass implements Insertable<Juego> {
           ..write('previoCierre: $previoCierre, ')
           ..write('permitirDevolucion: $permitirDevolucion, ')
           ..write('estado: $estado, ')
-          ..write('actualizado: $actualizado')
+          ..write('actualizado: $actualizado, ')
+          ..write('cartonesAleatorios: $cartonesAleatorios, ')
+          ..write('cartonesEnJuego: $cartonesEnJuego')
           ..write(')'))
         .toString();
   }
@@ -311,7 +334,9 @@ class Juego extends DataClass implements Insertable<Juego> {
         previoCierre,
         permitirDevolucion,
         estado,
-        actualizado
+        actualizado,
+        cartonesAleatorios,
+        cartonesEnJuego
       ]);
   @override
   bool operator ==(Object other) =>
@@ -337,7 +362,9 @@ class Juego extends DataClass implements Insertable<Juego> {
           other.previoCierre == this.previoCierre &&
           other.permitirDevolucion == this.permitirDevolucion &&
           other.estado == this.estado &&
-          other.actualizado == this.actualizado);
+          other.actualizado == this.actualizado &&
+          other.cartonesAleatorios == this.cartonesAleatorios &&
+          other.cartonesEnJuego == this.cartonesEnJuego);
 }
 
 class JuegosCompanion extends UpdateCompanion<Juego> {
@@ -362,6 +389,8 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
   final Value<String> permitirDevolucion;
   final Value<String> estado;
   final Value<DateTime?> actualizado;
+  final Value<String> cartonesAleatorios;
+  final Value<String> cartonesEnJuego;
   const JuegosCompanion({
     this.idProgramacionJuego = const Value.absent(),
     this.idJuego = const Value.absent(),
@@ -384,6 +413,8 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
     this.permitirDevolucion = const Value.absent(),
     this.estado = const Value.absent(),
     this.actualizado = const Value.absent(),
+    this.cartonesAleatorios = const Value.absent(),
+    this.cartonesEnJuego = const Value.absent(),
   });
   JuegosCompanion.insert({
     this.idProgramacionJuego = const Value.absent(),
@@ -407,6 +438,8 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
     required String permitirDevolucion,
     required String estado,
     this.actualizado = const Value.absent(),
+    required String cartonesAleatorios,
+    required String cartonesEnJuego,
   })  : tipoJuego = Value(tipoJuego),
         fechaProgramada = Value(fechaProgramada),
         moduloCartones = Value(moduloCartones),
@@ -424,7 +457,9 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
         horaCierre = Value(horaCierre),
         previoCierre = Value(previoCierre),
         permitirDevolucion = Value(permitirDevolucion),
-        estado = Value(estado);
+        estado = Value(estado),
+        cartonesAleatorios = Value(cartonesAleatorios),
+        cartonesEnJuego = Value(cartonesEnJuego);
   static Insertable<Juego> custom({
     Expression<int>? idProgramacionJuego,
     Expression<int?>? idJuego,
@@ -447,6 +482,8 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
     Expression<String>? permitirDevolucion,
     Expression<String>? estado,
     Expression<DateTime?>? actualizado,
+    Expression<String>? cartonesAleatorios,
+    Expression<String>? cartonesEnJuego,
   }) {
     return RawValuesInsertable({
       if (idProgramacionJuego != null)
@@ -471,6 +508,8 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
       if (permitirDevolucion != null) 'permitir_devolucion': permitirDevolucion,
       if (estado != null) 'estado': estado,
       if (actualizado != null) 'actualizado': actualizado,
+      if (cartonesAleatorios != null) 'cartones_aleatorios': cartonesAleatorios,
+      if (cartonesEnJuego != null) 'cartones_en_juego': cartonesEnJuego,
     });
   }
 
@@ -495,7 +534,9 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
       Value<int>? previoCierre,
       Value<String>? permitirDevolucion,
       Value<String>? estado,
-      Value<DateTime?>? actualizado}) {
+      Value<DateTime?>? actualizado,
+      Value<String>? cartonesAleatorios,
+      Value<String>? cartonesEnJuego}) {
     return JuegosCompanion(
       idProgramacionJuego: idProgramacionJuego ?? this.idProgramacionJuego,
       idJuego: idJuego ?? this.idJuego,
@@ -518,6 +559,8 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
       permitirDevolucion: permitirDevolucion ?? this.permitirDevolucion,
       estado: estado ?? this.estado,
       actualizado: actualizado ?? this.actualizado,
+      cartonesAleatorios: cartonesAleatorios ?? this.cartonesAleatorios,
+      cartonesEnJuego: cartonesEnJuego ?? this.cartonesEnJuego,
     );
   }
 
@@ -587,6 +630,12 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
     if (actualizado.present) {
       map['actualizado'] = Variable<DateTime?>(actualizado.value);
     }
+    if (cartonesAleatorios.present) {
+      map['cartones_aleatorios'] = Variable<String>(cartonesAleatorios.value);
+    }
+    if (cartonesEnJuego.present) {
+      map['cartones_en_juego'] = Variable<String>(cartonesEnJuego.value);
+    }
     return map;
   }
 
@@ -613,7 +662,9 @@ class JuegosCompanion extends UpdateCompanion<Juego> {
           ..write('previoCierre: $previoCierre, ')
           ..write('permitirDevolucion: $permitirDevolucion, ')
           ..write('estado: $estado, ')
-          ..write('actualizado: $actualizado')
+          ..write('actualizado: $actualizado, ')
+          ..write('cartonesAleatorios: $cartonesAleatorios, ')
+          ..write('cartonesEnJuego: $cartonesEnJuego')
           ..write(')'))
         .toString();
   }
@@ -723,6 +774,16 @@ class $JuegosTable extends Juegos with TableInfo<$JuegosTable, Juego> {
   late final GeneratedColumn<DateTime?> actualizado =
       GeneratedColumn<DateTime?>('actualizado', aliasedName, true,
           typeName: 'INTEGER', requiredDuringInsert: false);
+  final VerificationMeta _cartonesAleatoriosMeta =
+      const VerificationMeta('cartonesAleatorios');
+  late final GeneratedColumn<String?> cartonesAleatorios =
+      GeneratedColumn<String?>('cartones_aleatorios', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
+  final VerificationMeta _cartonesEnJuegoMeta =
+      const VerificationMeta('cartonesEnJuego');
+  late final GeneratedColumn<String?> cartonesEnJuego =
+      GeneratedColumn<String?>('cartones_en_juego', aliasedName, false,
+          typeName: 'TEXT', requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         idProgramacionJuego,
@@ -745,7 +806,9 @@ class $JuegosTable extends Juegos with TableInfo<$JuegosTable, Juego> {
         previoCierre,
         permitirDevolucion,
         estado,
-        actualizado
+        actualizado,
+        cartonesAleatorios,
+        cartonesEnJuego
       ];
   @override
   String get aliasedName => _alias ?? 'juegos';
@@ -905,6 +968,22 @@ class $JuegosTable extends Juegos with TableInfo<$JuegosTable, Juego> {
           _actualizadoMeta,
           actualizado.isAcceptableOrUnknown(
               data['actualizado']!, _actualizadoMeta));
+    }
+    if (data.containsKey('cartones_aleatorios')) {
+      context.handle(
+          _cartonesAleatoriosMeta,
+          cartonesAleatorios.isAcceptableOrUnknown(
+              data['cartones_aleatorios']!, _cartonesAleatoriosMeta));
+    } else if (isInserting) {
+      context.missing(_cartonesAleatoriosMeta);
+    }
+    if (data.containsKey('cartones_en_juego')) {
+      context.handle(
+          _cartonesEnJuegoMeta,
+          cartonesEnJuego.isAcceptableOrUnknown(
+              data['cartones_en_juego']!, _cartonesEnJuegoMeta));
+    } else if (isInserting) {
+      context.missing(_cartonesEnJuegoMeta);
     }
     return context;
   }

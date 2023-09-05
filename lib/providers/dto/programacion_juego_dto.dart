@@ -1,6 +1,3 @@
-import 'package:socio/utils/db/db_manager.dart';
-import 'package:socio/utils/db/json_serializer.dart';
-
 class ProgramacionJuegoDto {
   final int idProgramacionJuego;
   final String fechaProgramada;
@@ -16,6 +13,8 @@ class ProgramacionJuegoDto {
   final int hojaFinal;
   final int resultadoFinal;
   final String estado;
+  final String cartonesAleatorios;
+  final String cartonesEnJuego;
 
   ProgramacionJuegoDto(
       {required this.idProgramacionJuego,
@@ -31,5 +30,7 @@ class ProgramacionJuegoDto {
       required this.hojaInicial,
       required this.hojaFinal,
       required this.resultadoFinal,
-      required this.estado});
+      required this.estado,
+      required this.cartonesAleatorios,
+      required this.cartonesEnJuego});
 }

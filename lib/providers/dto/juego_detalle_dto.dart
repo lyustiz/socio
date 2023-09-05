@@ -30,6 +30,8 @@ class JuegoDetalleDto {
   final int modulosAsignados;
   final int modulosVendidos;
   final int numeroVendedores;
+  final String cartonesAleatorios;
+  final String cartonesEnJuego;
   final List<Figura> figuras;
   final ConfiguracionDto? configuracion;
   final List<ProgramacionJuegoDto> programacionesJuego;
@@ -59,6 +61,8 @@ class JuegoDetalleDto {
     required this.modulosAsignados,
     required this.modulosVendidos,
     required this.numeroVendedores,
+    required this.cartonesAleatorios,
+    required this.cartonesEnJuego,
     required this.figuras,
     this.configuracion,
     required this.programacionesJuego,
@@ -108,7 +112,9 @@ class JuegoDetalleDto {
             hojaInicial: pjuego['hojaInicial'],
             hojaFinal: pjuego['hojaFinal'],
             resultadoFinal: pjuego['resultadoFinal'],
-            estado: pjuego['estado']);
+            estado: pjuego['estado'],
+            cartonesAleatorios: pjuego['cartonesAleatorios'],
+            cartonesEnJuego: pjuego['cartonesEnJuego']);
         listProgramacionJuego.add(addProgramacion);
       }
     }
@@ -156,6 +162,9 @@ class JuegoDetalleDto {
       modulosAsignados: serializer.fromJson<int>(json['modulosAsignados']),
       modulosVendidos: serializer.fromJson<int>(json['modulosVendidos']),
       numeroVendedores: serializer.fromJson<int>(json['numeroVendedores']),
+      cartonesAleatorios:
+          serializer.fromJson<String>(json['cartonesAleatorios']),
+      cartonesEnJuego: serializer.fromJson<String>(json['cartonesEnJuego']),
       figuras: listFiguras,
       configuracion: configDTO,
       programacionesJuego: listProgramacionJuego,
@@ -167,26 +176,27 @@ class JuegoDetalleDto {
     bool hasConfig = juegoDTO.configuracion is ConfiguracionDto;
 
     Juego juego = Juego(
-      idProgramacionJuego: juegoDTO.idProgramacionJuego,
-      tipoJuego: juegoDTO.tipoJuego,
-      fechaProgramada: DateTime.parse(juegoDTO.fechaProgramada),
-      moduloCartones: juegoDTO.moduloCartones,
-      moneda: juegoDTO.moneda,
-      valorCarton: juegoDTO.valorCarton,
-      totalCartones: juegoDTO.totalCartones,
-      valorModulo: juegoDTO.valorModulo,
-      totalModulos: juegoDTO.totalModulos,
-      totalPremios: juegoDTO.totalPremios,
-      serie: juegoDTO.serie,
-      cartonInicial: juegoDTO.cartonInicial,
-      cartonFinal: juegoDTO.cartonFinal,
-      hojaInicial: juegoDTO.hojaInicial,
-      hojaFinal: juegoDTO.hojaFinal,
-      horaCierre: DateTime.parse(juegoDTO.horaCierre),
-      previoCierre: juegoDTO.previoCierre,
-      permitirDevolucion: juegoDTO.permitirDevolucion,
-      estado: juegoDTO.estado,
-    );
+        idProgramacionJuego: juegoDTO.idProgramacionJuego,
+        tipoJuego: juegoDTO.tipoJuego,
+        fechaProgramada: DateTime.parse(juegoDTO.fechaProgramada),
+        moduloCartones: juegoDTO.moduloCartones,
+        moneda: juegoDTO.moneda,
+        valorCarton: juegoDTO.valorCarton,
+        totalCartones: juegoDTO.totalCartones,
+        valorModulo: juegoDTO.valorModulo,
+        totalModulos: juegoDTO.totalModulos,
+        totalPremios: juegoDTO.totalPremios,
+        serie: juegoDTO.serie,
+        cartonInicial: juegoDTO.cartonInicial,
+        cartonFinal: juegoDTO.cartonFinal,
+        hojaInicial: juegoDTO.hojaInicial,
+        hojaFinal: juegoDTO.hojaFinal,
+        horaCierre: DateTime.parse(juegoDTO.horaCierre),
+        previoCierre: juegoDTO.previoCierre,
+        permitirDevolucion: juegoDTO.permitirDevolucion,
+        estado: juegoDTO.estado,
+        cartonesAleatorios: juegoDTO.cartonesAleatorios,
+        cartonesEnJuego: juegoDTO.cartonesEnJuego);
 
     List<Figura> listFiguras = [];
 
@@ -222,7 +232,9 @@ class JuegoDetalleDto {
           hojaInicial: pjuego.hojaInicial,
           hojaFinal: pjuego.hojaFinal,
           resultadoFinal: pjuego.resultadoFinal,
-          estado: pjuego.estado);
+          estado: pjuego.estado,
+          cartonesAleatorios: pjuego.cartonesAleatorios,
+          cartonesEnJuego: pjuego.cartonesAleatorios);
       listProgramacionJuego.add(addProgramacion);
     }
 

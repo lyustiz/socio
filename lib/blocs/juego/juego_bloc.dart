@@ -1,3 +1,4 @@
+import 'package:socio/providers/api.dart';
 import 'package:socio/utils/db/db_manager.dart';
 import 'package:socio/repository/juego_repository.dart';
 import 'package:socio/utils/db/db_init.dart';
@@ -18,11 +19,15 @@ class JuegoBloc extends Bloc<JuegoEvent, JuegoState> {
     on<InsertJuego>((event, emit) => _onInsertJuego(event, emit));
     on<DeleteJuego>((event, emit) => _onDeleteJuego(event, emit));
     on<SelectJuego>((event, emit) => _onSelectJuego(event, emit));
+    on<SetJuego>((event, emit) => _onSetJuego(event, emit));
+    on<UpdateCartonesJuego>(
+        (event, emit) => _onUpdateCartonesJuego(event, emit));
   }
 
   void _onGetJuego(event, emit) async {
     emit(JuegoLoading());
-    final Juego juego = await rep.selectJuego(event.juego);
+    final JuegosWithConfiguracion juego =
+        await rep.selectJuego(event.juego, event.idjuego);
     emit(JuegoLoaded(juego));
   }
 
@@ -30,7 +35,6 @@ class JuegoBloc extends Bloc<JuegoEvent, JuegoState> {
     emit(JuegoLoading());
     final List<JuegosWithConfiguracion> juegosPremios =
         await rep.getAllJuegos(event.estado);
-    //   await db<AppDatabase>().allJuegosWithConfiguracion(event.estado);
     emit(JuegosLoaded(juegosPremios));
   }
 
@@ -62,8 +66,19 @@ class JuegoBloc extends Bloc<JuegoEvent, JuegoState> {
     emit(JuegoSelected(event.juego));
   }
 
-  void _onClearJuego(event, emit) async {
-    final List<JuegosWithConfiguracion> juegos = [];
-    emit(JuegosLoaded(juegos));
+  void _onSetJuego(event, emit) async {
+    emit(JuegoSelected(event.juego));
+  }
+
+  void _onUpdateCartonesJuego(event, emit) async {
+    emit(JuegoLoading());
+    ResultApi result = await rep.updateCartonesEnJuego(
+        event.idProgramacionJuego, event.cartonesEnJuego);
+
+    if (result.success) {
+      emit(JuegoExito(result.message));
+    } else {
+      emit(JuegoError(result.message));
+    }
   }
 }

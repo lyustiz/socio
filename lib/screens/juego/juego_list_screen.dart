@@ -28,7 +28,7 @@ class JuegoListScreen extends StatelessWidget {
     juegoBlock.add(GetAllJuego(''));
 
     if (authState is AuthLogged) {
-      hasYapa = false; //authState.usuario.activarYapa;
+      hasYapa = authState.usuario.activarYapa;
     }
 
     return BlocBuilder<JuegoBloc, JuegoState>(
@@ -98,6 +98,14 @@ class JuegoListScreen extends StatelessWidget {
                 navigateTo(context, 'yapas');
               }
               break;
+            case 'cartones_en_juego':
+              if (isClose) {
+                ScaffoldMessenger.of(context).showSnackBar(Msg.appMessage(
+                    context, 'error', 'El Juego ya ha sido Jugado'));
+              } else {
+                navigateTo(context, 'cartones_en_juego');
+              }
+              break;
             case 'auditoria_acumulado':
               navigateTo(context, 'auditoria_acumulado');
               break;
@@ -155,6 +163,14 @@ class JuegoListScreen extends StatelessWidget {
                         dense: true,
                       )
                     : const Divider(),
+              ),
+              const PopupMenuItem(
+                value: 'cartones_en_juego',
+                child: ListTile(
+                  title: Text('Cartones en Juego'), //Configurar Figuras
+                  leading: Icon(Icons.add_to_photos),
+                  dense: true,
+                ),
               ),
               const PopupMenuItem(
                 value: 'auditoria_acumulado',

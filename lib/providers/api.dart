@@ -66,9 +66,10 @@ class Api {
   }
 
   Future<Map<String, dynamic>> putData(
-      String endPoint, Map<String, dynamic> params) async {
+      String endPoint, Map<String, dynamic> params,
+      {Map<String, dynamic>? paramsq}) async {
     baseUrl = await getBaseUrl();
-    url = Uri.https(baseUrl, prefix + endPoint);
+    url = Uri.https(baseUrl, prefix + endPoint, paramsq);
 
     headers['Authorization'] = '${await getToken()}';
 

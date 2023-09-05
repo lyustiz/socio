@@ -34,7 +34,9 @@ class ItemsState extends Equatable {
             horaCierre: DateTime.now(),
             previoCierre: 0,
             permitirDevolucion: 'N',
-            estado: 'C'),
+            estado: 'C',
+            cartonesAleatorios: 'N',
+            cartonesEnJuego: 'A'),
         configuracion: null);
 
     return ItemsState(

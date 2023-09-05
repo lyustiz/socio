@@ -228,6 +228,8 @@ class ProgramacionJuego {
   final int hojaFinal;
   final int resultadoFinal;
   final String estado;
+  final String cartonesAleatorios;
+  final String cartonesEnJuego;
 
   ProgramacionJuego(
       {required this.idProgramacionJuego,
@@ -243,7 +245,9 @@ class ProgramacionJuego {
       required this.hojaInicial,
       required this.hojaFinal,
       required this.resultadoFinal,
-      required this.estado});
+      required this.estado,
+      required this.cartonesAleatorios,
+      required this.cartonesEnJuego});
 }
 
 class Estadistica {
