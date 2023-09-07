@@ -88,12 +88,14 @@ class Api {
   Future<Map<String, dynamic>> deleteData(
       String endPoint, Map<String, dynamic> params) async {
     baseUrl = await getBaseUrl();
-    url = Uri.https(baseUrl, endPoint);
+    url = Uri.https(baseUrl, prefix + endPoint);
 
     headers['Authorization'] = '${await getToken()}';
 
+    var body = convert.jsonEncode(params);
+
     response = await http
-        .delete(url, headers: headers)
+        .delete(url, body: body, headers: headers)
         .timeout(Duration(seconds: timeOut))
         .catchError((e) {
       errorHandler(e);

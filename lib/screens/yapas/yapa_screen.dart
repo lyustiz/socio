@@ -100,6 +100,7 @@ class YapaScreen extends StatelessWidget {
     List<Widget> itemsYapas = [];
 
     itemsYapas.add(Container(
+        width: double.infinity,
         margin: EdgeInsets.only(bottom: 2),
         child: const Text(
           'Administar Yapas',
@@ -108,7 +109,7 @@ class YapaScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         )));
-
+    itemsYapas.add(const SizedBox(height: 10));
     for (var yapa in yapas) {
       var item = Container(
         margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
@@ -211,7 +212,7 @@ class YapaScreen extends StatelessWidget {
         ),
       ),
       Container(
-        margin: EdgeInsets.only(top: 15, bottom: 15),
+        margin: const EdgeInsets.only(top: 15, bottom: 15),
         child: Text(
           'Cartones desde ${juego.cartonInicial} hasta ${juego.cartonFinal}',
           style: const TextStyle(color: Colors.amber, fontSize: 14),

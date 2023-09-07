@@ -37,7 +37,13 @@ class YapaForm extends StatelessWidget {
       child: BlocBuilder<YapaBloc, YapaState>(buildWhen: (previous, current) {
         if (current is YapaExito) {
           ScaffoldMessenger.of(context).showSnackBar(
-              msg.appMessage(context, 'success', 'Yapa Actualizada'));
+              msg.appMessage(context, 'success', current.mensaje));
+          navigateTo(context, 'yapas');
+          return false;
+        }
+        if (current is YapaError) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(msg.appMessage(context, 'error', current.mensaje));
           navigateTo(context, 'yapas');
           return false;
         }
@@ -167,40 +173,15 @@ class YapaForm extends StatelessWidget {
                               height: 10,
                             ),
                             SizedBox(
-                                height: (state is YapaLoading) ? 30 : 0,
+                                height: (state is YapaLoading) ? 25 : 25,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: (state is YapaLoading)
                                       ? const LinearProgressIndicator()
                                       : null,
                                 )),
-                            SizedBox(
-                                height: (state is YapaError) ? 35 : 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: (state is YapaError)
-                                      ? Text(
-                                          state.mensaje,
-                                          style: const TextStyle(
-                                              color: Colors.red),
-                                        )
-                                      : null,
-                                )),
-                            SizedBox(
-                                height: (state is YapaExito) ? 35 : 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: (state is YapaExito)
-                                      ? Text(
-                                          state.mensaje,
-                                          style: const TextStyle(
-                                              color: Colors.green),
-                                        )
-                                      : null,
-                                )),
-                            const SizedBox(height: 05),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 FloatingActionButton(
                                     onPressed: () {
@@ -217,16 +198,35 @@ class YapaForm extends StatelessWidget {
                                     shape: const CircleBorder(
                                         side: BorderSide(
                                             color: Colors.white, width: 2))),
+                                (hasYapa)
+                                    ? FloatingActionButton(
+                                        onPressed: () => (state is YapaLoading)
+                                            ? null
+                                            : hasYapa
+                                                ? delConfirm(context,
+                                                    context.read<YapaBloc>())
+                                                : null,
+                                        child: const Icon(
+                                          Icons.delete,
+                                          size: 36,
+                                        ),
+                                        backgroundColor: Colors.red,
+                                        heroTag: '5',
+                                        elevation: 0,
+                                        shape: const CircleBorder(
+                                            side: BorderSide(
+                                                color: Colors.white, width: 2)))
+                                    : const SizedBox(width: 40),
                                 FloatingActionButton(
                                     onPressed: () => (state is YapaLoading)
                                         ? null
                                         : onCancel(context),
                                     child: const Icon(
-                                      Icons.close,
+                                      Icons.reply,
                                       size: 36,
                                     ),
-                                    backgroundColor: Colors.red,
-                                    heroTag: '5',
+                                    backgroundColor: Colors.amber,
+                                    heroTag: '6',
                                     elevation: 0,
                                     shape: const CircleBorder(
                                         side: BorderSide(
@@ -287,6 +287,25 @@ class YapaForm extends StatelessWidget {
     }
   }
 
+  void delConfirm(BuildContext context, YapaBloc yapaBloc) async {
+    bool isConfirm = false;
+
+    final String title =
+        'Eliminar Yapa del Juego ${juego.idProgramacionJuego.toString().padLeft(3, '0')}?';
+
+    List<Widget> content = [
+      ListTile(title: const Text('Nombre Yapa'), subtitle: Text(yapa.nombre)),
+    ];
+
+    await dlg
+        .appDialog(context, title, content, action: 'Confirmar')
+        .then((value) => isConfirm = value ?? false);
+
+    if (isConfirm) {
+      onDelete(context, yapaBloc);
+    }
+  }
+
   void onSave(BuildContext context, YapaBloc yapaBloc,
       FormBuilderState formStatus) async {
     DateTime actualizado = DateTime.now();
@@ -326,6 +345,23 @@ class YapaForm extends StatelessWidget {
     );
 
     yapaBloc.add(UpdateYapa(updYapa));
+  }
+
+  void onDelete(BuildContext context, YapaBloc yapaBloc) async {
+    YapaDto delYapa = YapaDto(
+      idYapa: yapa.idYapa,
+      idProgramacionJuego: juego.idProgramacionJuego,
+      nombre: yapa.nombre,
+      carton: yapa.carton,
+      valorPremio: yapa.valorPremio,
+      orden: yapa.orden,
+      aleatorio: yapa.aleatorio,
+      estado: 'A',
+      fechaAjuste: yapa.fechaAjuste,
+      idUsuario: 1,
+    );
+
+    yapaBloc.add(DeleteYapa(delYapa));
   }
 
   void onCancel(BuildContext context) {

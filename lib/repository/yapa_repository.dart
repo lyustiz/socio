@@ -51,7 +51,7 @@ class YapaRepository {
     if (data['isSuccess']) {
       return ResultApi(success: true, message: respond['message']);
     } else {
-      return ResultApi(success: false, message: 'Error al crear yapa');
+      return ResultApi(success: false, message: respond['message']);
     }
   }
 
@@ -62,11 +62,11 @@ class YapaRepository {
       return ResultApi(success: false, message: 'Error al eliminar yapa');
     }
 
+    respond = data['data'];
     if (data['isSuccess']) {
-      respond = data['data'];
       return ResultApi(success: true, message: respond['message']);
     } else {
-      return ResultApi(success: false, message: 'Error al eliminar yapa');
+      return ResultApi(success: false, message: respond['message']);
     }
   }
 }
