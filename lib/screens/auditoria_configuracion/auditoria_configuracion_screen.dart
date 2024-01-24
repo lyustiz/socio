@@ -83,7 +83,9 @@ class AuditoriaConfiguracionScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: DataTable(columns: const [
                 DataColumn(label: Text('Carton')),
+                DataColumn(label: Text('CartonDual')),
                 DataColumn(label: Text('Balota')),
+                DataColumn(label: Text('Multiple')),
                 DataColumn(label: Text('Usuario')),
                 DataColumn(label: Text('Fecha')),
               ], rows: [
@@ -91,8 +93,13 @@ class AuditoriaConfiguracionScreen extends StatelessWidget {
                   return DataRow(cells: [
                     DataCell(
                         Text('${row.cartonAnterior} -> ${row.cartonNuevo}')),
+                    DataCell(Text(formatValorDual(row.dualAnterior) +
+                        ' -> ' +
+                        formatValorDual(row.dualNuevo))),
                     DataCell(
                         Text('${row.balotaAnterior} -> ${row.balotaNuevo}')),
+                    DataCell(Text(
+                        '${row.multipleAnterior} -> ${row.multipleNuevo}')),
                     DataCell(Text(row.usuario)),
                     DataCell(Text(Fd.formatDateTime(row.fechaAuditoria))),
                   ]);
@@ -101,5 +108,9 @@ class AuditoriaConfiguracionScreen extends StatelessWidget {
             ),
           ))
         ]));
+  }
+
+  String formatValorDual(int valorDual) {
+    return (valorDual == 0) ? 'N' : '$valorDual';
   }
 }

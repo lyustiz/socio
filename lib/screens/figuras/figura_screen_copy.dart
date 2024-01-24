@@ -16,10 +16,8 @@ import 'package:socio/utils/format/format_data.dart' as Fd;
 import 'package:socio/widgets/layout/app_dialog.dart' as Dlg;
 import 'package:socio/widgets/layout/app_message.dart' as Msg;
 
-import 'figura_form.dart';
-
-class FiguraScreen extends StatelessWidget {
-  const FiguraScreen({Key? key}) : super(key: key);
+class FiguraScreenx extends StatelessWidget {
+  const FiguraScreenx({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +96,7 @@ class FiguraScreen extends StatelessWidget {
     List<Widget> itemsFiguras = [];
 
     itemsFiguras.add(Container(
-        margin: const EdgeInsets.only(bottom: 2),
+        margin: EdgeInsets.only(bottom: 2),
         child: const Text(
           'Acumular Figuras',
           style: TextStyle(
@@ -154,7 +152,7 @@ class FiguraScreen extends StatelessWidget {
                 ],
               ),
               trailing: Switch(
-                value: figura.acumula == 'S' || figura.multiple == 'S',
+                value: figura.acumula == 'S',
                 onChanged: (value) {
                   confirm(context, juego, figura, value, figuraBlock);
                 },
@@ -240,11 +238,158 @@ class FiguraScreen extends StatelessWidget {
     bool active,
     FiguraBloc figuraBlock,
   ) async {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => FiguraForm(figuraDto: figura),
+    bool continuar = await advertencia(context, figura, active);
+
+    if (!continuar) return;
+
+    String mensaje = active ? ', se Acumule? ' : ', "NO" se Acumule? ';
+
+    bool isMultiple = figura.multiple == 'S';
+
+    final _formKey = GlobalKey<FormBuilderState>();
+
+    List<Widget> content = [
+      const SizedBox(height: 20),
+      RichText(
+        text: TextSpan(
+          text: 'Desea que la figura: ',
+          children: <TextSpan>[
+            TextSpan(
+                text: figura.nombre.toUpperCase(),
+                style: const TextStyle(color: Colors.amber)),
+            TextSpan(
+                text: mensaje,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+          ],
+        ),
       ),
-    );
+      Container(
+        margin: const EdgeInsets.only(top: 15, bottom: 15),
+        child: Text(
+          'Cartones desde ${juego.cartonInicial} hasta ${juego.cartonFinal}',
+          style: const TextStyle(color: Colors.amber, fontSize: 14),
+        ),
+      ),
+      (!active)
+          ? const SizedBox(height: 20)
+          : FormBuilder(
+              key: _formKey,
+              child: FormBuilderTextField(
+                  name: 'carton',
+                  initialValue:
+                      figura.carton > 0 ? figura.carton.toString() : '',
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: false, decimal: false),
+                  autovalidateMode: AutovalidateMode.always,
+                  decoration: InputDecoration(
+                      labelText: 'Carton Asignado',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      filled: true,
+                      isDense: true,
+                      suffixIcon: const Icon(Icons.table_view)),
+                  validator: FormBuilderValidators.compose([
+                    FormBuilderValidators.required(context,
+                        errorText: 'El carton es requerido'),
+                    FormBuilderValidators.integer(context,
+                        errorText: 'indicar Solo numeros'),
+                    FormBuilderValidators.min(
+                        context, isMultiple ? juego.cartonInicial : 0,
+                        errorText:
+                            'Debe ser ${isMultiple ? juego.cartonInicial : 0} o superior'),
+                    FormBuilderValidators.max(context, juego.cartonFinal,
+                        errorText: 'No debe ser mayor de ${juego.cartonFinal}'),
+                    (val) {
+                      final number = int.parse(val ?? '0');
+                      if (number == 0) return null;
+                      return null;
+                    }
+                  ])),
+            ),
+      (!active)
+          ? const SizedBox(height: 20)
+          : Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(5)),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Ganador Multiple',
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                  Switch(
+                    value: isMultiple,
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    inactiveTrackColor: Colors.blue[50],
+                    onChanged: (value) {
+                      FiguraDto newfigura;
+                      var form = _formKey.currentState;
+                      if (isMultiple) {
+                        isMultiple = false;
+                        newfigura = figura.copyWith(multiple: 'N');
+                      } else {
+                        isMultiple = true;
+                        newfigura = figura.copyWith(multiple: 'S');
+                      }
+                      form!.validate();
+
+                      //context.read<FiguraBloc>().on(SetFigura(newfigura));
+                    },
+                  ),
+                ],
+              ),
+            ),
+      const SizedBox(height: 4),
+      (!active)
+          ? const SizedBox(height: 5)
+          : const Text('Cero (0) selecciona un carton aleatorio no vendido',
+              style: TextStyle(color: Colors.amber)),
+    ];
+
+    bool? isConfirm = await Dlg.appDialog(context, 'Acumular Figura?', content,
+        action: 'Confirmar');
+
+    if (active) {
+      final FormBuilderState? formStatus = _formKey.currentState;
+      if (isConfirm ?? false) {
+        if (formStatus != null) {
+          formStatus.save();
+          if (formStatus.validate()) {
+            int carton = int.parse(formStatus.value['carton']);
+            setAcumula(context, juego, figura, active, carton, figuraBlock);
+          }
+        } else {
+          Msg.appMessage(context, 'info', 'Debe asignar un carton');
+        }
+      }
+    } else {
+      if (isConfirm ?? false) {
+        setAcumula(context, juego, figura, active, 0, figuraBlock);
+      }
+    }
+  }
+
+  void setAcumula(
+    BuildContext context,
+    Juego juego,
+    FiguraDto figura,
+    bool active,
+    int carton,
+    FiguraBloc figuraBlock,
+  ) {
+    FiguraDto updFigura = FiguraDto(
+        idFigura: figura.idFigura,
+        idPlenoAutomatico: figura.idPlenoAutomatico,
+        nombre: figura.nombre,
+        posiciones: figura.posiciones,
+        estado: figura.estado,
+        valorPremio: figura.valorPremio,
+        acumula: active ? 'S' : 'N',
+        multiple: 'N',
+        carton: active ? carton : 0);
+
+    figuraBlock.add(UpdateFigura(updFigura, juego.idProgramacionJuego));
   }
 }

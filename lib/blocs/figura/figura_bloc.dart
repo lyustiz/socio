@@ -17,6 +17,7 @@ class FiguraBloc extends Bloc<FiguraEvent, FiguraState> {
     on<UpdateFigura>((event, emit) => _onUpdateFigura(event, emit));
     on<UpdateFiguraMultiple>(
         (event, emit) => _onUpdateFiguraMultiple(event, emit));
+    on<SetFigura>((event, emit) => _onSetFigura(event, emit));
   }
 
   void _onGetFigura(event, emit) async {
@@ -60,5 +61,9 @@ class FiguraBloc extends Bloc<FiguraEvent, FiguraState> {
         await rep.selectfiguras(event.idProgramacionJuego);
     Future.delayed(const Duration(milliseconds: 800), () {});
     emit(FigurasLoaded(figuras));
+  }
+
+  void _onSetFigura(event, emit) async {
+    emit(FiguraLoaded(event.figura));
   }
 }

@@ -43,6 +43,18 @@ class UpdateFigura extends FiguraEvent {
   String toString() => 'UpdateFigura';
 }
 
+class SetFigura extends FiguraEvent {
+  final FiguraDto figura;
+
+  const SetFigura(this.figura);
+
+  @override
+  List<Object> get props => [figura];
+
+  @override
+  String toString() => 'SetFigura';
+}
+
 class UpdateFiguraMultiple extends FiguraEvent {
   final FiguraDto figura;
   final int idProgramacionJuego;

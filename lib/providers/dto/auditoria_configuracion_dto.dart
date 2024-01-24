@@ -13,8 +13,12 @@ class AuditoriaConfiguracionDto {
   final int cartonNuevo;
   final int balotaAnterior;
   final int balotaNuevo;
+  final int dualAnterior;
+  final int dualNuevo;
   final String clienteAnterior;
   final String clienteNuevo;
+  final String multipleAnterior;
+  final String multipleNuevo;
 
   AuditoriaConfiguracionDto({
     required this.idAuditoria,
@@ -29,8 +33,12 @@ class AuditoriaConfiguracionDto {
     required this.cartonNuevo,
     required this.balotaAnterior,
     required this.balotaNuevo,
+    required this.dualAnterior,
+    required this.dualNuevo,
     required this.clienteAnterior,
     required this.clienteNuevo,
+    required this.multipleAnterior,
+    required this.multipleNuevo,
   });
 
   factory AuditoriaConfiguracionDto.fromJson(Map<String, dynamic> json) {
@@ -48,10 +56,14 @@ class AuditoriaConfiguracionDto {
       complemento: serializer.fromJson<String>(json['complemento']),
       cartonAnterior: serializer.fromJson<int>(json['cartonAnterior']),
       cartonNuevo: serializer.fromJson<int>(json['cartonNuevo']),
+      dualAnterior: serializer.fromJson<int>(json['dualAnterior']),
+      dualNuevo: serializer.fromJson<int>(json['dualNuevo']),
       balotaAnterior: serializer.fromJson<int>(json['balotaAnterior']),
       balotaNuevo: serializer.fromJson<int>(json['balotaNuevo']),
       clienteAnterior: serializer.fromJson<String>(json['clienteAnterior']),
       clienteNuevo: serializer.fromJson<String>(json['clienteNuevo']),
+      multipleAnterior: serializer.fromJson<String>(json['multipleAnterior']),
+      multipleNuevo: serializer.fromJson<String>(json['multipleNuevo']),
     );
   }
 }

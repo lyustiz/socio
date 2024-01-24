@@ -107,4 +107,29 @@ class FiguraDto {
       idUsuario: idUsuario,
     );
   }
+
+  FiguraDto copyWith(
+          {int? idFigura,
+          int? idPlenoAutomatico,
+          String? nombre,
+          String? posiciones,
+          String? estado,
+          double? valorPremio,
+          String? acumula,
+          String? multiple,
+          int? carton,
+          DateTime? fechaAjuste,
+          int? idUsuario}) =>
+      FiguraDto(
+          idFigura: idFigura ?? this.idFigura,
+          idPlenoAutomatico: idPlenoAutomatico ?? this.idPlenoAutomatico,
+          nombre: nombre ?? this.nombre,
+          posiciones: posiciones ?? this.posiciones,
+          estado: estado ?? this.estado,
+          valorPremio: valorPremio ?? this.valorPremio,
+          acumula: acumula ?? this.acumula,
+          multiple: multiple ?? this.multiple,
+          carton: carton ?? this.carton,
+          fechaAjuste: fechaAjuste ?? this.fechaAjuste,
+          idUsuario: idUsuario ?? this.idUsuario);
 }

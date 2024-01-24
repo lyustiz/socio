@@ -81,7 +81,8 @@ class AuditoriaAcumuladoScreen extends StatelessWidget {
               scrollDirection: Axis.horizontal,
               child: DataTable(columns: const [
                 DataColumn(label: Text('Figura')),
-                DataColumn(label: Text('Acumula')),
+                DataColumn(label: Text('Acum')),
+                DataColumn(label: Text('Mult')),
                 DataColumn(label: Text('Carton')),
                 DataColumn(label: Text('Usuario')),
                 DataColumn(label: Text('Fecha')),
@@ -90,6 +91,7 @@ class AuditoriaAcumuladoScreen extends StatelessWidget {
                   return DataRow(cells: [
                     DataCell(Text(row.figura)),
                     DataCell(Text(row.acumula)),
+                    DataCell(Text(row.multiple)),
                     DataCell(
                         Text('${row.cartonAnterior} -> ${row.cartonNuevo}')),
                     DataCell(Text(row.usuario)),

@@ -113,6 +113,14 @@ class InformeJuegoScreen extends StatelessWidget {
     double totalGastos = informe.totalGastos;
     double resultadoGeneral = informe.resultadoGeneral;
 
+    Map<String, String> tcartonesJuego = {
+      'A': 'Asignados',
+      'T': 'Todos',
+      'V': 'Vendidos',
+    };
+
+    String cartonesEnJuego = tcartonesJuego[juego.cartonesEnJuego]!;
+
     return AppContainer(
       variant: 'secondary',
       child: Column(
@@ -134,6 +142,7 @@ class InformeJuegoScreen extends StatelessWidget {
                   title: 'Cartones',
                   text:
                       'Desde: ${informe.cartonInicial} al ${informe.cartonFinal}'),
+              AppInfoList(title: 'Cartones en Juego', text: cartonesEnJuego),
               AppInfoList(
                   title: 'Total Cartones', text: '${informe.totalCartones}'),
               AppInfoList(

@@ -33,15 +33,15 @@ class FigurasLoaded extends FiguraState {
 }
 
 class FiguraLoaded extends FiguraState {
-  final FiguraDto figuras;
+  final FiguraDto figura;
 
-  const FiguraLoaded(this.figuras);
-
-  @override
-  List<Object> get props => [figuras];
+  const FiguraLoaded(this.figura);
 
   @override
-  String toString() => 'FiguraLoaded { configuracions: $figuras }';
+  List<Object> get props => [figura];
+
+  @override
+  String toString() => 'FiguraLoaded { configuracions: $figura }';
 }
 
 class FiguraSelected extends FiguraState {

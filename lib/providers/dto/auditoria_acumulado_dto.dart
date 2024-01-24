@@ -14,6 +14,7 @@ class AuditoriaAcumuladoDto {
   final int cartonAnterior;
   final int cartonNuevo;
   final String acumula;
+  final String multiple;
 
   AuditoriaAcumuladoDto(
       {required this.idAuditoria,
@@ -28,7 +29,8 @@ class AuditoriaAcumuladoDto {
       required this.figura,
       required this.cartonAnterior,
       required this.cartonNuevo,
-      required this.acumula});
+      required this.acumula,
+      required this.multiple});
 
   factory AuditoriaAcumuladoDto.fromJson(Map<String, dynamic> json) {
     var serializer = const JsonSerializer();
@@ -48,6 +50,7 @@ class AuditoriaAcumuladoDto {
       cartonAnterior: serializer.fromJson<int>(json['cartonAnterior']),
       cartonNuevo: serializer.fromJson<int>(json['cartonNuevo']),
       acumula: serializer.fromJson<String>(json['acumula']),
+      multiple: serializer.fromJson<String>(json['multiple']),
     );
   }
 }

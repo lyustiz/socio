@@ -34,4 +34,8 @@ List<EndPoint> endpoints = [
   EndPoint(12525, 'Villamil', 'apivillamil.sistemasyayudas.online'),
   EndPoint(12626, 'Camilo', 'apicamilo.sistemasyayudas.online'),
   EndPoint(12727, 'Girardota', 'apigirardota.sistemasyayudas.online'),
+  EndPoint(
+      12828, 'GranSort. Fam', 'apigransorteofamiliar.sistemasyayudas.online'),
+  EndPoint(12929, 'Zarzal', 'apizarzal.sistemasyayudas.online'),
+  EndPoint(13030, 'Santa Rosa', 'apisantarosa.sistemasyayudas.online'),
 ];
