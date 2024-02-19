@@ -24,6 +24,7 @@ class FiguraForm extends StatelessWidget {
   late Juego juego;
   late FiguraDto figura;
   late bool configurado;
+  late bool isDual = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class FiguraForm extends StatelessWidget {
     juego = juegoConfiguracion.juego;
     configurado = figuraDto.acumula == 'S' || figuraDto.multiple == 'S';
     bool isMultiple = figuraDto.multiple == 'S';
+    isDual = (figuraDto.cartonDual ?? 0) > 0;
     figura = figuraDto;
 
     return BlocProvider(
@@ -139,46 +141,150 @@ class FiguraForm extends StatelessWidget {
                             }
                           ])),
                     ),
-                    Container(
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.circular(5)),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            'Ganador Multiple',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
-                          ),
-                          Switch(
-                            value: isMultiple,
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            inactiveTrackColor: Colors.blue[50],
-                            onChanged: (value) {
-                              FiguraDto newfigura;
-                              var form = _formKey.currentState;
-                              if (isMultiple) {
-                                isMultiple = false;
-                                newfigura = figura.copyWith(multiple: 'N');
-                              } else {
-                                isMultiple = true;
-                                newfigura = figura.copyWith(multiple: 'S');
-                              }
-                              form!.validate();
+                    SizedBox(
+                      height: isDual ? 10 : 0,
+                    ),
+                    isDual
+                        ? FormBuilderTextField(
+                            name: 'cartonDual',
+                            initialValue: (figura.cartonDual ?? 0) > 0
+                                ? figura.cartonDual.toString()
+                                : '0',
+                            keyboardType: TextInputType.number,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                                labelText: 'Carton Dual',
+                                hintText:
+                                    'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                filled: true,
+                                isDense: true,
+                                suffixIcon: const Icon(Icons.table_view)),
+                            validator: FormBuilderValidators.compose([
+                              (val) {
+                                if (isDual) {
+                                  if (val == '') {
+                                    return 'Debe indicar Numero de Carton Dual';
+                                  }
+                                  var form = _formKey.currentState;
+                                  final cartonDual = int.parse(val ?? '0');
+                                  final carton = int.parse(
+                                      form!.value['carton'] == ''
+                                          ? '0'
+                                          : form.value['carton'] ?? '0');
 
-                              context
-                                  .read<FiguraBloc>()
-                                  .add(SetFigura(newfigura));
-                            },
+                                  if (cartonDual < juego.cartonInicial) {
+                                    return 'Debe ser ${juego.cartonInicial} o superior';
+                                  }
+
+                                  if (carton == cartonDual) {
+                                    return 'El carton $carton ya ha sido asignado ';
+                                  }
+
+                                  if (cartonDual > juego.cartonFinal) {
+                                    return 'No debe ser mayor de ${juego.cartonFinal}';
+                                  }
+                                } else {
+                                  return null;
+                                }
+                                return null;
+                              }
+                            ]),
+                          )
+                        : const SizedBox(width: 0, height: 0),
+                    const SizedBox(height: 10),
+                    const SizedBox(height: 1),
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white),
+                      child: Column(
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Acumulado Dual',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              ),
+                              Switch(
+                                value: isDual,
+                                onChanged: (value) {
+                                  FiguraDto newfigura;
+
+                                  if (isDual) {
+                                    isDual = false;
+                                    newfigura =
+                                        figura.copyWith(cartonDual: null);
+                                  } else {
+                                    isDual = true;
+                                    isMultiple = false;
+                                    newfigura = figura.copyWith(
+                                        cartonDual: juego.cartonInicial);
+                                  }
+
+                                  context
+                                      .read<FiguraBloc>()
+                                      .add(SetFigura(newfigura));
+                                },
+                                activeColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                inactiveTrackColor: Colors.blue[50],
+                              ),
+                            ],
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Ganador Multiple',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                              ),
+                              Switch(
+                                value: isMultiple,
+                                activeColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                inactiveTrackColor: Colors.blue[50],
+                                onChanged: (value) {
+                                  FiguraDto newfigura;
+                                  var form = _formKey.currentState;
+                                  if (isMultiple) {
+                                    isMultiple = false;
+                                    newfigura = figura.copyWith(multiple: 'N');
+                                  } else {
+                                    isMultiple = true;
+                                    isDual = false;
+                                    newfigura = figura.copyWith(multiple: 'S');
+                                  }
+                                  form!.validate();
+
+                                  context
+                                      .read<FiguraBloc>()
+                                      .add(SetFigura(newfigura));
+                                },
+                              ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(height: 4),
-                    isMultiple
+                    isMultiple || isDual
                         ? const Text(
-                            'Si es multiple debe seleccionar obligatoriamente un numero de carton',
+                            'Si es multiple/dual debe seleccionar obligatoriamente un numero de carton',
                             style: TextStyle(color: Colors.amber))
                         : const Text(
                             'Si indica cero (0) selecciona un carton aleatorio no vendido',
@@ -219,13 +325,8 @@ class FiguraForm extends StatelessWidget {
                                   int carton =
                                       int.parse(formStatus.value['carton']);
                                   FiguraBloc block = context.read<FiguraBloc>();
-                                  setConfiguracion(
-                                    juego,
-                                    figura,
-                                    carton,
-                                    block,
-                                    isMultiple,
-                                  );
+                                  setConfiguracion(juego, figura, carton, block,
+                                      isMultiple, isDual);
                                 }
                               }
                             },
@@ -243,17 +344,25 @@ class FiguraForm extends StatelessWidget {
     );
   }
 
-  void setConfiguracion(
-    Juego juego,
-    FiguraDto figura,
-    int carton,
-    FiguraBloc figuraBlock,
-    bool isMultiple,
-  ) {
-    String acumula = isMultiple ? 'N' : 'S';
-    String multiple = isMultiple ? 'S' : 'N';
-    FiguraDto updFigura =
-        figura.copyWith(carton: carton, acumula: acumula, multiple: multiple);
+  void setConfiguracion(Juego juego, FiguraDto figura, int carton,
+      FiguraBloc figuraBlock, bool isMultiple, bool isDual,
+      {int cartonDual = 0}) {
+    String acumula = 'N';
+    String multiple = 'N';
+
+    if (isDual) {
+      acumula = 'S';
+    } else {
+      acumula = isMultiple ? 'N' : 'S';
+      multiple = isMultiple ? 'S' : 'N';
+      cartonDual = 0; // 0 anula el dual
+    }
+
+    FiguraDto updFigura = figura.copyWith(
+        carton: carton,
+        acumula: acumula,
+        multiple: multiple,
+        cartonDual: cartonDual);
     figuraBlock.add(UpdateFigura(updFigura, juego.idProgramacionJuego));
   }
 

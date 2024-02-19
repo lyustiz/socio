@@ -11,6 +11,7 @@ class FiguraDto {
   final String acumula;
   final String multiple;
   final int carton;
+  final int? cartonDual;
   final DateTime? fechaAjuste;
   final int? idUsuario;
 
@@ -24,6 +25,7 @@ class FiguraDto {
       required this.acumula,
       required this.multiple,
       required this.carton,
+      this.cartonDual,
       this.fechaAjuste,
       this.idUsuario});
 
@@ -46,6 +48,7 @@ class FiguraDto {
       acumula: acumula,
       multiple: multiple,
       carton: serializer.fromJson<int>(json['carton']),
+      cartonDual: serializer.fromJson<int?>(json['cartonDual']),
       fechaAjuste: fechaAjuste,
       idUsuario: serializer.fromJson<int?>(json['idUsuario']),
     );
@@ -86,6 +89,7 @@ class FiguraDto {
       'acumula': serializer.toJson<String>(acumula),
       'multiple': serializer.toJson<String>(multiple),
       'carton': serializer.toJson<int>(carton),
+      'cartonDual': serializer.toJson<int?>(cartonDual),
       'fechaAjuste': serializer.toJson<String?>(null),
       'idUsuario': serializer.toJson<int>(idUsuario ?? 0),
     };
@@ -118,6 +122,7 @@ class FiguraDto {
           String? acumula,
           String? multiple,
           int? carton,
+          int? cartonDual,
           DateTime? fechaAjuste,
           int? idUsuario}) =>
       FiguraDto(
@@ -130,6 +135,7 @@ class FiguraDto {
           acumula: acumula ?? this.acumula,
           multiple: multiple ?? this.multiple,
           carton: carton ?? this.carton,
+          cartonDual: cartonDual == 0 ? null : cartonDual ?? this.cartonDual,
           fechaAjuste: fechaAjuste ?? this.fechaAjuste,
           idUsuario: idUsuario ?? this.idUsuario);
 }
