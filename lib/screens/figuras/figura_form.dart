@@ -106,95 +106,102 @@ class FiguraForm extends StatelessWidget {
                     ),
                     FormBuilder(
                       key: _formKey,
-                      child: FormBuilderTextField(
-                          name: 'carton',
-                          initialValue:
-                              configurado ? figura.carton.toString() : '',
-                          keyboardType: const TextInputType.numberWithOptions(
-                              signed: false, decimal: false),
-                          autovalidateMode: AutovalidateMode.always,
-                          decoration: InputDecoration(
-                              labelText: 'Carton Asignado',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              filled: true,
-                              isDense: true,
-                              suffixIcon: const Icon(Icons.table_view)),
-                          validator: FormBuilderValidators.compose([
-                            FormBuilderValidators.required(context,
-                                errorText: 'El carton es requerido'),
-                            FormBuilderValidators.integer(context,
-                                errorText: 'indicar Solo numeros'),
-                            FormBuilderValidators.min(
-                                context, isMultiple ? juego.cartonInicial : 0,
-                                errorText:
-                                    'Debe ser ${isMultiple ? juego.cartonInicial : 0} o superior'),
-                            FormBuilderValidators.max(
-                                context, juego.cartonFinal,
-                                errorText:
-                                    'No debe ser mayor de ${juego.cartonFinal}'),
-                            (val) {
-                              final number = int.parse(val ?? '0');
-                              if (number == 0) return null;
-                              return null;
-                            }
-                          ])),
-                    ),
-                    SizedBox(
-                      height: isDual ? 10 : 0,
-                    ),
-                    isDual
-                        ? FormBuilderTextField(
-                            name: 'cartonDual',
-                            initialValue: (figura.cartonDual ?? 0) > 0
-                                ? figura.cartonDual.toString()
-                                : '0',
-                            keyboardType: TextInputType.number,
-                            autovalidateMode:
-                                AutovalidateMode.onUserInteraction,
-                            decoration: InputDecoration(
-                                labelText: 'Carton Dual',
-                                hintText:
-                                    'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                filled: true,
-                                isDense: true,
-                                suffixIcon: const Icon(Icons.table_view)),
-                            validator: FormBuilderValidators.compose([
-                              (val) {
-                                if (isDual) {
-                                  if (val == '') {
-                                    return 'Debe indicar Numero de Carton Dual';
-                                  }
-                                  var form = _formKey.currentState;
-                                  final cartonDual = int.parse(val ?? '0');
-                                  final carton = int.parse(
-                                      form!.value['carton'] == ''
-                                          ? '0'
-                                          : form.value['carton'] ?? '0');
-
-                                  if (cartonDual < juego.cartonInicial) {
-                                    return 'Debe ser ${juego.cartonInicial} o superior';
-                                  }
-
-                                  if (carton == cartonDual) {
-                                    return 'El carton $carton ya ha sido asignado ';
-                                  }
-
-                                  if (cartonDual > juego.cartonFinal) {
-                                    return 'No debe ser mayor de ${juego.cartonFinal}';
-                                  }
-                                } else {
+                      child: Column(
+                        children: [
+                          FormBuilderTextField(
+                              name: 'carton',
+                              initialValue:
+                                  configurado ? figura.carton.toString() : '',
+                              keyboardType:
+                                  const TextInputType.numberWithOptions(
+                                      signed: false, decimal: false),
+                              autovalidateMode: AutovalidateMode.always,
+                              decoration: InputDecoration(
+                                  labelText: 'Carton Asignado',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  filled: true,
+                                  isDense: true,
+                                  suffixIcon: const Icon(Icons.table_view)),
+                              validator: FormBuilderValidators.compose([
+                                FormBuilderValidators.required(context,
+                                    errorText: 'El carton es requerido'),
+                                FormBuilderValidators.integer(context,
+                                    errorText: 'indicar Solo numeros'),
+                                FormBuilderValidators.min(context,
+                                    isMultiple ? juego.cartonInicial : 0,
+                                    errorText:
+                                        'Debe ser ${isMultiple ? juego.cartonInicial : 0} o superior'),
+                                FormBuilderValidators.max(
+                                    context, juego.cartonFinal,
+                                    errorText:
+                                        'No debe ser mayor de ${juego.cartonFinal}'),
+                                (val) {
+                                  final number = int.parse(val ?? '0');
+                                  if (number == 0) return null;
                                   return null;
                                 }
-                                return null;
-                              }
-                            ]),
-                          )
-                        : const SizedBox(width: 0, height: 0),
+                              ])),
+                          SizedBox(
+                            height: isDual ? 10 : 0,
+                          ),
+                          isDual
+                              ? FormBuilderTextField(
+                                  name: 'cartonDual',
+                                  initialValue: (figura.cartonDual ?? 0) > 0
+                                      ? figura.cartonDual.toString()
+                                      : '0',
+                                  keyboardType: TextInputType.number,
+                                  autovalidateMode:
+                                      AutovalidateMode.onUserInteraction,
+                                  decoration: InputDecoration(
+                                      labelText: 'Carton Dual',
+                                      hintText:
+                                          'Carton entre ${juego.cartonInicial} y ${juego.cartonFinal}',
+                                      border: OutlineInputBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      filled: true,
+                                      isDense: true,
+                                      suffixIcon: const Icon(Icons.table_view)),
+                                  validator: FormBuilderValidators.compose([
+                                    (val) {
+                                      if (isDual) {
+                                        if (val == '') {
+                                          return 'Debe indicar Numero de Carton Dual';
+                                        }
+                                        var form = _formKey.currentState;
+                                        final cartonDual =
+                                            int.parse(val ?? '0');
+                                        final carton = int.parse(
+                                            form!.value['carton'] == ''
+                                                ? '0'
+                                                : form.value['carton'] ?? '0');
+
+                                        if (cartonDual < juego.cartonInicial) {
+                                          return 'Debe ser ${juego.cartonInicial} o superior';
+                                        }
+
+                                        if (carton == cartonDual) {
+                                          return 'El carton $carton ya ha sido asignado ';
+                                        }
+
+                                        if (cartonDual > juego.cartonFinal) {
+                                          return 'No debe ser mayor de ${juego.cartonFinal}';
+                                        }
+                                      } else {
+                                        return null;
+                                      }
+                                      return null;
+                                    }
+                                  ]),
+                                )
+                              : const SizedBox(width: 0, height: 0)
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: 10),
                     const SizedBox(height: 1),
                     Container(
@@ -228,7 +235,8 @@ class FiguraForm extends StatelessWidget {
                                     isDual = true;
                                     isMultiple = false;
                                     newfigura = figura.copyWith(
-                                        cartonDual: juego.cartonInicial);
+                                        cartonDual: figuraDto.cartonDual ??
+                                            juego.cartonInicial);
                                   }
 
                                   context
@@ -320,13 +328,19 @@ class FiguraForm extends StatelessWidget {
                               final FormBuilderState? formStatus =
                                   _formKey.currentState;
                               if (formStatus != null) {
+                                // formStatus.registerField(name, field)
                                 formStatus.save();
                                 if (formStatus.validate()) {
+                                  FiguraBloc block = context.read<FiguraBloc>();
                                   int carton =
                                       int.parse(formStatus.value['carton']);
-                                  FiguraBloc block = context.read<FiguraBloc>();
+
+                                  int cartonDual = int.parse(
+                                      formStatus.value['cartonDual'] ?? '0');
+
                                   setConfiguracion(juego, figura, carton, block,
-                                      isMultiple, isDual);
+                                      isMultiple, isDual,
+                                      cartonDual: cartonDual);
                                 }
                               }
                             },

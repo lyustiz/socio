@@ -144,12 +144,16 @@ class FiguraScreen extends StatelessWidget {
                         fontSize: 14),
                   ),
                   Text(
-                    'Multiple: ' + figura.multiple,
+                    'Mult: ' +
+                        figura.multiple +
+                        '  Dual: ' +
+                        (figura.cartonDual == null ? 'N' : 'S'),
                     style: TextStyle(
-                        color: figura.multiple == 'S'
-                            ? Colors.redAccent
-                            : Theme.of(context).colorScheme.secondary,
-                        fontSize: 14),
+                        color:
+                            figura.multiple == 'S' || figura.cartonDual != null
+                                ? Colors.redAccent
+                                : Theme.of(context).colorScheme.secondary,
+                        fontSize: 12),
                   ),
                 ],
               ),
