@@ -180,15 +180,6 @@ class JuegoListScreen extends StatelessWidget {
                   dense: true,
                 ),
               ),
-              const PopupMenuItem(
-                value: 'configurar_figuras_multiple',
-                child: ListTile(
-                  title: Text(
-                      'Configurar Figuras Ganadores Multiple'), //Configurar Figuras
-                  leading: Icon(Icons.backup_table),
-                  dense: true,
-                ),
-              )
             ],
         icon: const Icon(Icons.settings),
         iconSize: 40);
