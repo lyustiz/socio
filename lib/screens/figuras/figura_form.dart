@@ -63,8 +63,8 @@ class FiguraForm extends StatelessWidget {
             }
 
             if (current is FiguraError) {
-              ScaffoldMessenger.of(context).showSnackBar(msg.appMessage(
-                  context, 'error', 'Error al Actualizar Figura'));
+              ScaffoldMessenger.of(context).showSnackBar(
+                  msg.appMessage(context, 'error', current.mensaje));
               return false;
             }
 
@@ -233,7 +233,6 @@ class FiguraForm extends StatelessWidget {
                                         figura.copyWith(cartonDual: null);
                                   } else {
                                     isDual = true;
-                                    isMultiple = false;
                                     newfigura = figura.copyWith(
                                         cartonDual: figuraDto.cartonDual ??
                                             juego.cartonInicial);
@@ -274,7 +273,6 @@ class FiguraForm extends StatelessWidget {
                                     newfigura = figura.copyWith(multiple: 'N');
                                   } else {
                                     isMultiple = true;
-                                    isDual = false;
                                     newfigura = figura.copyWith(multiple: 'S');
                                   }
                                   form!.validate();
@@ -361,16 +359,10 @@ class FiguraForm extends StatelessWidget {
   void setConfiguracion(Juego juego, FiguraDto figura, int carton,
       FiguraBloc figuraBlock, bool isMultiple, bool isDual,
       {int cartonDual = 0}) {
-    String acumula = 'N';
-    String multiple = 'N';
-
-    if (isDual) {
-      acumula = 'S';
-    } else {
-      acumula = isMultiple ? 'N' : 'S';
-      multiple = isMultiple ? 'S' : 'N';
-      cartonDual = 0; // 0 anula el dual
-    }
+    String acumula = isMultiple ? 'N' : 'S';
+    ;
+    String multiple = isMultiple ? 'S' : 'N';
+    cartonDual = isDual ? cartonDual : 0; // 0 anula el dual
 
     FiguraDto updFigura = figura.copyWith(
         carton: carton,
@@ -387,8 +379,8 @@ class FiguraForm extends StatelessWidget {
   ) {
     String acumula = 'N';
     String multiple = 'N';
-    FiguraDto updFigura =
-        figura.copyWith(carton: 0, acumula: acumula, multiple: multiple);
+    FiguraDto updFigura = figura.copyWith(
+        carton: 0, acumula: acumula, multiple: multiple, cartonDual: 0);
     figuraBlock.add(UpdateFigura(updFigura, juego.idProgramacionJuego));
   }
 }

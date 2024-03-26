@@ -16,7 +16,7 @@ SnackBar appMessage(BuildContext context, String type, String message) {
   };
 
   return SnackBar(
-    duration: Duration(milliseconds: 800),
+    duration: Duration(milliseconds: 1200),
     content: Row(children: [
       Icon(
         icon[type] ?? icon['success'],
